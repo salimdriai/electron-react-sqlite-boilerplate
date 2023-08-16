@@ -144,6 +144,9 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    /* const db = new DB();
+    db.connect(); */
+
     const User = new UserModel();
     const Account = new AccountModel();
     const Settings = new SettingsModel();

@@ -15,3 +15,14 @@ export const updateQuery = `UPDATE Accounts SET
   WHERE username = @username`;
 
 export const accountsCountQuery = `SELECT COUNT(*) FROM Accounts`;
+
+export const createAccountsTable = `
+CREATE TABLE IF NOT EXISTS Accounts (
+  username TEXT NOT NULL UNIQUE,
+  password TEXT UNIQUE,
+  permission TEXT,
+  role TEXT,
+  status TEXT,
+  createdAt TEXT
+)
+`;

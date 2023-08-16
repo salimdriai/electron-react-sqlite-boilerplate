@@ -10,6 +10,7 @@ import {
   getOneQuery,
   removeQuery,
   accountsCountQuery,
+  createAccountsTable,
 } from './queries';
 
 dotenv.config();
@@ -31,6 +32,7 @@ export default class AccountModel extends DB {
   constructor() {
     super();
     this.db = super.connect();
+    this.db.exec(createAccountsTable);
   }
 
   activateApp(key: string) {

@@ -8,6 +8,7 @@ import {
   removeQuery,
   removeAllQuery,
   searchQuery,
+  createUsersTable,
 } from './queries';
 
 export default class UserModel extends DB {
@@ -16,6 +17,7 @@ export default class UserModel extends DB {
   constructor() {
     super();
     this.db = super.connect();
+    this.db.exec(createUsersTable);
   }
 
   getAll(): User[] {

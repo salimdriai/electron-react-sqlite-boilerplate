@@ -23,3 +23,22 @@ export const updateQuery = `UPDATE Users SET
 
 export const searchQuery = `SELECT * FROM Users
   WHERE id LIKE '%' || ? || '%' OR firstName LIKE '%' || ? || '%' OR lastName LIKE '%' || ? || '%'`;
+
+export const createUsersTable = `
+CREATE TABLE IF NOT EXISTS Users(
+  id TEXT,
+  firstName TEXT,
+  lastName TEXT,
+  phoneNumber TEXT,
+  birthDate TEXT,
+  height INTEGER,
+  weight INTEGER,
+  sex TEXT,
+  photo BLOB,
+  registeredAt TEXT,
+  currentSubscriptions TEXT,
+  allTimeSessions INTEGER,
+  status TEXT,
+  bloodType TEXT
+)
+`;

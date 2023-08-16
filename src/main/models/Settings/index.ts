@@ -1,6 +1,11 @@
 import { Settings } from 'types/settings';
 import DB from '../../db';
-import { getQuery, updateQuery } from './queries';
+import {
+  getQuery,
+  createQuery,
+  updateQuery,
+  createSettingsTable,
+} from './queries';
 
 export default class SettingsModel extends DB {
   private db: any;
@@ -8,6 +13,21 @@ export default class SettingsModel extends DB {
   constructor() {
     super();
     this.db = super.connect();
+    this.db.exec(createSettingsTable);
+    this.initSettings();
+  }
+
+  initSettings() {
+    const initialSettings = {
+      theme: 'dark',
+      gymName: 'gym boss',
+      subscriptions: JSON.stringify([]),
+    };
+
+    console.log('initialSettings', initialSettings);
+
+    const stm = this.db.prepare(createQuery);
+    stm.run(initialSettings);
   }
 
   get(): Settings[] {
