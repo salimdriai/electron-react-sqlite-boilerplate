@@ -1,11 +1,5 @@
 import crypto from 'crypto';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const secretKey = process.env.SECRET_KEY || '';
-const secretIv = process.env.SECRET_IV || '';
-const ecnryptionMethod = process.env.ECNRYPTION_METHOD || '';
+import { secretKey, secretIv, ecnryptionMethod } from './config';
 
 const key = crypto
   .createHash('sha512')

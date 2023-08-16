@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { Account, AccountStatus, Permission, Role } from '../../../types';
-import { encryptData, decryptData } from '../../services/Encription';
-// import { getKey } from '../../services/Activation';
+import { encryptData, decryptData } from '../../utils/Encription';
 import DB from '../../db';
 import {
   logAccountQuery,
@@ -14,10 +13,20 @@ import {
 } from './queries';
 
 dotenv.config();
-const activationKey = process.env.ACTIVATION_KEY;
 
 export default class AccountModel extends DB {
   private db: any;
+
+  private account: Account = {
+    username: 'admin',
+    password: 'admin',
+    permission: Permission.Admin,
+    role: Role.Owner,
+    createdAt: new Date().toDateString(),
+    status: AccountStatus.Active,
+  };
+
+  private activationKey = 'salim123';
 
   constructor() {
     super();
@@ -25,20 +34,14 @@ export default class AccountModel extends DB {
   }
 
   activateApp(key: string) {
-    const account: Account = {
-      username: 'admin',
-      password: 'admin',
-      permission: Permission.Admin,
-      role: Role.Owner,
-      createdAt: new Date().toDateString(),
-      status: AccountStatus.Active,
-    };
+    const { account, activationKey } = this;
 
     if (key === activationKey) {
       const stm = this.db.prepare(createQuery);
       account.password = encryptData(account.password);
       stm.run(account);
       account.password = decryptData(account.password);
+
       return account;
     }
     return undefined;

@@ -19,7 +19,7 @@ import {
 } from 'types';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { decryptData } from './services/Encription';
+import { decryptData } from './utils/Encription';
 
 import DB from './db';
 import UserModel from './models/User';
