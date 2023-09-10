@@ -1,4 +1,4 @@
-import { User } from 'types';
+import { Permission, User } from '../../../types';
 import DB from '../../db';
 import {
   createQuery,
@@ -9,6 +9,7 @@ import {
   removeAllQuery,
   searchQuery,
   createUsersTable,
+  getByPermission,
 } from './queries';
 
 export default class UserModel extends DB {
@@ -20,9 +21,14 @@ export default class UserModel extends DB {
     this.db.exec(createUsersTable);
   }
 
-  getAll(): User[] {
-    const stm = this.db.prepare(getAllQuery);
-    const users = stm.all().map((user: any) => ({
+  getAll(permission: string): User[] {
+    let query = getAllQuery;
+    if (permission === Permission.Male || permission === Permission.Female) {
+      query = getByPermission;
+    }
+
+    const stm = this.db.prepare(query);
+    const users = stm.all({ sex: permission }).map((user: any) => ({
       ...user,
       currentSubscriptions: JSON.parse(user.currentSubscriptions),
     }));
@@ -59,7 +65,6 @@ export default class UserModel extends DB {
 
   remove(id: string) {
     const stm = this.db.prepare(removeQuery);
-
     stm.run({ id });
   }
 

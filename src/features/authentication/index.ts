@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { Permission } from 'types';
 import {
   saveToLocalStorage,
   getFromLocalStorage,
@@ -7,20 +8,23 @@ import {
 } from 'utils/local-storage';
 import { logAccount } from './reducers';
 
-const AuthLsKey = 'auth';
-
 interface InitialState {
   isAuthneticated: boolean;
   username: string;
-  permission: string;
+  permission: Permission | '';
   loading: boolean;
   error: any;
 }
 
+const AuthLsKey = 'auth';
+const auth: any = getFromLocalStorage(AuthLsKey);
+const defaultUsername = auth?.username || '';
+const defaultPermission = auth?.permission || '';
+
 const initialState: InitialState = {
-  isAuthneticated: false,
-  username: '',
-  permission: '',
+  isAuthneticated: !!defaultUsername,
+  username: defaultUsername,
+  permission: defaultPermission,
   loading: false,
   error: null,
 };
@@ -61,6 +65,9 @@ const authenticationSlice = createSlice({
         username: payload.username,
         permission: payload.permission,
       });
+    });
+    builder.addCase(logAccount.rejected, (state) => {
+      state.loading = false;
     });
   },
 });

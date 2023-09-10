@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { useAppDispatch, useAppSelector } from 'features/store';
 import { getSettings } from 'features/settings/reducers';
 import { currentUser } from 'features/authentication';
@@ -15,8 +16,12 @@ import Pages from '../pages';
 export default function App() {
   const {
     settings: { theme },
-    loading,
+    loading: settingsLoading,
   } = useAppSelector((state) => state.settings);
+
+  const { loading: authLoading } = useAppSelector(
+    (state) => state.authentication
+  );
 
   const darkTheme = createDarkTheme();
   const lightTheme = createLightTheme();
@@ -29,8 +34,9 @@ export default function App() {
 
   return (
     <Router>
+      <CssBaseline />
       <ThemeProvider theme={theme === Themes.Dark ? darkTheme : lightTheme}>
-        {loading ? <Loading /> : <Pages />}
+        {settingsLoading || authLoading ? <Loading /> : <Pages />}
         <Alert />
       </ThemeProvider>
     </Router>

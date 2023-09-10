@@ -18,22 +18,7 @@ export const defaultValues = {
   allTimeSessions: 0,
   status: '',
   bloodType: '',
-  currentSubscriptions: [
-    {
-      subscription: {
-        name: 'body building',
-        monthPrice: 2_000,
-        sessionPrice: 300,
-        sessionsPerMonth: 16,
-      },
-      startedAt: '',
-      endsAt: '',
-      paid: 2_000,
-      sessionsAvailable: 0,
-      sessionsSpent: 0,
-      lastEntryTimestamp: 0,
-    },
-  ],
+  currentSubscriptions: [],
 };
 
 export const subscriptionOptions = [

@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
-import { Settings, Themes } from 'types';
+import { Lang, Settings, Themes } from 'types';
+import { getFromLocalStorage } from 'utils/local-storage';
 import { getSettings, updateSettings } from './reducers';
 
 interface InitialState {
@@ -10,11 +11,18 @@ interface InitialState {
   error: any;
 }
 
+const SettingsLsKey = 'auth';
+const settings: any = getFromLocalStorage(SettingsLsKey);
+const defaultTheme = settings?.theme || Themes.Light;
+const defaultLang = settings?.lang || Lang.English;
+const defaultName = settings?.gymName || '';
+
 const initialState: InitialState = {
   settings: {
     subscriptions: [],
-    theme: Themes.Light,
-    gymName: '',
+    lang: defaultLang,
+    theme: defaultTheme,
+    gymName: defaultName,
   },
   loading: false,
   error: null,

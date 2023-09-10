@@ -23,10 +23,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { Sex, BloodType, Status, UserSubscription } from 'types/user';
-import { Subscription } from 'types/settings';
+import { Settings, Subscription } from 'types/settings';
+import { getFromLocalStorage } from 'utils/local-storage';
 import {
   defaultValues,
-  subscriptionOptions,
+  // subscriptionOptions,
   photoStyle,
   subscriptionOptionStyle,
   cameraModalStyle,
@@ -41,6 +42,17 @@ function UserForm() {
 
   const [camera, setCamera] = useState<{ open: boolean; photo: null | string }>(
     { open: false, photo: state?.photo || null }
+  );
+
+  const [subscriptionOptions, setSubscriptionOptions] = useState<
+    Subscription[]
+  >([]);
+
+  const [quickAddSubscription, setQuickAddSubscription] = React.useState<any>(
+    subscriptionOptions.map((sub) => ({
+      name: sub.name,
+      amount: 0,
+    }))
   );
 
   const {
@@ -68,13 +80,6 @@ function UserForm() {
     );
     return !isSubAdded;
   };
-
-  const [quickAddSubscription, setQuickAddSubscription] = React.useState<any>(
-    subscriptionOptions.map((sub) => ({
-      name: sub.name,
-      amount: 0,
-    }))
-  );
 
   const onSubscriptionDateChange =
     (subName: string, targetDate: string) => (value: any) => {
@@ -190,6 +195,7 @@ function UserForm() {
   };
 
   const isSubscriptionFieldsValid = (subscriptions: any) => {
+    console.log('subscriptions', subscriptions);
     let isValid = true;
     subscriptions.forEach((sub: any) => {
       if (!sub.startedAt || !sub.endsAt || !sub.sessionsAvailable) {
@@ -255,6 +261,28 @@ function UserForm() {
 
     setValue('currentSubscriptions', currentSubscriptions);
   };
+
+  React.useEffect(() => {
+    let settings = getFromLocalStorage('settings');
+    if (!settings) {
+      const getSettings = async () => {
+        const res = await window.electron.getSettings();
+        return res;
+      };
+      settings = getSettings();
+    }
+
+    const { subscriptions = [] } = settings as Settings;
+
+    setSubscriptionOptions(subscriptions);
+
+    setQuickAddSubscription(
+      subscriptions.map((sub) => ({
+        name: sub.name,
+        amount: 0,
+      }))
+    );
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(submitUser)}>
@@ -561,7 +589,7 @@ function UserForm() {
 
         <Stack flex={1} spacing={2}>
           <Stack spacing={1} height="100%">
-            {subscriptionOptions.map(({ name }: { name: string }, i) => (
+            {subscriptionOptions?.map(({ name }: { name: string }, i) => (
               <Card sx={subscriptionOptionStyle}>
                 <Stack
                   direction="row"
@@ -587,6 +615,7 @@ function UserForm() {
                     onChange={handleChangeQuickAddSubs(name)}
                   >
                     <ToggleButton
+                      color="primary"
                       disabled={isCardFieldsDisabled(name)}
                       value={`${name}.1`}
                       // sx={{ backgroundColor: 'red' }}
@@ -626,6 +655,7 @@ function UserForm() {
                     customInput={<TextField fullWidth label="ends at" />}
                   />
                   <TextField
+                    disabled={isCardFieldsDisabled(name)}
                     label="sessions"
                     defaultValue={0}
                     onChange={handleChangeSessionsNumber(name)}

@@ -176,62 +176,12 @@ export default function createComponents(config: any) {
         },
       },
     },
-    /*  MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          '&:hover': {
-            backgroundColor: palette.action.hover,
-            [`& .${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: palette.neutral[200],
-            },
-          },
-          [`&.${outlinedInputClasses.focused}`]: {
-            backgroundColor: 'transparent',
-            [`& .${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: palette.primary.main,
-              boxShadow: `${palette.primary.main} 0 0 0 2px`,
-            },
-          },
-          [`&.${filledInputClasses.error}`]: {
-            [`& .${outlinedInputClasses.notchedOutline}`]: {
-              borderColor: palette.error.main,
-              boxShadow: `${palette.error.main} 0 0 0 2px`,
-            },
-          },
-        },
-        input: {
-          fontSize: 14,
-          fontWeight: 500,
-          lineHeight: '24px',
-        },
-        notchedOutline: {
-          borderColor: palette.neutral[200],
-          transition: muiTheme.transitions.create([
-            'border-color',
-            'box-shadow',
-          ]),
-        },
-      },
-    }, */
+
     MuiFormLabel: {
       styleOverrides: {
         root: {
           fontSize: 14,
           fontWeight: 500,
-          /*  [`&.${inputLabelClasses.filled}`]: {
-            transform: 'translate(12px, 18px) scale(1)',
-          },
-          [`&.${inputLabelClasses.shrink}`]: {
-            [`&.${inputLabelClasses.standard}`]: {
-              transform: 'translate(0, -1.5px) scale(0.85)',
-            },
-            [`&.${inputLabelClasses.filled}`]: {
-              transform: 'translate(12px, 6px) scale(0.85)',
-            },
-            [`&.${inputLabelClasses.outlined}`]: {
-              transform: 'translate(14px, -9px) scale(0.85)',
-            },
-          }, */
         },
       },
     },

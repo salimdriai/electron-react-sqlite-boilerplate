@@ -10,11 +10,27 @@ import {
 } from '@mui/material';
 import { StatCardProps } from '../../types';
 
-export default function StatCard(props: StatCardProps) {
-  const { difference, positive = false, value, label, icon, color } = props;
+export default function StatCard(props: Partial<StatCardProps>) {
+  const {
+    difference,
+    positive = false,
+    value,
+    label,
+    icon,
+    color,
+    img,
+  } = props;
 
   return (
-    <Card sx={{ height: '100%', flex: 1, maxWidth: '300px' }}>
+    <Card
+      sx={{
+        height: '100%',
+        flex: 1,
+        maxWidth: '300px',
+        backgroundImage: `url(${img})`, // Set the background image correctly
+        backgroundSize: 'cover', // Optional: Set the background size as needed
+      }}
+    >
       <CardContent>
         <Stack
           alignItems="flex-start"
@@ -37,7 +53,7 @@ export default function StatCard(props: StatCardProps) {
               width: 56,
             }}
           >
-            <SvgIcon>{icon}</SvgIcon>
+            <SvgIcon sx={{ color: '#fff' }}>{icon}</SvgIcon>
           </Avatar>
         </Stack>
         {difference && (

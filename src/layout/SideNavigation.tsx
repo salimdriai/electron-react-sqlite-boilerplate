@@ -7,14 +7,17 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 import PeopleIcon from '@mui/icons-material/People';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CategoryIcon from '@mui/icons-material/Category';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { useAppSelector } from 'features/store';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { useAppSelector, useAppDispatch } from 'features/store';
 import { Permission } from 'types';
+import { logout } from 'features/authentication';
 
 const routes = [
   { label: 'dashboard', path: '/', icon: <DashboardIcon />, adminOnly: false },
@@ -29,7 +32,7 @@ const routes = [
     label: 'settings',
     path: '/settings',
     icon: <SettingsIcon />,
-    adminOnly: true,
+    adminOnly: false,
   },
   {
     label: 'administration',
@@ -43,6 +46,7 @@ export default function SideNavigation() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { permission } = useAppSelector((state) => state.authentication);
+  const dispatch = useAppDispatch();
 
   const permittedRoutes = useMemo(() => {
     if (permission === Permission.Admin) {
@@ -56,7 +60,9 @@ export default function SideNavigation() {
   };
 
   return (
-    <List sx={{ pt: 0 }}>
+    <List
+      sx={{ pt: 0, display: 'flex', flexDirection: 'column', height: '100%' }}
+    >
       {permittedRoutes.map((route) => (
         <ListItem
           key={route.path}
@@ -75,6 +81,22 @@ export default function SideNavigation() {
           </ListItemButton>
         </ListItem>
       ))}
+      <ListItem sx={{ flex: 1 }} />
+      <Divider />
+      <ListItem disablePadding onClick={() => dispatch(logout())}>
+        <ListItemButton>
+          <ListItemIcon>
+            <PowerSettingsNewIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={
+              <Typography variant="button" textTransform="none">
+                logout
+              </Typography>
+            }
+          />
+        </ListItemButton>
+      </ListItem>
     </List>
   );
 }

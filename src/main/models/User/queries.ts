@@ -1,4 +1,6 @@
 export const getAllQuery = 'SELECT * FROM Users';
+export const getByPermission = `SELECT * FROM Users WHERE sex = @sex`;
+
 export const getOneQuery = 'SELECT * FROM Users where id = @id';
 export const removeQuery = 'DELETE FROM Users WHERE id = @id';
 export const removeAllQuery = 'DELETE FROM Users';

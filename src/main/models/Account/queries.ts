@@ -19,7 +19,7 @@ export const accountsCountQuery = `SELECT COUNT(*) FROM Accounts`;
 export const createAccountsTable = `
 CREATE TABLE IF NOT EXISTS Accounts (
   username TEXT NOT NULL UNIQUE,
-  password TEXT UNIQUE,
+  password TEXT,
   permission TEXT,
   role TEXT,
   status TEXT,

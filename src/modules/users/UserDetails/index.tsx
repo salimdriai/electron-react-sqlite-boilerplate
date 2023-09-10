@@ -3,27 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import UserStatus from 'components/UserStatus';
 import { User } from 'types';
-import { useAppDispatch } from 'features/store';
-import { sessionsEntry } from 'features/users/reducers';
 
 import UserInfo from './UserInfo';
 import UserSubscriptions from './UserSubscriptions';
 
 function UserDetails({ user }: { user: User }) {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleEdit = () => {
     navigate('/users/add', { state: user });
-  };
-
-  const handleEntry = (id: string) => () => {
-    dispatch(sessionsEntry(id));
   };
 
   if (!user) return <Box>Something went wrong !</Box>;
@@ -36,12 +30,26 @@ function UserDetails({ user }: { user: User }) {
             variant="outlined"
             sx={{ height: '100px', width: '100px', borderRadius: '50%' }}
           >
-            <img
-              src={user.photo as unknown as string}
-              width="100%"
-              height="100%"
-              alt={user.firstName}
-            />
+            {user.photo ? (
+              <img
+                src={user.photo as unknown as string}
+                width="100%"
+                height="100%"
+                alt={user.firstName}
+              />
+            ) : (
+              <Avatar
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: 'secondary.main',
+                  fontSize: 32,
+                  colro: '#fff',
+                }}
+              >
+                {user.firstName.charAt(0).toLocaleUpperCase()}
+              </Avatar>
+            )}
           </Card>
           <Stack>
             <Typography fontSize={32} fontWeight={500}>
@@ -58,9 +66,14 @@ function UserDetails({ user }: { user: User }) {
           <EditIcon />
         </IconButton>
       </Stack>
-
-      <UserInfo user={user} />
-      <UserSubscriptions user={user} />
+      <Box>
+        <Typography variant="h5">Info</Typography>
+        <UserInfo user={user} />
+      </Box>
+      <Box>
+        <Typography variant="h5">Subscriptions</Typography>
+        <UserSubscriptions user={user} />
+      </Box>
     </Stack>
   );
 }

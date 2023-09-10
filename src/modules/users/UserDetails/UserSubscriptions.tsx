@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -77,14 +77,7 @@ function UserSubscriptions({ user }: { user: User }) {
   const [confirmationModalOpen, setConfirmationModalOpen] =
     React.useState(false);
 
-  const [extend, setExtend] = React.useState<Extend[]>(
-    user.currentSubscriptions.map((sub) => ({
-      name: sub.subscription.name,
-      amount: 0,
-      startFrom: StartFrom.Now,
-      lastSubEndDate: sub.endsAt,
-    }))
-  );
+  const [extend, setExtend] = React.useState<Extend[]>([]);
 
   const handleExtend =
     (targetName: string) =>
@@ -125,18 +118,31 @@ function UserSubscriptions({ user }: { user: User }) {
     console.log('e', extend);
   };
 
+  useEffect(() => {
+    if (user) {
+      const initState = user?.currentSubscriptions.map((sub) => ({
+        name: sub.subscription.name,
+        amount: 0,
+        startFrom: StartFrom.Now,
+        lastSubEndDate: sub.endsAt,
+      }));
+
+      setExtend(initState);
+    }
+  }, [user]);
+
   return (
     <Stack spacing={1}>
-      {user.currentSubscriptions.map((sub: UserSubscription, i) => (
+      {user?.currentSubscriptions.map((sub: UserSubscription, i) => (
         <Card variant="outlined" key={sub.subscription.name}>
           <CardHeader
             sx={{ pt: 2 }}
             title={sub.subscription.name}
             action={
               <Stack direction="row" spacing={1}>
-                <StyledToggleButtonGroup
+                {/*  <StyledToggleButtonGroup
                   size="small"
-                  value={`${extend[i].name}.${extend[i].amount}`}
+                  value={`${extend?.[i]?.name}.${extend?.[i]?.amount}`}
                   exclusive
                   onChange={handleExtend(sub.subscription.name)}
                 >
@@ -149,7 +155,7 @@ function UserSubscriptions({ user }: { user: User }) {
                   <ToggleButton value={`${sub.subscription.name}.3`}>
                     +3 Months
                   </ToggleButton>
-                </StyledToggleButtonGroup>
+                </StyledToggleButtonGroup> */}
               </Stack>
             }
           />
@@ -161,19 +167,23 @@ function UserSubscriptions({ user }: { user: User }) {
           </CardContent>
         </Card>
       ))}
-      <Button
+      {/* <Button
         variant="contained"
         disabled={!extend.find((e) => e.amount !== 0)}
         onClick={() => setConfirmationModalOpen(true)}
       >
         Confirm
-      </Button>
+      </Button> */}
       <Modal
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
         open={confirmationModalOpen}
         onClose={() => setConfirmationModalOpen(false)}
       >
-        <Card sx={{ minWidth: '40%' }}>
+        <Card sx={{ minWidth: '40%', p: 4 }}>
           <CardHeader
             title="Confirm subscription extend ."
             action={

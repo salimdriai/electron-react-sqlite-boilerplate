@@ -4,7 +4,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -12,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import { toast } from 'react-toastify';
 import { Account } from 'types';
+import logo from '../../assets/icon.png';
 
 export default function ActivationPage() {
   const {
@@ -45,81 +45,96 @@ export default function ActivationPage() {
     checkAppStatus();
   }, []);
 
-  if (account) {
-    return (
-      <Container maxWidth="sm">
-        <Card elevation={10} sx={{ p: 5, mt: '30%' }}>
-          <Typography variant="h5">Your credentials :</Typography>
-          <Typography variant="body2" color="text.secondary">
-            please make sure to save a copy of your credentials .
-          </Typography>
-          <Card variant="outlined" sx={{ p: 2, my: 2 }}>
-            <Typography variant="body2" color="text.secondary">
-              username :
-            </Typography>
-            <Typography gutterBottom variant="h6">
-              {account?.username}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              password :
-            </Typography>
-            <Typography gutterBottom variant="h6">
-              {account?.password}
-            </Typography>
-          </Card>
-          <Stack>
-            <Button variant="contained" onClick={() => navigate('/')}>
-              Go to login
-            </Button>
-          </Stack>
-        </Card>
-      </Container>
-    );
-  }
   return (
-    <Container maxWidth="sm">
-      <Card elevation={10} sx={{ p: 5, mt: '30%' }}>
-        <Stack spacing={2} component="form" onSubmit={handleSubmit(activate)}>
-          <Typography gutterBottom variant="h5">
-            {isAppActivated ? 'Your app is already activated' : 'Activation'}
-          </Typography>
-          <Controller
-            name="key"
-            control={control}
-            rules={{
-              pattern: {
-                value: /^[A-Za-z0-9]*$/,
-                message: 'Only letters and numbers are allowed.',
-              },
-              required: 'Activation key is required.',
-            }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="activation key"
-                error={!!errors.key}
-                helperText={<> {errors.key?.message}</>}
-                disabled={isAppActivated}
+    <Stack direction="row" height="100vh">
+      <Stack
+        height="100%"
+        flex={1}
+        justifyContent="center"
+        alignItems="center"
+        sx={{ backgroundColor: 'background.default' }}
+      >
+        <img src={logo} width={250} alt="logo" />
+      </Stack>
+      <Stack height="100%" flex={2} justifyContent="center" alignItems="center">
+        {account ? (
+          <Card variant="outlined" sx={{ p: 5 }}>
+            <Typography variant="h5">Your credentials :</Typography>
+            <Typography variant="body2" color="text.secondary">
+              please make sure to save a copy of your credentials .
+            </Typography>
+            <Card variant="outlined" sx={{ p: 2, my: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                username :
+              </Typography>
+              <Typography gutterBottom variant="h6">
+                {account?.username}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                password :
+              </Typography>
+              <Typography gutterBottom variant="h6">
+                {account?.password}
+              </Typography>
+            </Card>
+            <Stack>
+              <Button variant="contained" onClick={() => navigate('/')}>
+                Go to login
+              </Button>
+            </Stack>
+          </Card>
+        ) : (
+          <Card variant="outlined" sx={{ p: 5 }}>
+            <Stack
+              spacing={2}
+              component="form"
+              onSubmit={handleSubmit(activate)}
+            >
+              <Typography gutterBottom variant="h5">
+                {isAppActivated
+                  ? 'Your app is already activated !'
+                  : 'Activation'}
+              </Typography>
+              <Controller
+                name="key"
+                control={control}
+                rules={{
+                  pattern: {
+                    value: /^[A-Za-z0-9]*$/,
+                    message: 'Only letters and numbers are allowed.',
+                  },
+                  required: 'Activation key is required.',
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    type="password"
+                    label="activation key"
+                    error={!!errors.key}
+                    helperText={<> {errors.key?.message}</>}
+                    disabled={isAppActivated}
+                  />
+                )}
               />
-            )}
-          />
 
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={isAppActivated}
-          >
-            Activate
-          </Button>
-          <Typography>
-            Already activated the app ?{' '}
-            <Link component="button" onClick={() => navigate('/')}>
-              Login
-            </Link>
-          </Typography>
-        </Stack>
-      </Card>
-    </Container>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={isAppActivated}
+              >
+                Activate
+              </Button>
+              <Typography>
+                Already activated the app ?{' '}
+                <Link component="button" onClick={() => navigate('/')}>
+                  Login
+                </Link>
+              </Typography>
+            </Stack>
+          </Card>
+        )}
+      </Stack>
+    </Stack>
   );
 }

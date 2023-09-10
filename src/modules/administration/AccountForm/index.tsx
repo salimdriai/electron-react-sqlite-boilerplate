@@ -46,8 +46,6 @@ function AccountForm() {
   };
 
   const submitAccount = async (data: any) => {
-    console.log('DATA', data);
-    console.log('isEditMode', isEditMode);
     if (isEditMode) {
       await updateAccount(data);
     } else {
@@ -127,10 +125,12 @@ function AccountForm() {
                   value={field.value}
                   label="permission"
                 >
-                  <MenuItem value={Permission.Admin}>admin</MenuItem>
-                  <MenuItem value={Permission.Men}>Men</MenuItem>
-                  <MenuItem value={Permission.Women}>Women</MenuItem>
-                  <MenuItem value={Permission.All}>Men and Women</MenuItem>
+                  {Object.keys(Permission).map((key) => (
+                    /* @ts-ignore */
+                    <MenuItem key={key} value={Permission[key]}>
+                      {key}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             )}
@@ -147,9 +147,12 @@ function AccountForm() {
                   value={field.value}
                   label="role"
                 >
-                  <MenuItem value={Role.Coach}>coach</MenuItem>
-                  <MenuItem value={Role.Employee}>employee</MenuItem>
-                  <MenuItem value={Role.Owner}>owner</MenuItem>
+                  {Object.keys(Role).map((key) => (
+                    /* @ts-ignore */
+                    <MenuItem key={key} value={Role[key]}>
+                      {key}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             )}

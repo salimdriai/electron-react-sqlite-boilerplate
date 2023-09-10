@@ -2,7 +2,7 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-import { Account, Settings, User } from 'types';
+import { Account, FreeSession, Settings, User } from 'types';
 
 export type Channels = 'ipc-example';
 
@@ -31,7 +31,8 @@ const electronHandler = {
     ipcRenderer.invoke('settings:update', settings),
 
   // users ----------------------
-  getAllUsers: () => ipcRenderer.invoke('user:getAll'),
+  getAllUsers: (permission: string) =>
+    ipcRenderer.invoke('user:getAll', permission),
   getOneUser: (id: string) => ipcRenderer.invoke('user:getOne', id),
   searchUsers: (query: string) => ipcRenderer.invoke('user:search', query),
   insertUser: (user: User) => ipcRenderer.invoke('user:insert', user),
@@ -53,8 +54,18 @@ const electronHandler = {
     ipcRenderer.invoke('account:remove', username),
   activateApp: (key: string) => ipcRenderer.invoke('app:activate', key),
   isAppActivated: () => ipcRenderer.invoke('app:isActivated'),
-  // other -----------------------
 
+  // free session ----------------
+  getFreeSessions: () => ipcRenderer.invoke('freeSession:getAll'),
+
+  createFreeSessions: (session: FreeSession) =>
+    ipcRenderer.invoke('freeSession:create', session),
+  updateFreeSessions: (session: FreeSession) =>
+    ipcRenderer.invoke('freeSession:update', session),
+  removeFreeSessions: (id: string) =>
+    ipcRenderer.invoke('freeSession:delete', id),
+
+  // other -----------------------
   decryptData: (data: string) => ipcRenderer.invoke('data:decrypt', data),
 };
 

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import SyncIcon from '@mui/icons-material/Sync';
 import {
   Button,
@@ -7,8 +9,11 @@ import {
   Divider,
   SvgIcon,
 } from '@mui/material';
+import { toast } from 'react-toastify';
 import { alpha, useTheme } from '@mui/material/styles';
 import Chart from 'react-apexcharts';
+import { User } from 'types';
+import { useAppSelector } from 'features/store';
 
 const useChartOptions = () => {
   const theme = useTheme();
@@ -94,7 +99,8 @@ const useChartOptions = () => {
     },
     yaxis: {
       labels: {
-        formatter: (value: number) => (value > 0 ? `${value}K` : `${value}`),
+        formatter: (value: number) =>
+          value > 0 ? `${value} users` : `${value}`,
         offsetX: -10,
         style: {
           colors: theme.palette.text.secondary,
@@ -104,11 +110,51 @@ const useChartOptions = () => {
   };
 };
 
-function Overview() {
+function NewUsersChart() {
   const chartOptions = useChartOptions();
 
+  const [series, setSeries] = useState<any>({
+    currentYearSeries: new Array(12).fill(0),
+    lastYearSeries: new Array(12).fill(0),
+  });
+
+  const { permission } = useAppSelector((state) => state.authentication);
+
+  useEffect(() => {
+    const getSeries = async () => {
+      const currentYearSubs = new Array(12).fill(0);
+      const lastYearSubs = new Array(12).fill(0);
+
+      const currentYear = new Date().getFullYear();
+      const lastYear = currentYear - 1;
+
+      const allUsers = await window.electron.getAllUsers(permission);
+      if (!Array.isArray(allUsers)) return toast.error('somthing went wrong !');
+
+      allUsers.forEach((user: User) => {
+        const registrationYear = new Date(user.registeredAt).getFullYear();
+        const registrationMonth = new Date(user.registeredAt).getMonth();
+
+        if (registrationYear === currentYear) {
+          currentYearSubs[registrationMonth] += 1;
+        }
+        if (registrationYear === lastYear) {
+          lastYearSubs[registrationMonth] += 1;
+        }
+      });
+      setSeries({
+        currentYearSeries: currentYearSubs,
+        lastYearSeries: lastYearSubs,
+      });
+      return null;
+    };
+
+    getSeries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <Card sx={{ height: '100%', flex: 2 }}>
+    <Card variant="outlined" sx={{ height: '100%', flex: 2 }}>
       <CardHeader
         action={
           <Button
@@ -123,7 +169,7 @@ function Overview() {
             Sync
           </Button>
         }
-        title="Sales"
+        title="New Subscribers"
       />
       <CardContent>
         <Chart
@@ -132,11 +178,11 @@ function Overview() {
           series={[
             {
               name: 'This year',
-              data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20],
+              data: series.currentYearSeries,
             },
             {
               name: 'Last year',
-              data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
+              data: series.lastYearSeries,
             },
           ]}
           type="bar"
@@ -148,4 +194,4 @@ function Overview() {
   );
 }
 
-export default Overview;
+export default NewUsersChart;

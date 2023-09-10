@@ -1,59 +1,49 @@
 /* eslint-disable consistent-return */
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 import { User } from 'types';
 
 export const sessionsEntry = createAsyncThunk(
   'sessionsEntry',
   async (userId: string) => {
     const user: User = await window.electron.getOneUser(userId);
+
     const currentTimestamp = new Date().getTime();
     const sixHoursTimstamp = 21600000;
 
-    let isEnteredSixHoursAgo = false;
-    let isSubscriptionExpired = null;
-    let isMaxSessionsSpent = null;
+    const result = {
+      user,
+      isEnteredSixHoursAgo: false,
+      isSubscriptionExpired: false,
+      isMaxSessionsSpent: false,
+      message: 'Welcome !',
+    };
 
     user.currentSubscriptions.forEach(
-      ({
-        lastEntryTimestamp,
-        endsAt,
-        sessionsAvailable,
-        sessionsSpent,
-        ...rest
-      }) => {
+      ({ lastEntryTimestamp, endsAt, sessionsAvailable, sessionsSpent }) => {
         if (currentTimestamp - lastEntryTimestamp < sixHoursTimstamp) {
-          isEnteredSixHoursAgo = true;
+          result.isEnteredSixHoursAgo = true;
+          result.message = 'This user entered in less than 6 hours !';
         }
 
         const endsAtTimestamp = new Date(endsAt).getTime();
         if (endsAtTimestamp < currentTimestamp) {
-          isSubscriptionExpired = rest;
+          result.isSubscriptionExpired = true;
+          result.message = 'This user subscription expired !';
         }
 
         if (sessionsSpent >= sessionsAvailable) {
-          isMaxSessionsSpent = rest;
+          result.isMaxSessionsSpent = true;
+          result.message = 'This user spent max sessions amount !';
         }
       }
     );
 
-    if (isEnteredSixHoursAgo) {
-      toast.warning('This user entered in last 6 hours !');
-      return;
-    }
-
-    if (isSubscriptionExpired) {
-      return {
-        user,
-        isSubscriptionExpired,
-      };
-    }
-
-    if (isMaxSessionsSpent) {
-      return {
-        user,
-        isMaxSessionsSpent,
-      };
+    if (
+      result.isEnteredSixHoursAgo ||
+      result.isMaxSessionsSpent ||
+      result.isSubscriptionExpired
+    ) {
+      return result;
     }
 
     user.currentSubscriptions.forEach((sub) => {
@@ -65,8 +55,13 @@ export const sessionsEntry = createAsyncThunk(
       user.currentSubscriptions
     ) as any;
 
-    const res = await window.electron.updateUser(user);
-    return { user: res };
+    if (typeof user?.allTimeSessions === 'number') {
+      user.allTimeSessions += 1;
+    }
+
+    const updatedUser = await window.electron.updateUser(user);
+    result.user = updatedUser;
+    return result;
   }
 );
 

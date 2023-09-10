@@ -42,7 +42,9 @@ function SidebarLayout({ page }: Props) {
         <Toolbar sx={{ py: 5, display: 'flex', justifyContent: 'center' }}>
           <img src={logo} width={150} alt="logo" />
         </Toolbar>
-        <SideNavigation />
+        <Box flex={1}>
+          <SideNavigation />
+        </Box>
       </Drawer>
 
       <Box

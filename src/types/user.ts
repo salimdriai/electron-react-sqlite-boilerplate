@@ -22,8 +22,8 @@ export interface UserSubscription {
 }
 
 export enum Sex {
-  Male = 'Male',
-  Female = 'Female',
+  Male = 'male',
+  Female = 'female',
 }
 
 export enum Status {

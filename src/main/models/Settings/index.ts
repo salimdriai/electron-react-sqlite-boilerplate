@@ -20,11 +20,10 @@ export default class SettingsModel extends DB {
   initSettings() {
     const initialSettings = {
       theme: 'dark',
+      lang: 'en',
       gymName: 'gym boss',
       subscriptions: JSON.stringify([]),
     };
-
-    console.log('initialSettings', initialSettings);
 
     const stm = this.db.prepare(createQuery);
     stm.run(initialSettings);

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import SyncIcon from '@mui/icons-material/Sync';
 import {
@@ -13,6 +15,8 @@ import {
   Button,
 } from '@mui/material';
 import Chart from 'react-apexcharts';
+import { Sex, User } from 'types';
+import { useAppSelector } from 'features/store';
 
 const useChartOptions = (labels: string[]) => {
   const theme = useTheme();
@@ -21,11 +25,7 @@ const useChartOptions = (labels: string[]) => {
     chart: {
       background: 'transparent',
     },
-    colors: [
-      theme.palette.primary.main,
-      theme.palette.success.main,
-      theme.palette.warning.main,
-    ],
+    colors: [theme.palette.primary.dark, theme.palette.secondary.dark],
     dataLabels: {
       enabled: false,
     },
@@ -63,29 +63,52 @@ const useChartOptions = (labels: string[]) => {
 };
 
 const iconMap: any = {
-  Desktop: (
+  Male: (
     <SvgIcon>
       <EmojiEmotionsIcon />
     </SvgIcon>
   ),
-  Tablet: (
-    <SvgIcon>
-      <EmojiEmotionsIcon />
-    </SvgIcon>
-  ),
-  Phone: (
+  Female: (
     <SvgIcon>
       <EmojiEmotionsIcon />
     </SvgIcon>
   ),
 };
 
-function OverviewTraffic() {
-  const labels = ['Desktop', 'Tablet', 'Phone'];
+function SexChart() {
+  const [sexSeries, setSexSeries] = useState([0, 0]);
+  const labels = ['Male', 'Female'];
   const chartOptions = useChartOptions(labels);
+  const { permission } = useAppSelector((state) => state.authentication);
+
+  useEffect(() => {
+    const getSeries = async () => {
+      let males = 0;
+      let females = 0;
+
+      const allUsers = await window.electron.getAllUsers(permission);
+
+      if (!Array.isArray(allUsers)) return toast.error('Cant get users !');
+
+      allUsers.forEach((user: User) => {
+        // @ts-ignore
+        if (user.sex === Sex.Male) {
+          males += 1;
+        }
+        // @ts-ignore
+        if (user.sex === Sex.Female) {
+          females += 1;
+        }
+      });
+      setSexSeries([males, females]);
+      return null;
+    };
+    getSeries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <Card sx={{ height: '100%', flex: 1 }}>
+    <Card variant="outlined" sx={{ height: '100%', flex: 1 }}>
       <CardHeader
         action={
           <Button
@@ -100,13 +123,13 @@ function OverviewTraffic() {
             Sync
           </Button>
         }
-        title="Sales"
+        title="Gender"
       />
       <CardContent>
         <Chart
           height={230}
           options={chartOptions}
-          series={[63, 15, 22]}
+          series={sexSeries}
           type="donut"
           width="100%"
         />
@@ -117,7 +140,7 @@ function OverviewTraffic() {
           spacing={2}
           sx={{ mt: 2 }}
         >
-          {[63, 15, 22].map((item, index) => {
+          {sexSeries.map((item, index) => {
             const label = labels[index];
 
             return (
@@ -145,4 +168,4 @@ function OverviewTraffic() {
   );
 }
 
-export default OverviewTraffic;
+export default SexChart;

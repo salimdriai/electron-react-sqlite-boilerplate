@@ -16,6 +16,7 @@ import {
   User as UserType,
   Account as AccountType,
   Settings as SettingsType,
+  FreeSession as FreeSessionType,
 } from 'types';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -25,6 +26,7 @@ import DB from './db';
 import UserModel from './models/User';
 import AccountModel from './models/Account';
 import SettingsModel from './models/Settings';
+import FreeSessionModel from './models/FreeSession';
 
 class AppUpdater {
   constructor() {
@@ -150,6 +152,7 @@ app
     const User = new UserModel();
     const Account = new AccountModel();
     const Settings = new SettingsModel();
+    const FreeSession = new FreeSessionModel();
 
     // settings
     ipcMain.handle('settings:get', async () => {
@@ -162,8 +165,8 @@ app
     });
 
     // users ----------------------
-    ipcMain.handle('user:getAll', async () => {
-      const users = await User.getAll();
+    ipcMain.handle('user:getAll', async (_, permission: string) => {
+      const users = await User.getAll(permission);
       return users;
     });
     ipcMain.handle('user:getOne', async (_, id: string) => {
@@ -176,10 +179,12 @@ app
     });
     ipcMain.handle('user:insert', async (_, user: UserType) => {
       await User.create(user);
+      user.currentSubscriptions = JSON.parse(user.currentSubscriptions as any);
       return user;
     });
     ipcMain.handle('user:update', async (_, user: UserType) => {
       await User.update(user);
+      user.currentSubscriptions = JSON.parse(user.currentSubscriptions as any);
       return user;
     });
     ipcMain.handle('user:remove', async (_, id: string) => {
@@ -229,6 +234,31 @@ app
     ipcMain.handle('app:isActivated', async () => {
       const res = await Account.isAppActivated();
       return res;
+    });
+
+    // free session
+
+    ipcMain.handle('freeSession:getAll', async () => {
+      const freeSessions = await FreeSession.get();
+      return freeSessions;
+    });
+
+    ipcMain.handle(
+      'freeSession:create',
+      async (_, session: FreeSessionType) => {
+        await FreeSession.create(session);
+        return session;
+      }
+    );
+    ipcMain.handle(
+      'freeSession:update',
+      async (_, session: FreeSessionType) => {
+        await FreeSession.update(session);
+        return session;
+      }
+    );
+    ipcMain.handle('freeSession:delete', async (_, id: string) => {
+      await FreeSession.remove(id);
     });
 
     createWindow();

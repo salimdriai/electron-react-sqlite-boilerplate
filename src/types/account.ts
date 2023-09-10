@@ -1,7 +1,7 @@
 export enum Permission {
   Admin = 'admin',
-  Men = 'men',
-  Women = 'women',
+  Male = 'male',
+  Female = 'female',
   All = 'all',
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,6 +19,7 @@ export default function Header({
 }: {
   openFreeSessionModal: () => void;
 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <AppBar
@@ -38,7 +40,7 @@ export default function Header({
             color="secondary"
             startIcon={<AddIcon />}
           >
-            New user
+            {t('Welcome to React')}
           </Button>
 
           <Button
@@ -49,9 +51,9 @@ export default function Header({
           >
             free session
           </Button>
-          <UserEntry />
         </Stack>
         <Stack direction="row" justifyContent="end" alignItems="center">
+          <UserEntry />
           <AccountMenu />
         </Stack>
       </Toolbar>

@@ -1,24 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
+import { toast } from 'react-toastify';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { Typography } from '@mui/material';
+import { Divider, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Subscription } from 'types';
-
-import bodybuildingIcon from '../../../assets/icons/icons8-treadmill.png';
-import runningIcon from '../../../assets/icons/icons8-curls.png';
-import cyclingIcon from '../../../assets/icons/icons8-cycling.png';
-
-const images = {
-  'body building': bodybuildingIcon,
-  cardio: runningIcon,
-  velo: cyclingIcon,
-};
+import { FreeSession as FreeSessionType, Subscription } from 'types';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   '& .MuiToggleButtonGroup-grouped': {
@@ -69,16 +60,29 @@ function FreeSession({
   onFreeSessionModalClose,
 }: Props) {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [selected, setSelected] = React.useState(() => [
-    'body building',
-    'italic',
-  ]);
+  const [selected, setSelected] = React.useState<any>(() => []);
+  const [fullName, setFullName] = useState({ firstName: '', lastName: '' });
 
   const handleFormat = (
     event: React.MouseEvent<HTMLElement>,
     session: string[]
   ) => {
     setSelected(session);
+  };
+
+  const handleAddSession = async () => {
+    const session: FreeSessionType = {
+      id: new Date().getTime().toString(),
+      firstName: fullName.firstName,
+      lastName: fullName.lastName,
+      sessionType: subscriptions.filter((sub) => selected.includes(sub.name)),
+      enteredAt: new Date().toDateString(),
+      totalPaid: getTotal(subscriptions, selected).toString(),
+    };
+
+    await window.electron.createFreeSessions(session);
+    toast.success('Sessions succesfully added !');
+    onFreeSessionModalClose();
   };
 
   useEffect(() => {
@@ -108,11 +112,23 @@ function FreeSession({
           value={selected}
           onChange={handleFormat}
           aria-label="text formatting"
+          sx={{
+            '& .MuiButtonBase-root': {
+              margin: '0px!important',
+              borderColor: 'lightblue!important',
+            },
+            mt: 2,
+            gap: 2,
+          }}
         >
           {subscriptions?.map((subscription: Subscription) => (
-            <ToggleButton key={subscription.name} value={subscription.name}>
+            <ToggleButton
+              sx={{ minWidth: '200px' }}
+              key={subscription.name}
+              value={subscription.name}
+            >
               {/* @ts-ignore */}
-              <img src={images[subscription.name]} width={40} alt="icon" />
+              {/*  <img src={images[subscription.name]} width={40} alt="icon" /> */}
               <Stack alignItems="start">
                 <Typography variant="h5">{subscription.name}</Typography>
                 <Typography color="secondary">
@@ -122,14 +138,37 @@ function FreeSession({
             </ToggleButton>
           ))}
         </StyledToggleButtonGroup>
+
+        {/*    <Stack direction="row" spacing={2} my={2}>
+          <TextField
+            sx={{ maxWidth: '200px' }}
+            onChange={(e) =>
+              setFullName({ ...fullName, firstName: e.target.value })
+            }
+            variant="outlined"
+            label="first name"
+            value={fullName.firstName}
+          />
+          <TextField
+            sx={{ maxWidth: '200px' }}
+            onChange={(e) =>
+              setFullName({ ...fullName, lastName: e.target.value })
+            }
+            variant="outlined"
+            label="last name"
+            value={fullName.lastName}
+          />
+        </Stack> */}
         <Stack spacing={2} mt={2}>
-          <Typography color="text.secondary" variant="h6" align="center">
-            Total :{' '}
-            <Typography variant="h5" component="span" color="secondary">
-              {getTotal(subscriptions, selected)} DZD
+          <Card sx={{ p: 1 }} variant="outlined">
+            <Typography color="text.secondary" variant="h6" align="center">
+              Total :{' '}
+              <Typography variant="h5" component="span" color="secondary">
+                {getTotal(subscriptions, selected)} DZD
+              </Typography>
             </Typography>
-          </Typography>
-          <Button variant="contained" size="large">
+          </Card>
+          <Button onClick={handleAddSession} variant="contained" size="large">
             Confirm
           </Button>
         </Stack>

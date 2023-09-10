@@ -1,5 +1,7 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+
+import { useNavigate } from 'react-router-dom';
+import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,16 +9,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Avatar from '@mui/material/Avatar';
-import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
 import { User } from 'types';
+import { useAppSelector } from 'features/store';
 import UserStatus from 'components/UserStatus';
 import TableHead from './TableHead';
 import UserDetails from '../UserDetails';
@@ -30,6 +34,8 @@ export default function UsersTable() {
   const [users, setUsers] = React.useState<User[]>([]);
   const [usersDetails, setUsersDetails] = React.useState<User | null>(null);
 
+  const { permission } = useAppSelector((state) => state.authentication);
+
   const handleSearch = async (e: any) => {
     setSearchQuery(e.target.value);
     const query = e.target.value.toLowerCase();
@@ -37,13 +43,13 @@ export default function UsersTable() {
       const result = await window.electron.searchUsers(query);
       setUsers(result);
     } catch (error) {
-      console.log('ERRR', error);
+      console.error('ERRR', error);
     }
   };
 
   const handleClearSearch = async () => {
     setSearchQuery('');
-    const data = await window.electron.getAllUsers();
+    const data = await window.electron.getAllUsers(permission);
     setUsers(data);
   };
 
@@ -70,18 +76,26 @@ export default function UsersTable() {
     () => users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [page, rowsPerPage, users]
   );
+  const navigate = useNavigate();
+
+  const handleEdit = (e: any, row: any) => {
+    e.stopPropagation();
+    navigate('/users/add', { state: row });
+  };
 
   React.useEffect(() => {
-    const getUsers = async () => {
-      const data = await window.electron.getAllUsers();
+    const getUsers = async (per: string) => {
+      const data = await window.electron.getAllUsers(per);
       setUsers(data);
     };
-    getUsers();
-  }, []);
+    if (permission) {
+      getUsers(permission);
+    }
+  }, [permission]);
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper elevation={1} sx={{ width: '100%', mb: 2 }}>
+    <Card variant="outlined" sx={{ width: '100%', mb: 2 }}>
+      <div>
         <Stack direction="row" py={1} px={2}>
           <TextField
             onChange={handleSearch}
@@ -122,9 +136,17 @@ export default function UsersTable() {
                     sx={{ cursor: 'pointer' }}
                   >
                     <TableCell>
-                      <Avatar>
-                        {/* @ts-ignore */}
-                        <img src={row.photo} width="100%" alt={row.firstName} />
+                      <Avatar sx={{ backgroundColor: 'secondary.main' }}>
+                        {row.photo ? (
+                          <img
+                            // @ts-ignore
+                            src={row.photo}
+                            width="100%"
+                            alt={row.firstName}
+                          />
+                        ) : (
+                          row.firstName.charAt(0).toUpperCase()
+                        )}
                       </Avatar>
                     </TableCell>
                     <TableCell
@@ -156,6 +178,11 @@ export default function UsersTable() {
                     <TableCell align="right">
                       <UserStatus status={row.status} />
                     </TableCell>
+                    <TableCell align="right">
+                      <IconButton onClick={(e) => handleEdit(e, row)}>
+                        <EditIcon />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -181,7 +208,7 @@ export default function UsersTable() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Paper>
+      </div>
       <Drawer
         anchor="right"
         sx={{
@@ -196,6 +223,6 @@ export default function UsersTable() {
       >
         <UserDetails user={usersDetails as User} />
       </Drawer>
-    </Box>
+    </Card>
   );
 }

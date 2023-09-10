@@ -7,9 +7,9 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Account, Permission } from 'types';
 import { Chip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { Account } from 'types';
 
 function Administration() {
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -37,24 +37,33 @@ function Administration() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: 4,
           }}
           variant="outlined"
         >
-          <Stack direction="row" alignItems="center" spacing={2}>
+          <Stack flex={3} direction="row" alignItems="center" spacing={2}>
             <Avatar sx={{ width: 60, height: 60 }}>
               {account.username.charAt(0).toLocaleUpperCase()}
             </Avatar>
             <Box>
               <Typography variant="h5">{account.username}</Typography>
               <Typography variant="body2" color="text.secondary">
-                {account.permission === Permission.Admin ? 'admin' : 'user'}
+                {account.role}
               </Typography>
             </Box>
           </Stack>
           <Box>
-            <Chip label="active" color="success" />
+            <Chip
+              sx={{ minWidth: 100 }}
+              label={account.permission}
+              color="primary"
+              variant="outlined"
+            />
           </Box>
-          <Stack direction="row" spacing={1}>
+          <Box>
+            <Chip sx={{ minWidth: 100 }} label="active" color="success" />
+          </Box>
+          <Stack flex={1} direction="row" justifyContent="end" spacing={1}>
             <IconButton onClick={handleClickEdit(account)}>
               <EditIcon color="info" />
             </IconButton>

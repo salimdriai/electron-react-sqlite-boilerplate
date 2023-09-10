@@ -3,6 +3,12 @@ export enum Themes {
   Light = 'light',
 }
 
+export enum Lang {
+  Arabic = 'ar',
+  English = 'en',
+  French = 'fr',
+}
+
 export interface Subscription {
   name: string;
   monthPrice: number;
@@ -12,6 +18,7 @@ export interface Subscription {
 
 export interface Settings {
   theme: Themes;
+  lang: Lang;
   gymName: string;
   subscriptions: Subscription[];
 }

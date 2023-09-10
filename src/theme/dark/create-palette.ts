@@ -6,17 +6,16 @@ export default function createPalette() {
   return {
     action: {
       active: neutral[500],
-      disabled: alpha(neutral[900], 0.38),
+      disabled: alpha(neutral[600], 0.58),
       disabledBackground: alpha(neutral[900], 0.12),
       focus: alpha(neutral[900], 0.16),
       hover: alpha(neutral[900], 0.04),
       selected: alpha(neutral[900], 0.12),
     },
     background: {
-      default: '#1d232a',
-      paper: '#2a323c',
+      default: '#141627',
+      paper: '#1C1F36',
     },
-    // divider: '#F2F4F7',
     error,
     info,
     mode: 'dark',

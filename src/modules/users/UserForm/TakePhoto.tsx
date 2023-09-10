@@ -26,6 +26,7 @@ function TakePhoto({ setCamera }: Props) {
     const photo = canvas.toDataURL('image/jpeg');
     setCamera({ open: false, photo });
   };
+
   return (
     <>
       <video
