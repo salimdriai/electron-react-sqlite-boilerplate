@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,6 +31,7 @@ export default function Login() {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const onSubmit = ({ username, password }: any) => {
     dispatch(logAccount({ username, password }));
@@ -53,11 +55,13 @@ export default function Login() {
       <Stack height="100%" flex={2} justifyContent="center" alignItems="center">
         <Card variant="outlined" sx={{ p: 5 }}>
           <Stack component="form" onSubmit={handleSubmit(onSubmit)} spacing={2}>
-            <Typography variant="h2">Login</Typography>
+            <Typography variant="h2">{t('actions.login')}</Typography>
             <Controller
               control={control}
               name="username"
-              render={({ field }) => <TextField {...field} label="username" />}
+              render={({ field }) => (
+                <TextField {...field} label={t('info.username')} />
+              )}
             />
             <Controller
               control={control}
@@ -65,7 +69,7 @@ export default function Login() {
               render={({ field }) => (
                 <TextField
                   {...field}
-                  label="password"
+                  label={t('info.password')}
                   type={isPasswordVisible ? 'text' : 'password'}
                   InputProps={{
                     endAdornment: (
@@ -90,14 +94,14 @@ export default function Login() {
               )}
             />
             <Button size="large" variant="contained" type="submit">
-              Submit
+              {t('actions.submit')}
             </Button>
           </Stack>
           <Stack mt={2}>
             <Typography>
-              your app not active yet ?{' '}
+              {t('common.notActivated')}{' '}
               <Link component="button" onClick={navigateToActivation}>
-                Activate
+                {t('actions.activate')}
               </Link>
             </Typography>
           </Stack>

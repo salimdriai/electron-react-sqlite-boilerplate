@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -16,10 +17,11 @@ export interface Props {
 
 function Language(props: Props) {
   const { value, onChange } = props;
+  const { t } = useTranslation();
   return (
     <Card variant="outlined">
       <CardHeader
-        title="Language"
+        title={t('common.language')}
         action={<LanguageIcon color="secondary" />}
       />
       <CardContent>

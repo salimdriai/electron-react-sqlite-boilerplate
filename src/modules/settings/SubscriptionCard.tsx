@@ -1,14 +1,13 @@
 import * as React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import CardHeader from '@mui/material/CardHeader';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import { Subscription } from 'types';
-import { displayFormat } from 'utils';
 
 export interface Props {
   subscription: Subscription;
@@ -18,6 +17,8 @@ export interface Props {
 
 function SubscriptionCard(props: Props) {
   const { subscription, onChange, onClickDelete } = props;
+  const { t } = useTranslation();
+
   return (
     <Card variant="outlined" sx={{ p: 2, mt: 2 }}>
       <CardHeader
@@ -37,7 +38,7 @@ function SubscriptionCard(props: Props) {
             onChange={onChange}
             // @ts-ignore
             defaultValue={subscription[key]}
-            label={displayFormat(key)}
+            label={t(key)}
             // @ts-ignore
             value={subscription[key]}
           />

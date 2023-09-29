@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
+import SyncIcon from '@mui/icons-material/Sync';
 import UserEntry from 'modules/users/UserEntry';
 
 import AccountMenu from './AccountMenu';
@@ -40,7 +42,7 @@ export default function Header({
             color="secondary"
             startIcon={<AddIcon />}
           >
-            {t('Welcome to React')}
+            {t('user.add')}
           </Button>
 
           <Button
@@ -49,11 +51,19 @@ export default function Header({
             color="success"
             startIcon={<LoginIcon />}
           >
-            free session
+            {t('common.freeSession')}
           </Button>
         </Stack>
-        <Stack direction="row" justifyContent="end" alignItems="center">
+        <Stack
+          direction="row"
+          justifyContent="end"
+          alignItems="center"
+          spacing={2}
+        >
           <UserEntry />
+          <IconButton onClick={() => window.location.reload()}>
+            <SyncIcon />
+          </IconButton>
           <AccountMenu />
         </Stack>
       </Toolbar>

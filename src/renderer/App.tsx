@@ -12,6 +12,7 @@ import Alert from 'components/Alert';
 import createDarkTheme from '../theme/dark';
 import createLightTheme from '../theme/light';
 import Pages from '../pages';
+import '../i18n';
 
 export default function App() {
   const {

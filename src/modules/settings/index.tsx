@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
@@ -29,6 +30,7 @@ const newSubInitialState = {
 
 function Settings() {
   const { settings } = useAppSelector((state) => state.settings);
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [newSettings, setNewSettings] = useState<SettingsType>({ ...settings });
@@ -86,7 +88,11 @@ function Settings() {
     }
     dispatch(updateSettings(data))
       .unwrap()
-      .then(() => toast.success('Settings successfuly updated .'))
+      .then(() => {
+        toast.success('Settings successfuly updated .');
+        window.location.reload();
+        return null;
+      })
       .catch((err) => toast.error(err));
   };
 
@@ -123,7 +129,7 @@ function Settings() {
       <AdminGuard>
         <Card variant="outlined">
           <CardHeader
-            title="Subscriptions"
+            title={t('subscriptions.subscriptions')}
             action={
               <Button
                 onClick={() => setShowNewSubForm(!showNewSubForm)}
@@ -160,7 +166,7 @@ function Settings() {
           size="large"
           color="success"
         >
-          save changes
+          {t('actions.save')}
         </Button>
       </Stack>
 

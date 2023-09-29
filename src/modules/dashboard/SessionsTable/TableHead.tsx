@@ -5,51 +5,24 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-interface Data {
-  fullName: string;
-  id: string;
-  phoneNumber: number;
-  subscriptions: any;
-  status: string;
-}
-
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
+const headCells = [
   {
-    id: 'fullName',
+    id: 'enteredAt',
     numeric: false,
     disablePadding: true,
-    label: 'name',
+    label: 'date',
   },
   {
-    id: 'id',
+    id: 'sessionType',
     numeric: false,
     disablePadding: false,
-    label: 'id',
+    label: 'type',
   },
   {
-    id: 'phoneNumber',
+    id: 'totalPaid',
     numeric: true,
     disablePadding: false,
-    label: 'phoneNumber',
-  },
-  {
-    id: 'subscriptions',
-    numeric: true,
-    disablePadding: false,
-    label: 'subscriptions',
-  },
-  {
-    id: 'status',
-    numeric: true,
-    disablePadding: false,
-    label: 'status',
+    label: 'total paid',
   },
 ];
 
@@ -59,7 +32,6 @@ export default function EnhancedTableHead() {
   return (
     <TableHead>
       <TableRow>
-        <TableCell />
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}

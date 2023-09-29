@@ -4,7 +4,7 @@ export enum Themes {
 }
 
 export enum Lang {
-  Arabic = 'ar',
+  //  Arabic = 'ar',
   English = 'en',
   French = 'fr',
 }

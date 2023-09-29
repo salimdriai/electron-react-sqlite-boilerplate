@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -45,6 +46,7 @@ const routes = [
 export default function SideNavigation() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const { t } = useTranslation();
   const { permission } = useAppSelector((state) => state.authentication);
   const dispatch = useAppDispatch();
 
@@ -74,7 +76,7 @@ export default function SideNavigation() {
             <ListItemText
               primary={
                 <Typography variant="button" textTransform="none">
-                  {route.label}
+                  {t(`common.${route.label}`)}
                 </Typography>
               }
             />
@@ -91,7 +93,7 @@ export default function SideNavigation() {
           <ListItemText
             primary={
               <Typography variant="button" textTransform="none">
-                logout
+                {t('actions.logout')}
               </Typography>
             }
           />

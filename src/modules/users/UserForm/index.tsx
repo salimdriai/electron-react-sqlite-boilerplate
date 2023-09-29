@@ -1,5 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm, Controller } from 'react-hook-form';
@@ -54,6 +56,8 @@ function UserForm() {
       amount: 0,
     }))
   );
+
+  const { t } = useTranslation();
 
   const {
     control,
@@ -195,7 +199,6 @@ function UserForm() {
   };
 
   const isSubscriptionFieldsValid = (subscriptions: any) => {
-    console.log('subscriptions', subscriptions);
     let isValid = true;
     subscriptions.forEach((sub: any) => {
       if (!sub.startedAt || !sub.endsAt || !sub.sessionsAvailable) {
@@ -307,7 +310,7 @@ function UserForm() {
           <Box height={40}>
             {camera.photo && (
               <Button size="small" color="error" onClick={removePhoto}>
-                remove
+                {t('actions.delete')}
               </Button>
             )}
           </Box>
@@ -366,7 +369,7 @@ function UserForm() {
                   <Select
                     onChange={(v) => field.onChange(v as any)}
                     value={field.value}
-                    label="sex"
+                    label={t('info.sex')}
                   >
                     <MenuItem value={Sex.Male}>Male</MenuItem>
                     <MenuItem value={Sex.Female}>Female</MenuItem>
@@ -401,7 +404,7 @@ function UserForm() {
                 <TextField
                   fullWidth
                   {...field}
-                  label="first name"
+                  label={t('info.firstname')}
                   error={!!errors.firstName}
                   helperText={<> {errors.firstName?.message || ''} </>}
                 />
@@ -433,7 +436,7 @@ function UserForm() {
                   type="text"
                   fullWidth
                   {...field}
-                  label="last name"
+                  label={t('info.lastname')}
                   error={!!errors.lastName}
                   helperText={<> {errors.lastName?.message || ''}</>}
                 />
@@ -472,7 +475,7 @@ function UserForm() {
                   type="number"
                   fullWidth
                   {...field}
-                  label="phone number"
+                  label={t('info.phoneNumber')}
                   error={!!errors.phoneNumber}
                   helperText={<> {errors.phoneNumber?.message || ''} </>}
                 />
@@ -507,7 +510,9 @@ function UserForm() {
                       watch('birthDate') ? new Date(watch('birthDate')) : null
                     }
                     onChange={(d) => field.onChange(d?.toDateString())}
-                    customInput={<TextField fullWidth label="birth date" />}
+                    customInput={
+                      <TextField fullWidth label={t('info.birthDate')} />
+                    }
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
@@ -538,7 +543,7 @@ function UserForm() {
                 },
               }}
               render={({ field }) => (
-                <TextField type="number" {...field} label="height" />
+                <TextField type="number" {...field} label={t('info.height')} />
               )}
             />
 
@@ -552,7 +557,7 @@ function UserForm() {
                 },
               }}
               render={({ field }) => (
-                <TextField type="number" {...field} label="weight" />
+                <TextField type="number" {...field} label={t('info.weight')} />
               )}
             />
 
@@ -561,12 +566,13 @@ function UserForm() {
               control={control}
               render={({ field }) => (
                 <FormControl sx={{ width: 140 }}>
-                  <InputLabel>blood type</InputLabel>
+                  <InputLabel>{t('info.bloodType')}</InputLabel>
                   <Select
                     onChange={(v) => field.onChange(v as any)}
                     value={field.value}
-                    label="sex"
+                    label={t('info.bloodType')}
                   >
+                    <MenuItem value="">none</MenuItem>
                     {Object.values(BloodType).map((type: string) => (
                       <MenuItem value={type}>{type}</MenuItem>
                     ))}
@@ -620,19 +626,19 @@ function UserForm() {
                       value={`${name}.1`}
                       // sx={{ backgroundColor: 'red' }}
                     >
-                      +1 Month
+                      +1 {t('common.month')}
                     </ToggleButton>
                     <ToggleButton
                       disabled={isCardFieldsDisabled(name)}
                       value={`${name}.2`}
                     >
-                      +2 Months
+                      +2 {t('common.month')}
                     </ToggleButton>
                     <ToggleButton
                       disabled={isCardFieldsDisabled(name)}
                       value={`${name}.3`}
                     >
-                      +3 Months
+                      +3 {t('common.month')}
                     </ToggleButton>
                   </StyledToggleButtonGroup>
                 </Stack>
@@ -656,7 +662,7 @@ function UserForm() {
                   />
                   <TextField
                     disabled={isCardFieldsDisabled(name)}
-                    label="sessions"
+                    label={t('common.sessions')}
                     defaultValue={0}
                     onChange={handleChangeSessionsNumber(name)}
                     value={
@@ -679,7 +685,7 @@ function UserForm() {
           size="large"
           variant="contained"
         >
-          {isEditMode ? 'Update' : 'Register'}
+          {isEditMode ? t('actions.update') : t('actions.register')}
         </Button>
       </Box>
     </form>

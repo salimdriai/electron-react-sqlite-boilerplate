@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
@@ -18,6 +19,7 @@ export interface Props {
 
 function DeleteSubscriptionModal(props: Props) {
   const { open, onClose, onClickDelete } = props;
+  const { t } = useTranslation();
 
   return (
     <Modal
@@ -34,13 +36,13 @@ function DeleteSubscriptionModal(props: Props) {
         <CardContent sx={{ alignItems: 'cetner' }}>
           <Stack alignItems="center">
             <DeleteIcon color="error" sx={{ fontSize: '60px' }} />
-            <Typography>Do you wanna delete this subscription ?</Typography>
+            <Typography>{t('subscriptions.confirmDelete')}</Typography>
           </Stack>
         </CardContent>
         <CardActions sx={{ justifyContent: 'end', mt: 4 }}>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{t('actions.cancel')}</Button>
           <Button variant="contained" color="error" onClick={onClickDelete}>
-            Confirm
+            {t('actions.confirm')}
           </Button>
         </CardActions>
       </Card>

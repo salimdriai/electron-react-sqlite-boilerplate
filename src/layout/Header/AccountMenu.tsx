@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -77,6 +78,7 @@ const paperProps = {
 function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { t } = useTranslation();
 
   const { username, permission } = useAppSelector(
     ({ authentication }) => authentication
@@ -102,7 +104,6 @@ function AccountMenu() {
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{ ml: 2 }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -137,7 +138,7 @@ function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar /> My account
+          <Avatar /> {t('account.myAccount')}
         </MenuItem>
         <Divider />
         {permission === Permission.Admin && (
@@ -146,13 +147,13 @@ function AccountMenu() {
               <ListItemIcon>
                 <PersonAdd fontSize="small" />
               </ListItemIcon>
-              Add another account
+              {t('account.add')}
             </MenuItem>
             <MenuItem onClick={() => navigate('/settings')}>
               <ListItemIcon>
                 <Settings fontSize="small" />
               </ListItemIcon>
-              Settings
+              {t('common.settings')}
             </MenuItem>
           </>
         )}
@@ -160,7 +161,7 @@ function AccountMenu() {
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          {t('actions.logout')}
         </MenuItem>
       </Menu>
     </>

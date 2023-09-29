@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+
+import { useTranslation } from 'react-i18next';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -78,6 +80,7 @@ function UserSubscriptions({ user }: { user: User }) {
     React.useState(false);
 
   const [extend, setExtend] = React.useState<Extend[]>([]);
+  const { t } = useTranslation();
 
   const handleExtend =
     (targetName: string) =>
@@ -115,7 +118,6 @@ function UserSubscriptions({ user }: { user: User }) {
         return p;
       })
     );
-    console.log('e', extend);
   };
 
   useEffect(() => {
@@ -161,9 +163,15 @@ function UserSubscriptions({ user }: { user: User }) {
           />
 
           <CardContent sx={{ py: 0, display: 'flex', gap: 4 }}>
-            <Typography>started at : {sub.startedAt}</Typography>
-            <Typography>ends at : {sub.endsAt}</Typography>
-            <Typography>sessions spent : {sub.sessionsSpent}</Typography>
+            <Typography>
+              {t('info.startsAt')} : {sub.startedAt}
+            </Typography>
+            <Typography>
+              {t('info.endsAt')} : {sub.endsAt}
+            </Typography>
+            <Typography>
+              {t('info.sessionsSpent')} : {sub.sessionsSpent}
+            </Typography>
           </CardContent>
         </Card>
       ))}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import TextField from '@mui/material/TextField';
@@ -37,6 +38,7 @@ function UserEntry() {
     message: '',
   });
 
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -174,14 +176,14 @@ function UserEntry() {
           )}
           <Stack direction="row" justifyContent="end" spacing={2} mt={2}>
             <Button variant="outlined" color="secondary" onClick={handleclose}>
-              Close
+              {t('actions.close')}
             </Button>
             <Button
               endIcon={<ArrowRightAltIcon />}
               variant="contained"
               onClick={navigateToUser}
             >
-              Go to user info
+              {t('actions.goToUserInfo')}
             </Button>
           </Stack>
         </Card>

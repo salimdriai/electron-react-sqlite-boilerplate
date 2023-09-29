@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import Card from '@mui/material/Card';
@@ -16,6 +17,7 @@ import { Role, Permission, Account } from 'types';
 
 function AccountForm() {
   const { state } = useLocation();
+  const { t } = useTranslation();
 
   const isEditMode = useMemo(() => !!state, [state]);
 
@@ -38,10 +40,7 @@ function AccountForm() {
   };
 
   const updateAccount = async (account: Account) => {
-    await window.electron
-      .updateAccount(account)
-      .then((res) => console.log(res))
-      .catch((err) => console.log('ERRRR', err));
+    await window.electron.updateAccount(account);
     toast.success('Account updated successfuly');
   };
 
@@ -79,7 +78,7 @@ function AccountForm() {
       onSubmit={handleSubmit(submitAccount)}
     >
       <Typography variant="h5" gutterBottom>
-        Account info:
+        {t('common.accountInfo')}:
       </Typography>
       <Stack spacing={4}>
         <Controller
@@ -89,7 +88,7 @@ function AccountForm() {
             <TextField
               disabled={isEditMode}
               type="text"
-              label="username"
+              label={t('info.username')}
               {...field}
             />
           )}
@@ -99,13 +98,18 @@ function AccountForm() {
             name="password"
             control={control}
             render={({ field }) => (
-              <TextField fullWidth type="text" label="password" {...field} />
+              <TextField
+                fullWidth
+                type="text"
+                label={t('info.password')}
+                {...field}
+              />
             )}
           />
           <TextField
             fullWidth
             type="text"
-            label="confirm password"
+            label={t('info.passwordConfirm')}
             value={passwordConfirmation}
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             error={passwordConfirmation !== watch('password')}
@@ -123,7 +127,7 @@ function AccountForm() {
                 <Select
                   onChange={(v) => field.onChange(v as any)}
                   value={field.value}
-                  label="permission"
+                  label={t('info.permission')}
                 >
                   {Object.keys(Permission).map((key) => (
                     /* @ts-ignore */
@@ -145,7 +149,7 @@ function AccountForm() {
                 <Select
                   onChange={(v) => field.onChange(v as any)}
                   value={field.value}
-                  label="role"
+                  label={t('info.role')}
                 >
                   {Object.keys(Role).map((key) => (
                     /* @ts-ignore */
@@ -159,7 +163,7 @@ function AccountForm() {
           />
         </Stack>
         <Button variant="contained" type="submit">
-          {isEditMode ? 'Update account' : 'Add account'}
+          {isEditMode ? t('actions.update') : t('actions.create')}
         </Button>
       </Stack>
     </Card>

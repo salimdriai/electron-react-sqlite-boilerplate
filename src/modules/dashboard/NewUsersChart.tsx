@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import SyncIcon from '@mui/icons-material/Sync';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  SvgIcon,
-} from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 import { toast } from 'react-toastify';
 import { alpha, useTheme } from '@mui/material/styles';
 import Chart from 'react-apexcharts';
@@ -112,7 +105,7 @@ const useChartOptions = () => {
 
 function NewUsersChart() {
   const chartOptions = useChartOptions();
-
+  const { t } = useTranslation();
   const [series, setSeries] = useState<any>({
     currentYearSeries: new Array(12).fill(0),
     lastYearSeries: new Array(12).fill(0),
@@ -155,22 +148,7 @@ function NewUsersChart() {
 
   return (
     <Card variant="outlined" sx={{ height: '100%', flex: 2 }}>
-      <CardHeader
-        action={
-          <Button
-            color="inherit"
-            size="small"
-            startIcon={
-              <SvgIcon fontSize="small">
-                <SyncIcon />
-              </SvgIcon>
-            }
-          >
-            Sync
-          </Button>
-        }
-        title="New Subscribers"
-      />
+      <CardHeader title={t('subscriptions.new')} />
       <CardContent>
         <Chart
           height={300}

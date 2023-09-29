@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from 'react';
+
+import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,6 +26,7 @@ export default function ActivationPage() {
   const [account, setAccount] = React.useState<Account | null>(null);
   const [isAppActivated, setIsAppActivated] = React.useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const activate = async (data: { key: string }) => {
     const res = await window.electron.activateApp(data.key);
@@ -38,8 +41,6 @@ export default function ActivationPage() {
   React.useEffect(() => {
     const checkAppStatus = async () => {
       const res = await window.electron.isAppActivated();
-      console.log('RES');
-
       setIsAppActivated(!!res[0]['COUNT(*)']);
     };
     checkAppStatus();
@@ -59,19 +60,21 @@ export default function ActivationPage() {
       <Stack height="100%" flex={2} justifyContent="center" alignItems="center">
         {account ? (
           <Card variant="outlined" sx={{ p: 5 }}>
-            <Typography variant="h5">Your credentials :</Typography>
+            <Typography variant="h5">
+              {t('common.yourCredentials')} :
+            </Typography>
             <Typography variant="body2" color="text.secondary">
-              please make sure to save a copy of your credentials .
+              {t('common.saveCopyCredentials')}
             </Typography>
             <Card variant="outlined" sx={{ p: 2, my: 2 }}>
               <Typography variant="body2" color="text.secondary">
-                username :
+                {t('info.username')} :
               </Typography>
               <Typography gutterBottom variant="h6">
                 {account?.username}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                password :
+                {t('info.password')} :
               </Typography>
               <Typography gutterBottom variant="h6">
                 {account?.password}
@@ -79,7 +82,7 @@ export default function ActivationPage() {
             </Card>
             <Stack>
               <Button variant="contained" onClick={() => navigate('/')}>
-                Go to login
+                {t('actions.goToLogin')}
               </Button>
             </Stack>
           </Card>
@@ -123,12 +126,12 @@ export default function ActivationPage() {
                 fullWidth
                 disabled={isAppActivated}
               >
-                Activate
+                {t('actions.activate')}
               </Button>
               <Typography>
-                Already activated the app ?{' '}
+                {t('common.alreadyActivated')}{' '}
                 <Link component="button" onClick={() => navigate('/')}>
-                  Login
+                  {t('actions.login')}
                 </Link>
               </Typography>
             </Stack>

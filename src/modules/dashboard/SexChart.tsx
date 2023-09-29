@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import SyncIcon from '@mui/icons-material/Sync';
 import {
   Box,
   Card,
@@ -12,7 +12,6 @@ import {
   SvgIcon,
   Typography,
   useTheme,
-  Button,
 } from '@mui/material';
 import Chart from 'react-apexcharts';
 import { Sex, User } from 'types';
@@ -77,9 +76,10 @@ const iconMap: any = {
 
 function SexChart() {
   const [sexSeries, setSexSeries] = useState([0, 0]);
-  const labels = ['Male', 'Female'];
-  const chartOptions = useChartOptions(labels);
   const { permission } = useAppSelector((state) => state.authentication);
+  const { t } = useTranslation();
+  const labels = [t('info.male'), t('info.female')];
+  const chartOptions = useChartOptions(labels);
 
   useEffect(() => {
     const getSeries = async () => {
@@ -109,25 +109,10 @@ function SexChart() {
 
   return (
     <Card variant="outlined" sx={{ height: '100%', flex: 1 }}>
-      <CardHeader
-        action={
-          <Button
-            color="inherit"
-            size="small"
-            startIcon={
-              <SvgIcon fontSize="small">
-                <SyncIcon />
-              </SvgIcon>
-            }
-          >
-            Sync
-          </Button>
-        }
-        title="Gender"
-      />
+      <CardHeader title={t('info.sex')} />
       <CardContent>
         <Chart
-          height={230}
+          height="250px"
           options={chartOptions}
           series={sexSeries}
           type="donut"

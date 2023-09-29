@@ -23,12 +23,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import { User } from 'types';
 import { useAppSelector } from 'features/store';
 import UserStatus from 'components/UserStatus';
+import UserDetails from 'modules/users/UserDetails';
 import TableHead from './TableHead';
-import UserDetails from '../UserDetails';
 
 const colors = ['info', 'primary', 'secondary'];
 
-export default function UsersTable() {
+export default function UsersTable({
+  latestEnteredUsers,
+}: {
+  latestEnteredUsers: User[];
+}) {
   const [page, setPage] = React.useState(0);
   const [seachQuery, setSearchQuery] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -86,19 +90,27 @@ export default function UsersTable() {
   };
 
   React.useEffect(() => {
-    const getUsers = async (per: string) => {
+    setUsers(latestEnteredUsers);
+    /*   const getUsers = async (per: string) => {
       const data = await window.electron.getAllUsers(per);
-      setUsers(data);
+      setUsers(latestEnteredUsers);
     };
     if (permission) {
       getUsers(permission);
-    }
-  }, [permission]);
+    } */
+  }, [permission, latestEnteredUsers]);
 
   return (
     <Card variant="outlined" sx={{ width: '100%', mb: 2 }}>
       <div>
-        <Stack direction="row" py={1} px={2}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          py={1}
+          px={2}
+        >
+          <Typography variant="h6"> {t('user.latest')}</Typography>
           <TextField
             onChange={handleSearch}
             value={seachQuery}

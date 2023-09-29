@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -15,6 +17,7 @@ import UserSubscriptions from './UserSubscriptions';
 
 function UserDetails({ user }: { user: User }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleEdit = () => {
     navigate('/users/add', { state: user });
@@ -71,7 +74,7 @@ function UserDetails({ user }: { user: User }) {
         <UserInfo user={user} />
       </Box>
       <Box>
-        <Typography variant="h5">Subscriptions</Typography>
+        <Typography variant="h5">{t('subscriptions.subscriptions')}</Typography>
         <UserSubscriptions user={user} />
       </Box>
     </Stack>
