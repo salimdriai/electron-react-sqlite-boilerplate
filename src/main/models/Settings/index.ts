@@ -13,20 +13,24 @@ export default class SettingsModel extends DB {
   constructor() {
     super();
     this.db = super.connect();
-    this.db.exec(createSettingsTable);
     this.initSettings();
   }
 
-  initSettings() {
-    const initialSettings = {
-      theme: 'dark',
-      lang: 'en',
-      gymName: 'gym boss',
-      subscriptions: JSON.stringify([]),
-    };
+  async initSettings() {
+    try {
+      await this.db.exec(createSettingsTable);
+      const initialSettings = {
+        theme: 'dark',
+        lang: 'en',
+        gymName: 'gym boss',
+        subscriptions: JSON.stringify([]),
+      };
 
-    const stm = this.db.prepare(createQuery);
-    stm.run(initialSettings);
+      const stm = this.db.prepare(createQuery);
+      stm.run(initialSettings);
+    } catch (err) {
+      console.error('FAILED TO INIT SETTINGS', err);
+    }
   }
 
   get(): Settings[] {

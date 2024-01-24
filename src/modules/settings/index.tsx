@@ -20,6 +20,7 @@ import GymInfo from './GymInfo';
 import Language from './Language';
 import Theme from './Theme';
 import DeleteSubscriptionModal from './DeleteSubscriptionModal';
+import ImportUsers from './ImportUsers';
 
 const newSubInitialState = {
   name: 'new subscription',
@@ -169,7 +170,9 @@ function Settings() {
           {t('actions.save')}
         </Button>
       </Stack>
-
+      <Stack direction="row" spacing={2}>
+        <ImportUsers />
+      </Stack>
       <DeleteSubscriptionModal
         open={subDeletion.modalOpen}
         onClose={() => setSubDeletion({ modalOpen: false, subIndex: 0 })}

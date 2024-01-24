@@ -216,6 +216,8 @@ function UserForm() {
     };
 
     if (!isSubscriptionFieldsValid(data.currentSubscriptions)) {
+      console.log(data.currentSubscriptions);
+
       toast.error('Incorrect subscription fields!');
       return;
     }

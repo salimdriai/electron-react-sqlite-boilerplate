@@ -34,7 +34,7 @@
       "bloodType": "blood type",
       "startsAt": "starts At",
       "endsAt": "ends At",
-      "registeredAt": "ends At",
+      "registeredAt": "registered At",
       "sessionsSpent": "sessions spent",
       "allTimeSessions": "all time sessions",
       "username": "username",

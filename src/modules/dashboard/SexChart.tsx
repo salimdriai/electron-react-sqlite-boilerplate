@@ -100,7 +100,11 @@ function SexChart() {
           females += 1;
         }
       });
-      setSexSeries([males, females]);
+
+      const malePercentage = ((100 * males) / allUsers.length).toFixed(2);
+      const femalePercentage = ((100 * females) / allUsers.length).toFixed(2);
+
+      setSexSeries([parseFloat(malePercentage), parseFloat(femalePercentage)]);
       return null;
     };
     getSeries();

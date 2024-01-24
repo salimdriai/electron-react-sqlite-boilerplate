@@ -18,7 +18,7 @@ export interface UserSubscription {
   paid: number;
   sessionsAvailable: number;
   sessionsSpent: number;
-  lastEntryTimestamp: number;
+  lastEntryTimestamp?: number;
 }
 
 export enum Sex {
@@ -38,13 +38,13 @@ export interface User {
   lastName: string;
   phoneNumber?: string;
   birthDate: string;
-  sex: 'Male' | 'Female';
+  sex: Sex;
   height?: number;
   weight?: number;
-  photo?: Blob;
+  photo?: Blob | string;
   registeredAt: string;
   currentSubscriptions: UserSubscription[];
   allTimeSessions?: number;
   status: Status;
-  bloodType: BloodType;
+  bloodType?: BloodType;
 }

@@ -6,10 +6,10 @@ VALUES (@theme, @lang, @gymName, @subscriptions)`;
 
 export const updateQuery = `
 UPDATE Settings
-SET subscriptions = @subscriptions,
-    theme = @theme,
+SET theme = @theme,
     lang = @lang,
-    gymName = @gymName
+    gymName = @gymName,
+    subscriptions = @subscriptions
 WHERE ROWID = 1;
 `;
 

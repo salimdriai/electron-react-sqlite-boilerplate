@@ -12,7 +12,7 @@ import Divider from '@mui/material/Divider';
 
 import PeopleIcon from '@mui/icons-material/People';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import CategoryIcon from '@mui/icons-material/Category';
+// import CategoryIcon from '@mui/icons-material/Category';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
@@ -23,12 +23,12 @@ import { logout } from 'features/authentication';
 const routes = [
   { label: 'dashboard', path: '/', icon: <DashboardIcon />, adminOnly: false },
   { label: 'users', path: '/users', icon: <PeopleIcon />, adminOnly: false },
-  {
-    label: 'products',
-    path: '/products',
-    icon: <CategoryIcon />,
-    adminOnly: false,
-  },
+  // {
+  //   label: 'products',
+  //   path: '/products',
+  //   icon: <CategoryIcon />,
+  //   adminOnly: false,
+  // },
   {
     label: 'settings',
     path: '/settings',
