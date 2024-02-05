@@ -2,9 +2,9 @@
 
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { styled } from '@mui/material/styles';
-import { Sex } from 'types/user';
+import { Sex, User, BloodType } from 'types/user';
 
-export const defaultValues = {
+export const userDefaultValues: User = {
   id: '',
   firstName: '',
   lastName: '',
@@ -15,10 +15,7 @@ export const defaultValues = {
   weight: 0,
   photo: '',
   registeredAt: '',
-  allTimeSessions: 0,
-  status: '',
-  bloodType: '',
-  currentSubscriptions: [],
+  bloodType: BloodType.Op,
 };
 
 export const subscriptionOptions = [

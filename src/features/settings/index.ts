@@ -2,8 +2,6 @@
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
 import { Lang, Settings, Themes } from 'types';
-import { getFromLocalStorage } from 'utils/local-storage';
-import { getSettings, updateSettings } from './reducers';
 
 interface InitialState {
   settings: Settings;
@@ -11,18 +9,11 @@ interface InitialState {
   error: any;
 }
 
-const SettingsLsKey = 'auth';
-const settings: any = getFromLocalStorage(SettingsLsKey);
-const defaultTheme = settings?.theme || Themes.Light;
-const defaultLang = settings?.lang || Lang.English;
-const defaultName = settings?.gymName || '';
-
 const initialState: InitialState = {
   settings: {
-    subscriptions: [],
-    lang: defaultLang,
-    theme: defaultTheme,
-    gymName: defaultName,
+    lang: Lang.English,
+    theme: Themes.Light,
+    gymName: 'Gym Boss',
   },
   loading: false,
   error: null,
@@ -31,35 +22,19 @@ const initialState: InitialState = {
 const settingsSlice = createSlice({
   name: 'settings',
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(getSettings.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getSettings.fulfilled, (state, action) => {
-      state.settings = action.payload;
-      state.loading = false;
-    });
-    builder.addCase(getSettings.rejected, (state, action) => {
-      state.error = action.error;
-      state.loading = false;
-    });
-
-    builder.addCase(updateSettings.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(updateSettings.fulfilled, (state, action) => {
-      state.settings = action.payload;
-      state.loading = false;
-    });
-    builder.addCase(updateSettings.rejected, (state, action) => {
-      console.log('ERR', action.error);
-      state.error = action.error;
-      state.loading = false;
-    });
+  reducers: {
+    switchTheme: (state, action) => {
+      console.log('payload', action.payload);
+      state.settings.theme = action.payload;
+      window.electron.setStoreData('settings.theme', action.payload);
+    },
+    switchLanguage: (state, action) => {
+      window.electron.setStoreData('settings.language', action.payload);
+      state.settings.lang = action.payload;
+    },
   },
 });
 
-// export const {} = settingsSlice.actions;
+export const { switchTheme, switchLanguage } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

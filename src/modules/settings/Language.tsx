@@ -9,15 +9,20 @@ import Select from '@mui/material/Select';
 import LanguageIcon from '@mui/icons-material/Language';
 
 import { Lang } from 'types';
+import { useAppDispatch, useAppSelector } from 'features/store';
+import { switchLanguage } from 'features/settings';
 
-export interface Props {
-  value: string;
-  onChange: (e: any) => void;
-}
+function Language() {
+  const { t, i18n } = useTranslation();
+  const { settings } = useAppSelector((state) => state.settings);
+  const dispatch = useAppDispatch();
 
-function Language(props: Props) {
-  const { value, onChange } = props;
-  const { t } = useTranslation();
+  const onChange = async (e: any) => {
+    const lang = e.target.value || 'en';
+    dispatch(switchLanguage(lang));
+    i18n.changeLanguage(lang);
+  };
+
   return (
     <Card variant="outlined">
       <CardHeader
@@ -25,7 +30,7 @@ function Language(props: Props) {
         action={<LanguageIcon color="secondary" />}
       />
       <CardContent>
-        <Select sx={{ width: 200 }} value={value} onChange={onChange}>
+        <Select sx={{ width: 200 }} value={settings.lang} onChange={onChange}>
           {Object.keys(Lang).map((key: string) => (
             <MenuItem key={key} value={(Lang as any)[key]}>
               {key}

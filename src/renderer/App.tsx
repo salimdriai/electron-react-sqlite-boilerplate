@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useAppDispatch, useAppSelector } from 'features/store';
-import { getSettings } from 'features/settings/reducers';
+import { switchTheme, switchLanguage } from 'features/settings';
 import { currentUser } from 'features/authentication';
 import { Themes } from 'types';
 import Loading from 'components/Loading';
@@ -24,13 +25,23 @@ export default function App() {
     (state) => state.authentication
   );
 
+  const { i18n } = useTranslation();
+
   const darkTheme = createDarkTheme();
   const lightTheme = createLightTheme();
   const dispatch = useAppDispatch();
 
+  const initSettings = async () => {
+    const settings = await window.electron.getStoreData('settings');
+    i18n.changeLanguage(settings.language || 'en');
+    dispatch(switchLanguage(settings.language || 'en'));
+    dispatch(switchTheme(settings.theme || Themes.Dark));
+  };
+
   useEffect(() => {
     dispatch(currentUser());
-    dispatch(getSettings());
+    initSettings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return (

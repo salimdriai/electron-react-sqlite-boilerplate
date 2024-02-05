@@ -18,6 +18,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     radix: 'off',
     'no-nested-ternary': 'off',
+    'react/function-component-definition': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

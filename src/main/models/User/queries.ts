@@ -7,10 +7,10 @@ export const removeAllQuery = 'DELETE FROM Users';
 
 export const createQuery = `INSERT INTO Users
   (id, firstName, lastName, phoneNumber, birthDate,
-  height, weight, sex, photo, registeredAt, currentSubscriptions,
+  height, weight, sex, photo, registeredAt,
   allTimeSessions, status, bloodType)
   VALUES (@id, @firstName, @lastName, @phoneNumber, @birthDate,
-  @height, @weight, @sex, @photo, @registeredAt, @currentSubscriptions,
+  @height, @weight, @sex, @photo, @registeredAt,
   @allTimeSessions, @status, @bloodType)`;
 
 export const updateQuery = `UPDATE Users SET
@@ -18,7 +18,6 @@ export const updateQuery = `UPDATE Users SET
   phoneNumber = @phoneNumber, birthDate = @birthDate,
   height = @height, weight = @weight, sex = @sex, photo = @photo,
   registeredAt = @registeredAt,
-  currentSubscriptions = @currentSubscriptions,
   allTimeSessions = @allTimeSessions, status = @status,
   bloodType = @bloodType
   WHERE id = @id`;
@@ -38,7 +37,6 @@ CREATE TABLE IF NOT EXISTS Users(
   sex TEXT,
   photo BLOB,
   registeredAt TEXT,
-  currentSubscriptions TEXT,
   allTimeSessions INTEGER,
   status TEXT,
   bloodType TEXT

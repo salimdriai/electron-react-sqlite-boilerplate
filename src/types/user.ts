@@ -41,10 +41,7 @@ export interface User {
   sex: Sex;
   height?: number;
   weight?: number;
-  photo?: Blob | string;
+  photo?: string;
   registeredAt: string;
-  currentSubscriptions: UserSubscription[];
-  allTimeSessions?: number;
-  status: Status;
   bloodType?: BloodType;
 }

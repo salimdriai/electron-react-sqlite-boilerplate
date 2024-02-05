@@ -9,15 +9,18 @@ import Switch from '@mui/material/Switch';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 import { Themes } from 'types';
+import { switchTheme } from 'features/settings';
+import { useAppDispatch, useAppSelector } from 'features/store';
 
-export interface IAppProps {
-  checked: boolean;
-  onChange: (e: any) => void;
-}
-
-function Theme(props: IAppProps) {
-  const { checked, onChange } = props;
+function Theme() {
   const { t } = useTranslation();
+  const { settings } = useAppSelector((state) => state.settings);
+  const dispatch = useAppDispatch();
+
+  const onChange = async (e: any) => {
+    const isDark = e.target.checked;
+    dispatch(switchTheme(isDark ? Themes.Dark : Themes.Light));
+  };
 
   return (
     <Card variant="outlined" sx={{ width: 200 }}>
@@ -27,7 +30,12 @@ function Theme(props: IAppProps) {
       />
       <CardContent>
         <FormControlLabel
-          control={<Switch onChange={onChange} checked={checked} />}
+          control={
+            <Switch
+              onChange={onChange}
+              checked={settings.theme === Themes.Dark}
+            />
+          }
           label={Themes.Dark}
         />
       </CardContent>

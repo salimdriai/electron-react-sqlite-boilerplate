@@ -10,6 +10,7 @@
  */
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import {
@@ -17,6 +18,8 @@ import {
   Account as AccountType,
   Settings as SettingsType,
   FreeSession as FreeSessionType,
+  SubscriptionPlan as SubscriptionPlanType,
+  Subscription,
 } from 'types';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -27,6 +30,8 @@ import UserModel from './models/User';
 import AccountModel from './models/Account';
 import SettingsModel from './models/Settings';
 import FreeSessionModel from './models/FreeSession';
+import SubscriptionPlanModel from './models/SubscriptionPlans';
+import SubscriptionsModel from './models/Subscription';
 
 class AppUpdater {
   constructor() {
@@ -153,6 +158,8 @@ app
     const Account = new AccountModel();
     const Settings = new SettingsModel();
     const FreeSession = new FreeSessionModel();
+    const SubscriptionPlan = new SubscriptionPlanModel();
+    const Subscriptions = new SubscriptionsModel();
 
     // settings
     ipcMain.handle('settings:get', async () => {
@@ -179,12 +186,10 @@ app
     });
     ipcMain.handle('user:insert', async (_, user: UserType) => {
       await User.create(user);
-      user.currentSubscriptions = JSON.parse(user.currentSubscriptions as any);
       return user;
     });
     ipcMain.handle('user:update', async (_, user: UserType) => {
       await User.update(user);
-      user.currentSubscriptions = JSON.parse(user.currentSubscriptions as any);
       return user;
     });
     ipcMain.handle('user:remove', async (_, id: string) => {
@@ -192,6 +197,49 @@ app
     });
     ipcMain.handle('user:removeAll', async () => {
       await User.removeAll();
+    });
+
+    // subscription plans -------------
+    ipcMain.handle('subscriptionPlan:getAll', async () => {
+      const users = await SubscriptionPlan.getAll();
+      return users;
+    });
+
+    ipcMain.handle(
+      'subscriptionPlan:insert',
+      async (_, plan: SubscriptionPlanType) => {
+        await SubscriptionPlan.create(plan);
+        return plan;
+      }
+    );
+
+    // subscriptions -------------------
+    ipcMain.handle(
+      'subscriptions:getUserSubscriptions',
+      async (_, userId: string) => {
+        const subscriptions = Subscriptions.get(userId);
+        return subscriptions;
+      }
+    );
+
+    ipcMain.handle(
+      'subscriptions:create',
+      async (_, subscription: Subscription) => {
+        await Subscriptions.create(subscription);
+        return subscription;
+      }
+    );
+
+    ipcMain.handle(
+      'subscriptions:update',
+      async (_, subscription: Subscription) => {
+        await Subscriptions.create(subscription);
+        return subscription;
+      }
+    );
+
+    ipcMain.handle('subscriptions:delete', async (_, id: string) => {
+      await Subscriptions.delete(id);
     });
 
     // account ---------------------
@@ -259,6 +307,20 @@ app
     );
     ipcMain.handle('freeSession:delete', async (_, id: string) => {
       await FreeSession.remove(id);
+    });
+
+    // store
+
+    ipcMain.handle('store:get', async (_, key) => {
+      const store = new Store();
+      const data = store.get(key);
+      return data;
+    });
+
+    ipcMain.handle('store:set', async (_, key, data) => {
+      const store = new Store();
+      await store.set(key, data);
+      return data;
     });
 
     createWindow();

@@ -2,7 +2,14 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-import { Account, FreeSession, Settings, User } from 'types';
+import {
+  Account,
+  FreeSession,
+  Settings,
+  Subscription,
+  SubscriptionPlan,
+  User,
+} from 'types';
 
 export type Channels = 'ipc-example';
 
@@ -57,7 +64,6 @@ const electronHandler = {
 
   // free session ----------------
   getFreeSessions: () => ipcRenderer.invoke('freeSession:getAll'),
-
   createFreeSessions: (session: FreeSession) =>
     ipcRenderer.invoke('freeSession:create', session),
   updateFreeSessions: (session: FreeSession) =>
@@ -65,8 +71,26 @@ const electronHandler = {
   removeFreeSessions: (id: string) =>
     ipcRenderer.invoke('freeSession:delete', id),
 
+  // subscription plans
+  getSubscriptionPlans: () => ipcRenderer.invoke('subscriptionPlan:getAll'),
+  createSubscriptionPlan: (plan: SubscriptionPlan) =>
+    ipcRenderer.invoke('subscriptionPlan:insert', plan),
+
+  // subscriptions
+  getUsersubscriptions: (userId: string) =>
+    ipcRenderer.invoke('subscriptions:getUserSubscriptions', userId),
+  createSubscription: (subscription: Subscription) =>
+    ipcRenderer.invoke('subscriptions:create', subscription),
+  updateSubscription: (subscription: Subscription) =>
+    ipcRenderer.invoke('subscriptions:update', subscription),
+  deleteSubscription: (id: string) =>
+    ipcRenderer.invoke('subscriptions:create', id),
+
   // other -----------------------
   decryptData: (data: string) => ipcRenderer.invoke('data:decrypt', data),
+  getStoreData: (key: string) => ipcRenderer.invoke('store:get', key),
+  setStoreData: (key: string, data: any) =>
+    ipcRenderer.invoke('store:set', key, data),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
