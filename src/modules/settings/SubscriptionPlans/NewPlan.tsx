@@ -54,18 +54,15 @@ function NewPlan({
     <CardContent>
       <Card sx={{ p: 2, mt: 2 }}>
         <Stack direction="row" spacing={2} mt={2}>
-          {Object.keys(newPlan).map(
-            (key) =>
+          {Object.entries(newPlan).map(
+            ([key, value]) =>
               key !== 'id' && (
                 <TextField
                   type={key === 'name' ? 'text' : 'number'}
                   name={key}
                   onChange={onChange}
-                  // @ts-ignore
-                  defaultValue={newPlan[key]}
                   label={t(key)}
-                  // @ts-ignore
-                  value={newPlan[key]}
+                  value={value}
                 />
               )
           )}

@@ -8,7 +8,7 @@ import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { useAppSelector } from 'features/store';
-import { User, StatCardProps, FreeSession } from 'types';
+import { User, StatCardProps } from 'types';
 import img1 from 'assets/images/img-6.jpg';
 import img2 from 'assets/images/img-2.png';
 import img3 from 'assets/images/img-4.jpg';
@@ -22,9 +22,7 @@ export default function Dashbaors() {
   const { t } = useTranslation();
   const { permission } = useAppSelector((state) => state.authentication);
   const [latestEnteredUsers, setLatestEnteredUsers] = useState<User[]>([]);
-  const [latestFreeSessions, setLatestFreeSessions] = useState<FreeSession[]>(
-    []
-  );
+
   const [statistics, setStatistics] = useState<StatCardProps[]>([
     {
       id: 'entries',
@@ -71,11 +69,10 @@ export default function Dashbaors() {
         }
 
         let isEnteredToday = false;
-        user.currentSubscriptions.forEach((sub) => {
-          if (sub.lastEntryTimestamp > dayStart.getTime()) {
-            isEnteredToday = true;
-          }
-        });
+
+        if (user.lastEntryTimestamp > dayStart.getTime()) {
+          isEnteredToday = true;
+        }
 
         if (isEnteredToday) {
           setLatestEnteredUsers((prev) => [...prev, user]);
@@ -88,9 +85,9 @@ export default function Dashbaors() {
 
       freeSessions.forEach((session: any) => {
         const entryTime = new Date(session.enteredAt).getTime();
-        if (entryTime === dayStart.getTime()) {
+
+        if (entryTime > dayStart.getTime()) {
           todayFreeSessions += 1;
-          setLatestFreeSessions((prev) => [...prev, session]);
         }
       });
 
@@ -143,7 +140,7 @@ export default function Dashbaors() {
           <UsersTable latestEnteredUsers={latestEnteredUsers} />
         </Box>
         <Box flex={2}>
-          <SessionsTable latestFreeSessions={latestFreeSessions} />
+          <SessionsTable />
         </Box>
       </Stack>
     </Stack>

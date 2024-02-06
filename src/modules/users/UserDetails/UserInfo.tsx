@@ -40,9 +40,6 @@ function UserInfo({ user }: { user: User }) {
             <Typography>
               {t('info.registeredAt')} : {user.registeredAt}
             </Typography>
-            <Typography>
-              {t('info.allTimeSessions')} : {user.allTimeSessions}
-            </Typography>
           </Box>
         </Stack>
       </CardContent>

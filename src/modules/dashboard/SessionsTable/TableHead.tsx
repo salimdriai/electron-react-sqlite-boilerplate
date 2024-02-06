@@ -7,20 +7,14 @@ import TableRow from '@mui/material/TableRow';
 
 const headCells = [
   {
-    id: 'enteredAt',
+    id: 'date',
     numeric: false,
     disablePadding: true,
     label: 'date',
   },
   {
-    id: 'sessionType',
-    numeric: false,
-    disablePadding: false,
-    label: 'type',
-  },
-  {
     id: 'totalPaid',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'total paid',
   },

@@ -184,7 +184,7 @@ app
       const users = await User.search(query);
       return users;
     });
-    ipcMain.handle('user:insert', async (_, user: UserType) => {
+    ipcMain.handle('user:create', async (_, user: UserType) => {
       await User.create(user);
       return user;
     });
@@ -214,6 +214,11 @@ app
     );
 
     // subscriptions -------------------
+    ipcMain.handle('subscriptions:getAll', async () => {
+      const subscriptions = Subscriptions.getAll();
+      return subscriptions;
+    });
+
     ipcMain.handle(
       'subscriptions:getUserSubscriptions',
       async (_, userId: string) => {
@@ -233,7 +238,7 @@ app
     ipcMain.handle(
       'subscriptions:update',
       async (_, subscription: Subscription) => {
-        await Subscriptions.create(subscription);
+        await Subscriptions.update(subscription);
         return subscription;
       }
     );

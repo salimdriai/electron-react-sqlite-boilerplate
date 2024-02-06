@@ -8,27 +8,17 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import Drawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
 
-import { FreeSession, User } from 'types';
+import { FreeSession } from 'types';
 import { useAppSelector } from 'features/store';
-import UserDetails from 'modules/users/UserDetails';
 import TableHead from './TableHead';
 
-const colors = ['info', 'primary', 'secondary'];
-
-export default function UsersTable({
-  latestFreeSessions,
-}: {
-  latestFreeSessions: FreeSession[];
-}) {
+export default function SessionsTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [users, setUsers] = React.useState<FreeSession[]>([]);
-  const [usersDetails, setUsersDetails] = React.useState<User | null>(null);
+  const [freeSessions, setFreeSessions] = React.useState<FreeSession[]>([]);
   const { t } = useTranslation();
 
   const { permission } = useAppSelector((state) => state.authentication);
@@ -46,16 +36,21 @@ export default function UsersTable({
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - freeSessions.length) : 0;
 
   const visibleRows = React.useMemo(
-    () => users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [page, rowsPerPage, users]
+    () =>
+      freeSessions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [page, rowsPerPage, freeSessions]
   );
 
   React.useEffect(() => {
-    setUsers(latestFreeSessions);
-  }, [permission, latestFreeSessions]);
+    const getFreeSessions = async () => {
+      const data = await window.electron.getFreeSessions();
+      setFreeSessions(data);
+    };
+    getFreeSessions();
+  }, [permission]);
 
   return (
     <Card variant="outlined" sx={{ width: '100%', mb: 2 }}>
@@ -86,22 +81,11 @@ export default function UsersTable({
                     key={row.enteredAt}
                     sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell align="left">{row.enteredAt}</TableCell>
+                    <TableCell align="left">
+                      {row.enteredAt.split('T').join(' ').split('.')[0]}
+                    </TableCell>
 
                     <TableCell align="left">{row.totalPaid}</TableCell>
-                    <TableCell align="right">
-                      <Stack direction="row" spacing={1} justifyContent="end">
-                        {row.sessionType.map((type, i) => (
-                          <Chip
-                            key={type.name}
-                            size="small"
-                            label={type.name}
-                            // @ts-ignore
-                            color={colors[i] as string}
-                          />
-                        ))}
-                      </Stack>
-                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -121,7 +105,7 @@ export default function UsersTable({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={users.length}
+          count={freeSessions.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -129,20 +113,6 @@ export default function UsersTable({
           labelRowsPerPage={t('common.rowsPerPage')}
         />
       </div>
-      <Drawer
-        anchor="right"
-        sx={{
-          '& > .MuiPaper-root': {
-            width: '50%',
-            p: 5,
-            backgroundColor: 'background.default',
-          },
-        }}
-        open={!!usersDetails}
-        onClose={() => setUsersDetails(null)}
-      >
-        <UserDetails user={usersDetails as User} />
-      </Drawer>
     </Card>
   );
 }

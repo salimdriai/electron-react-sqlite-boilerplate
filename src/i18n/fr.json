@@ -81,7 +81,8 @@
       "status": "statut",
       "id": "identifiant",
       "phoneNumber": "numéro de téléphone",
-      "subscriptions": "abonnements"
+      "subscriptions": "abonnements",
+      "registredAt": "enregistré le"
     },
     "account": {
       "add": "ajouter un compte",

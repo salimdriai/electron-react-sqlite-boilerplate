@@ -142,7 +142,7 @@ function AccountMenu() {
         </MenuItem>
         <Divider />
         {permission === Permission.Admin && (
-          <>
+          <div>
             <MenuItem onClick={() => navigate('/administration/add-account')}>
               <ListItemIcon>
                 <PersonAdd fontSize="small" />
@@ -155,7 +155,7 @@ function AccountMenu() {
               </ListItemIcon>
               {t('common.settings')}
             </MenuItem>
-          </>
+          </div>
         )}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>

@@ -42,7 +42,7 @@ const electronHandler = {
     ipcRenderer.invoke('user:getAll', permission),
   getOneUser: (id: string) => ipcRenderer.invoke('user:getOne', id),
   searchUsers: (query: string) => ipcRenderer.invoke('user:search', query),
-  insertUser: (user: User) => ipcRenderer.invoke('user:insert', user),
+  createUser: (user: User) => ipcRenderer.invoke('user:create', user),
   updateUser: (user: User) => ipcRenderer.invoke('user:update', user),
   removeUser: (id: string) => ipcRenderer.invoke('user:remove', id),
   removeAllUsers: () => ipcRenderer.invoke('user:removeAll'),
@@ -77,6 +77,7 @@ const electronHandler = {
     ipcRenderer.invoke('subscriptionPlan:insert', plan),
 
   // subscriptions
+  getAllSubscriptions: () => ipcRenderer.invoke('subscriptions:getAll'),
   getUsersubscriptions: (userId: string) =>
     ipcRenderer.invoke('subscriptions:getUserSubscriptions', userId),
   createSubscription: (subscription: Subscription) =>
@@ -84,7 +85,7 @@ const electronHandler = {
   updateSubscription: (subscription: Subscription) =>
     ipcRenderer.invoke('subscriptions:update', subscription),
   deleteSubscription: (id: string) =>
-    ipcRenderer.invoke('subscriptions:create', id),
+    ipcRenderer.invoke('subscriptions:delete', id),
 
   // other -----------------------
   decryptData: (data: string) => ipcRenderer.invoke('data:decrypt', data),

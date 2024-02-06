@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -53,9 +54,13 @@ const SubscriptionPlans = () => {
         {showNewPlanForm && <NewPlan setShowNewPlanForm={setShowNewPlanForm} />}
 
         <CardContent>
-          {subscriptionPlans.map((subscriptionPlan) => (
-            <PlanCard subscriptionPlan={subscriptionPlan} />
-          ))}
+          <Grid container spacing={2}>
+            {subscriptionPlans.map((subscriptionPlan) => (
+              <Grid item xs={6} key={subscriptionPlan.id}>
+                <PlanCard subscriptionPlan={subscriptionPlan} />
+              </Grid>
+            ))}
+          </Grid>
         </CardContent>
       </Card>
     </AdminGuard>

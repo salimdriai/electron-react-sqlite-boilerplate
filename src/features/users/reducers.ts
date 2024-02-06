@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { User } from 'types';
+import { Subscription, User } from 'types';
 
 export const sessionsEntry = createAsyncThunk(
   'sessionsEntry',
@@ -8,7 +8,8 @@ export const sessionsEntry = createAsyncThunk(
     const user: User = await window.electron.getOneUser(userId);
 
     const currentTimestamp = new Date().getTime();
-    const sixHoursTimstamp = 21600000;
+    const threeHoursTimestamp = 1_800_000;
+    // const sixHoursTimstamp = 21_600_000;
 
     const result = {
       user,
@@ -18,9 +19,9 @@ export const sessionsEntry = createAsyncThunk(
       message: 'Welcome !',
     };
 
-    user.currentSubscriptions.forEach(
-      ({ lastEntryTimestamp, endsAt, sessionsAvailable, sessionsSpent }) => {
-        if (currentTimestamp - lastEntryTimestamp < sixHoursTimstamp) {
+    user.subscriptions!.forEach(
+      ({ endsAt, sessionsAvailable, sessionsSpent }: Subscription) => {
+        if (currentTimestamp - user.lastEntryTimestamp < threeHoursTimestamp) {
           result.isEnteredSixHoursAgo = true;
           result.message = 'This user entered in less than 6 hours !';
         }
@@ -28,7 +29,7 @@ export const sessionsEntry = createAsyncThunk(
         const endsAtTimestamp = new Date(endsAt).getTime();
         if (endsAtTimestamp < currentTimestamp) {
           result.isSubscriptionExpired = true;
-          result.message = 'This user subscription expired !';
+          result.message = 'This user subscription is expired !';
         }
 
         if (sessionsSpent >= sessionsAvailable) {
@@ -46,18 +47,24 @@ export const sessionsEntry = createAsyncThunk(
       return result;
     }
 
-    user.currentSubscriptions.forEach((sub) => {
-      sub.lastEntryTimestamp = new Date().getTime();
+    user.lastEntryTimestamp = new Date().getTime();
+    user.subscriptions!.forEach((sub) => {
       sub.sessionsSpent += 1;
     });
 
-    user.currentSubscriptions = JSON.stringify(
-      user.currentSubscriptions
-    ) as any;
-
-    if (typeof user?.allTimeSessions === 'number') {
-      user.allTimeSessions += 1;
+    if (typeof user?.allTimeEntries === 'number') {
+      user.allTimeEntries += 1;
+    } else {
+      user.allTimeEntries = 1;
     }
+
+    const subsPromises = user.subscriptions!.map((sub) =>
+      window.electron.updateSubscription(sub)
+    );
+
+    Promise.all(subsPromises)
+      .then((res) => console.log('res', res))
+      .catch((err) => console.log('ERR updating subscriptions', err));
 
     const updatedUser = await window.electron.updateUser(user);
     result.user = updatedUser;

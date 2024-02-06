@@ -3,11 +3,14 @@ import Button from '@mui/material/Button';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 interface Props {
-  setCamera: (args: { open: boolean; photo: string | null }) => void;
+  setCamera: (args: {
+    open: boolean;
+    photo: undefined | string | Buffer;
+  }) => void;
 }
 
 function TakePhoto({ setCamera }: Props) {
-  const takePhoto = () => {
+  const takePhoto = async () => {
     const canvas = document.createElement('canvas');
     const video = document.getElementById('video');
 
@@ -24,6 +27,7 @@ function TakePhoto({ setCamera }: Props) {
     );
 
     const photo = canvas.toDataURL('image/jpeg');
+
     setCamera({ open: false, photo });
   };
 

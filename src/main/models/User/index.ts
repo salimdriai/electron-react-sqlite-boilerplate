@@ -12,6 +12,8 @@ import {
   getByPermission,
 } from './queries';
 
+import { getUserSubscriptionsQuery } from '../Subscription/queries';
+
 export default class UserModel extends DB {
   private db: any;
 
@@ -26,39 +28,39 @@ export default class UserModel extends DB {
     if (permission === Permission.Male || permission === Permission.Female) {
       query = getByPermission;
     }
-
     const stm = this.db.prepare(query);
-    const users = stm.all({ sex: permission }).map((user: any) => ({
-      ...user,
-      currentSubscriptions: JSON.parse(user.currentSubscriptions),
-    }));
-
+    const users = stm.all({ sex: permission });
     return users;
   }
 
   getOne(id: string): User {
-    const stm = this.db.prepare(getOneQuery);
-    const user = stm.get({ id });
-    user.currentSubscriptions = JSON.parse(user.currentSubscriptions);
+    const userStm = this.db.prepare(getOneQuery);
+    const subStm = this.db.prepare(getUserSubscriptionsQuery);
+    const user = userStm.get({ id });
+    const subscriptions = subStm.all({ userId: id });
+    user.subscriptions = subscriptions;
     return user;
   }
 
   search(query: string): User[] {
     const stm = this.db.prepare(searchQuery);
-    const users = stm.all(query, query, query).map((user: any) => ({
-      ...user,
-      currentSubscriptions: JSON.parse(user.currentSubscriptions),
-    }));
+    const users = stm.all(query, query, query);
 
     return users;
   }
 
-  create(user: User) {
+  async create(user: User) {
+    if (user.photo) {
+      user.photo = Buffer.from(user.photo as string, 'base64');
+    }
     const stm = this.db.prepare(createQuery);
     stm.run(user);
   }
 
-  update(user: User) {
+  async update(user: User) {
+    if (user.photo) {
+      user.photo = Buffer.from(user.photo as string, 'base64');
+    }
     const stm = this.db.prepare(updateQuery);
     stm.run(user);
   }

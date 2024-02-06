@@ -1,4 +1,4 @@
-import { Subscription } from './settings';
+import { Subscription } from './subscriptions';
 
 export enum BloodType {
   Op = 'O+',
@@ -9,16 +9,6 @@ export enum BloodType {
   Bn = 'B-',
   ABp = 'AB+',
   ABn = 'AB-',
-}
-
-export interface UserSubscription {
-  subscription: Subscription;
-  startedAt: string;
-  endsAt: string;
-  paid: number;
-  sessionsAvailable: number;
-  sessionsSpent: number;
-  lastEntryTimestamp?: number;
 }
 
 export enum Sex {
@@ -41,7 +31,11 @@ export interface User {
   sex: Sex;
   height?: number;
   weight?: number;
-  photo?: string;
+  photo?: Buffer | string;
   registeredAt: string;
   bloodType?: BloodType;
+  lastEntryTimestamp: number;
+  allTimeEntries?: number;
+  notes?: string;
+  subscriptions?: Subscription[];
 }

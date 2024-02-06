@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import Card from '@mui/material/Card';
@@ -14,31 +14,9 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import CardActions from '@mui/material/CardActions';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Divider from '@mui/material/Divider';
 import CloseIcon from '@mui/icons-material/Close';
-import { styled } from '@mui/material/styles';
-import { User, UserSubscription } from 'types';
-
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-  gap: 12,
-  '& .MuiToggleButtonGroup-grouped': {
-    textTransform: 'none',
-    '&:not(:first-of-type)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:first-of-type': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&.Mui-disabled': {
-      border: 0,
-    },
-    border: '1px solid!important',
-  },
-  '& .Mui-selected': {
-    borderColor: `${theme.palette.success.dark}!important`,
-  },
-}));
+import { Subscription, SubscriptionPlan, User } from 'types';
 
 enum StartFrom {
   Now = 'now',
@@ -78,35 +56,10 @@ type Extend = {
 function UserSubscriptions({ user }: { user: User }) {
   const [confirmationModalOpen, setConfirmationModalOpen] =
     React.useState(false);
+  const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
 
   const [extend, setExtend] = React.useState<Extend[]>([]);
   const { t } = useTranslation();
-
-  const handleExtend =
-    (targetName: string) =>
-    (event: React.MouseEvent<HTMLElement>, value: string) => {
-      if (value === null) {
-        setExtend((prev: any) =>
-          prev.map((p: Extend) => {
-            if (p.name === targetName) {
-              return { ...p, amount: 0 };
-            }
-            return p;
-          })
-        );
-        return;
-      }
-
-      const [name, amount] = value.split('.');
-      setExtend((prev: any) =>
-        prev.map((p: Extend) => {
-          if (p.name === name) {
-            return { ...p, amount: Number(amount) };
-          }
-          return p;
-        })
-      );
-    };
 
   const handleStartFromChange = (e: any) => {
     const { name, value } = e.target;
@@ -120,47 +73,28 @@ function UserSubscriptions({ user }: { user: User }) {
     );
   };
 
-  useEffect(() => {
-    if (user) {
-      const initState = user?.currentSubscriptions.map((sub) => ({
-        name: sub.subscription.name,
-        amount: 0,
-        startFrom: StartFrom.Now,
-        lastSubEndDate: sub.endsAt,
-      }));
+  const getPlan = (planId: string) => {
+    return plans.find((plan) => plan.id === planId);
+  };
 
-      setExtend(initState);
-    }
+  useEffect(() => {
+    const getPlans = async () => {
+      const res = await window.electron.getSubscriptionPlans();
+      setPlans(res);
+    };
+    getPlans();
   }, [user]);
 
   return (
     <Stack spacing={1}>
-      {user?.currentSubscriptions.map((sub: UserSubscription, i) => (
-        <Card variant="outlined" key={sub.subscription.name}>
-          <CardHeader
-            sx={{ pt: 2 }}
-            title={sub.subscription.name}
-            action={
-              <Stack direction="row" spacing={1}>
-                {/*  <StyledToggleButtonGroup
-                  size="small"
-                  value={`${extend?.[i]?.name}.${extend?.[i]?.amount}`}
-                  exclusive
-                  onChange={handleExtend(sub.subscription.name)}
-                >
-                  <ToggleButton value={`${sub.subscription.name}.1`}>
-                    +1 Month
-                  </ToggleButton>
-                  <ToggleButton value={`${sub.subscription.name}.2`}>
-                    +2 Months
-                  </ToggleButton>
-                  <ToggleButton value={`${sub.subscription.name}.3`}>
-                    +3 Months
-                  </ToggleButton>
-                </StyledToggleButtonGroup> */}
-              </Stack>
-            }
-          />
+      {user.subscriptions!.map((sub: Subscription) => (
+        <Card variant="outlined" key={sub.id}>
+          <Stack p={2}>
+            <Typography gutterBottom variant="h6" color="primary">
+              {getPlan(sub.planId)?.name}
+            </Typography>
+            <Divider />
+          </Stack>
 
           <CardContent sx={{ py: 0, display: 'flex', gap: 4 }}>
             <Typography>

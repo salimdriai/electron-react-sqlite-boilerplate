@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import UserStatus from 'components/UserStatus';
 import { User } from 'types';
@@ -15,7 +16,8 @@ import { User } from 'types';
 import UserInfo from './UserInfo';
 import UserSubscriptions from './UserSubscriptions';
 
-function UserDetails({ user }: { user: User }) {
+function UserDetails({ userId }: { userId: string }) {
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -23,10 +25,20 @@ function UserDetails({ user }: { user: User }) {
     navigate('/users/add', { state: user });
   };
 
+  useEffect(() => {
+    const getUser = async () => {
+      const data: User = await window.electron.getOneUser(userId);
+      setUser(data);
+    };
+    if (userId) {
+      getUser();
+    }
+  }, [userId]);
+
   if (!user) return <Box>Something went wrong !</Box>;
 
   return (
-    <Stack spacing={4}>
+    <Stack spacing={4} height="100%">
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Stack direction="row" alignItems="center" spacing={2}>
           <Card
@@ -58,7 +70,7 @@ function UserDetails({ user }: { user: User }) {
             <Typography fontSize={32} fontWeight={500}>
               {`${user.firstName} ${user.lastName}`}{' '}
               <span>
-                <UserStatus status={user.status} />
+                <UserStatus status="new" />
               </span>
             </Typography>
             <Typography>id : {user.id} </Typography>
@@ -77,6 +89,10 @@ function UserDetails({ user }: { user: User }) {
         <Typography variant="h5">{t('subscriptions.subscriptions')}</Typography>
         <UserSubscriptions user={user} />
       </Box>
+      <Box flex={1} />
+      <Stack>
+        <Button variant="contained">Manual entry</Button>
+      </Stack>
     </Stack>
   );
 }

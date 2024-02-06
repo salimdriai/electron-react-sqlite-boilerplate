@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
+import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,7 +11,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Avatar from '@mui/material/Avatar';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
@@ -26,13 +26,12 @@ import UserStatus from 'components/UserStatus';
 import TableHead from './TableHead';
 import UserDetails from '../UserDetails';
 
-const colors = ['info', 'primary', 'secondary'];
-
 export default function UsersTable() {
   const [page, setPage] = React.useState(0);
   const [seachQuery, setSearchQuery] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = React.useState<User[]>([]);
+
   const [usersDetails, setUsersDetails] = React.useState<User | null>(null);
   const { t } = useTranslation();
 
@@ -90,6 +89,7 @@ export default function UsersTable() {
       const data = await window.electron.getAllUsers(per);
       setUsers(data);
     };
+
     if (permission) {
       getUsers(permission);
     }
@@ -141,8 +141,7 @@ export default function UsersTable() {
                       <Avatar sx={{ backgroundColor: 'secondary.main' }}>
                         {row.photo ? (
                           <img
-                            // @ts-ignore
-                            src={row.photo}
+                            src={URL.createObjectURL(new Blob([row.photo]))}
                             width="100%"
                             alt={row.firstName}
                           />
@@ -151,6 +150,7 @@ export default function UsersTable() {
                         )}
                       </Avatar>
                     </TableCell>
+                    <TableCell align="left">{row.id}</TableCell>
                     <TableCell
                       component="th"
                       id={labelId}
@@ -159,28 +159,14 @@ export default function UsersTable() {
                     >
                       {`${row.firstName} ${row.lastName}`}
                     </TableCell>
-                    <TableCell align="left">{row.id}</TableCell>
 
                     <TableCell align="right">{row.phoneNumber}</TableCell>
+                    <TableCell align="right">{row.registeredAt}</TableCell>
                     <TableCell align="right">
-                      <Stack direction="row" spacing={1} justifyContent="end">
-                        {row.currentSubscriptions.map(
-                          ({ subscription }: any, i: number) => (
-                            <Chip
-                              key={subscription.name}
-                              size="small"
-                              label={subscription.name}
-                              // @ts-ignore
-                              color={colors[i] as string}
-                            />
-                          )
-                        )}
-                      </Stack>
+                      <UserStatus status="new" />
                     </TableCell>
                     <TableCell align="right">
-                      <UserStatus status={row.status} />
-                    </TableCell>
-                    <TableCell align="right">
+                      <Button>manual entry</Button>
                       <IconButton onClick={(e) => handleEdit(e, row)}>
                         <EditIcon />
                       </IconButton>
@@ -224,7 +210,7 @@ export default function UsersTable() {
         open={!!usersDetails}
         onClose={() => setUsersDetails(null)}
       >
-        <UserDetails user={usersDetails as User} />
+        <UserDetails userId={usersDetails?.id!} />
       </Drawer>
     </Card>
   );

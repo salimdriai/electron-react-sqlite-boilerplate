@@ -3,7 +3,7 @@ export const createSubscriptionPlansTable = `CREATE TABLE IF NOT EXISTS Subscrip
   name TEXT,
   monthPrice REAL,
   sessionPrice REAL,
-  sessionsPerMonth NUMBER
+  sessionsPerMonth INTEGER
 )`;
 
 export const getQuery = `SELECT * FROM SubscriptionPlans`;

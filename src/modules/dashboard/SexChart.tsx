@@ -104,7 +104,10 @@ function SexChart() {
       const malePercentage = ((100 * males) / allUsers.length).toFixed(2);
       const femalePercentage = ((100 * females) / allUsers.length).toFixed(2);
 
-      setSexSeries([parseFloat(malePercentage), parseFloat(femalePercentage)]);
+      setSexSeries([
+        Number(malePercentage) || 0,
+        Number(femalePercentage) || 0,
+      ]);
       return null;
     };
     getSeries();

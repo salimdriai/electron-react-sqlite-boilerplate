@@ -7,9 +7,11 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { Divider, TextField, Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
-import { FreeSession as FreeSessionType, Subscription } from 'types';
+import { FreeSession as FreeSessionType, SubscriptionPlan } from 'types';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   '& .MuiToggleButtonGroup-grouped': {
@@ -40,16 +42,25 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
+const style = {
+  '& .MuiButtonBase-root': {
+    margin: '0px!important',
+    borderColor: 'lightblue!important',
+  },
+  mt: 2,
+  gap: 2,
+};
+
 interface Props {
   freeSessionsModalOpen: boolean;
   onFreeSessionModalClose: () => void;
 }
 
-const getTotal = (subscription: Subscription[], selected: string[]): number => {
+const getTotal = (plans: SubscriptionPlan[], selected: string[]): number => {
   let total = 0;
-  subscription.forEach((sub) => {
-    if (selected.includes(sub.name)) {
-      total += Number(sub.sessionPrice);
+  plans.forEach((plan) => {
+    if (selected.includes(plan.name)) {
+      total += Number(plan.sessionPrice);
     }
   });
   return total;
@@ -59,7 +70,10 @@ function FreeSession({
   freeSessionsModalOpen,
   onFreeSessionModalClose,
 }: Props) {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [subscriptionsPlans, setSubscriptionsPlans] = useState<
+    SubscriptionPlan[]
+  >([]);
+
   const [selected, setSelected] = React.useState<any>(() => []);
   const [fullName, setFullName] = useState({ firstName: '', lastName: '' });
 
@@ -70,14 +84,17 @@ function FreeSession({
     setSelected(session);
   };
 
+  const handleChangeName = (e: any) => {
+    setFullName((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   const handleAddSession = async () => {
     const session: FreeSessionType = {
-      id: new Date().getTime().toString(),
       firstName: fullName.firstName,
       lastName: fullName.lastName,
-      sessionType: subscriptions.filter((sub) => selected.includes(sub.name)),
-      enteredAt: new Date().toDateString(),
-      totalPaid: getTotal(subscriptions, selected).toString(),
+      plansIds: subscriptionsPlans.map(({ id }) => id).join(','),
+      enteredAt: new Date().toISOString(),
+      totalPaid: getTotal(subscriptionsPlans, selected),
     };
 
     await window.electron.createFreeSessions(session);
@@ -86,11 +103,11 @@ function FreeSession({
   };
 
   useEffect(() => {
-    const getSettings = async () => {
-      const res = await window.electron.getSettings();
-      setSubscriptions(res.subscriptions);
+    const getPlans = async () => {
+      const res = await window.electron.getSubscriptionPlans();
+      setSubscriptionsPlans(res);
     };
-    getSettings();
+    getPlans();
   }, []);
 
   return (
@@ -104,27 +121,37 @@ function FreeSession({
       }}
     >
       <Card sx={{ p: 5 }}>
-        <Typography gutterBottom align="center" variant="h5">
+        <Typography gutterBottom variant="h5">
           Free session entry
         </Typography>
+        <Divider />
+
+        <Stack direction="row" spacing={2} my={2}>
+          <TextField
+            value={fullName.firstName}
+            label="first name"
+            name="firstName"
+            onChange={handleChangeName}
+            fullWidth
+          />
+          <TextField
+            value={fullName.lastName}
+            label="last name"
+            name="lastName"
+            onChange={handleChangeName}
+            fullWidth
+          />
+        </Stack>
+        <Divider />
         <StyledToggleButtonGroup
-          // orientation="vertical"
           value={selected}
           onChange={handleFormat}
-          aria-label="text formatting"
-          sx={{
-            '& .MuiButtonBase-root': {
-              margin: '0px!important',
-              borderColor: 'lightblue!important',
-            },
-            mt: 2,
-            gap: 2,
-          }}
+          sx={style}
         >
-          {subscriptions?.map((subscription: Subscription) => (
+          {subscriptionsPlans!.map((subscription: SubscriptionPlan) => (
             <ToggleButton
               sx={{ minWidth: '200px' }}
-              key={subscription.name}
+              key={subscription.id}
               value={subscription.name}
             >
               {/* @ts-ignore */}
@@ -139,32 +166,12 @@ function FreeSession({
           ))}
         </StyledToggleButtonGroup>
 
-        {/*    <Stack direction="row" spacing={2} my={2}>
-          <TextField
-            sx={{ maxWidth: '200px' }}
-            onChange={(e) =>
-              setFullName({ ...fullName, firstName: e.target.value })
-            }
-            variant="outlined"
-            label="first name"
-            value={fullName.firstName}
-          />
-          <TextField
-            sx={{ maxWidth: '200px' }}
-            onChange={(e) =>
-              setFullName({ ...fullName, lastName: e.target.value })
-            }
-            variant="outlined"
-            label="last name"
-            value={fullName.lastName}
-          />
-        </Stack> */}
         <Stack spacing={2} mt={2}>
           <Card sx={{ p: 1 }} variant="outlined">
             <Typography color="text.secondary" variant="h6" align="center">
               Total :{' '}
               <Typography variant="h5" component="span" color="secondary">
-                {getTotal(subscriptions, selected)} DZD
+                {getTotal(subscriptionsPlans, selected)} DZD
               </Typography>
             </Typography>
           </Card>

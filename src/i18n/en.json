@@ -83,7 +83,8 @@
       "id": "id",
       "phoneNumber": "phone number",
       "subscriptions": "subscriptions",
-      "latest": "latest entered users"
+      "latest": "latest entered users",
+      "registredAt": "registered at"
     },
     "account": {
       "add": "add account",

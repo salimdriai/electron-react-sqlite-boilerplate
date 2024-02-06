@@ -19,17 +19,14 @@ export default class SettingsModel extends DB {
 
   get(): FreeSession[] {
     const stm = this.db.prepare(getQuery);
-    const freeSessions = stm.all().map((session: any) => ({
-      ...session,
-      sessionType: JSON.parse(session.sessionType),
-    }));
+    const freeSessions = stm.all();
 
     return freeSessions;
   }
 
   create(session: FreeSession) {
     const stm = this.db.prepare(createQuery);
-    stm.run({ ...session, sessionType: JSON.stringify(session.sessionType) });
+    stm.run(session);
   }
 
   update(session: FreeSession) {

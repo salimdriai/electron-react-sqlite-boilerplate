@@ -5,6 +5,7 @@ import {
   updateQuery,
   removeQuery,
   getUserSubscriptionsQuery,
+  getQuery,
 } from './queries';
 import { Subscription } from '../../../types';
 
@@ -17,14 +18,19 @@ export default class SubscriptionsModel extends DB {
     this.db.exec(createSubscriptionsTable);
   }
 
+  getAll() {
+    const stm = this.db.prepare(getQuery);
+    const subscriptions = stm.all();
+    return subscriptions;
+  }
+
   get(userId: string): Subscription[] {
     const stm = this.db.prepare(getUserSubscriptionsQuery);
-    const subscriptions = stm.get({ userId });
+    const subscriptions = stm.all({ userId });
     return subscriptions;
   }
 
   create(subscription: Subscription) {
-    console.log('SUBBB', subscription);
     const stm = this.db.prepare(createQuery);
     stm.run(subscription);
   }

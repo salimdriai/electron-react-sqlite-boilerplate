@@ -9,8 +9,9 @@ interface Data {
   fullName: string;
   id: string;
   phoneNumber: number;
-  subscriptions: any;
+  registredAt: any;
   status: string;
+  actions: string;
 }
 
 interface HeadCell {
@@ -22,16 +23,16 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'fullName',
-    numeric: false,
-    disablePadding: true,
-    label: 'name',
-  },
-  {
     id: 'id',
     numeric: false,
     disablePadding: false,
     label: 'id',
+  },
+  {
+    id: 'fullName',
+    numeric: false,
+    disablePadding: true,
+    label: 'name',
   },
   {
     id: 'phoneNumber',
@@ -40,16 +41,22 @@ const headCells: readonly HeadCell[] = [
     label: 'phoneNumber',
   },
   {
-    id: 'subscriptions',
+    id: 'registredAt',
     numeric: true,
     disablePadding: false,
-    label: 'subscriptions',
+    label: 'registredAt',
   },
   {
     id: 'status',
     numeric: true,
     disablePadding: false,
     label: 'status',
+  },
+  {
+    id: 'actions',
+    numeric: true,
+    disablePadding: false,
+    label: 'actions',
   },
 ];
 

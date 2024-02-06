@@ -176,7 +176,7 @@ export default function UsersTable({
                     <TableCell align="right">{row.phoneNumber}</TableCell>
                     <TableCell align="right">
                       <Stack direction="row" spacing={1} justifyContent="end">
-                        {row.currentSubscriptions.map(
+                        {/* {row.currentSubscriptions.map(
                           ({ subscription }: any, i: number) => (
                             <Chip
                               key={subscription.name}
@@ -186,11 +186,11 @@ export default function UsersTable({
                               color={colors[i] as string}
                             />
                           )
-                        )}
+                        )} */}
                       </Stack>
                     </TableCell>
                     <TableCell align="right">
-                      <UserStatus status={row.status} />
+                      {/* <UserStatus status={row.status} /> */}
                     </TableCell>
                     <TableCell align="right">
                       <IconButton onClick={(e) => handleEdit(e, row)}>
@@ -236,7 +236,7 @@ export default function UsersTable({
         open={!!usersDetails}
         onClose={() => setUsersDetails(null)}
       >
-        <UserDetails user={usersDetails as User} />
+        <UserDetails userId={usersDetails?.id as string} />
       </Drawer>
     </Card>
   );

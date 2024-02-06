@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { Controller, UseFormReturn } from 'react-hook-form';
+// import QRCode from 'qrcode';
 
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -36,10 +37,15 @@ interface IInfo {
 
 const Info = ({ formMethods, isEditMode }: IInfo) => {
   const { state } = useLocation();
+  const [isKeyLost, setIsKeyLost] = useState(false);
 
-  const [camera, setCamera] = useState<{ open: boolean; photo: null | string }>(
-    { open: false, photo: state?.photo || null }
-  );
+  const [camera, setCamera] = useState<{
+    open: boolean;
+    photo: undefined | string | Buffer;
+  }>({
+    open: false,
+    photo: state?.photo || undefined,
+  });
 
   const {
     control,
@@ -64,8 +70,13 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
   };
 
   const removePhoto = () => {
-    setCamera({ ...camera, photo: null });
+    setCamera({ ...camera, photo: undefined });
   };
+
+  useEffect(() => {
+    formMethods.setValue('photo', camera.photo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [camera]);
 
   return (
     <Stack flex={1} spacing={1.5} component={Card} variant="outlined" p={2}>
@@ -83,7 +94,16 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
 
       <Card elevation={4} sx={photoStyle} onClick={handleOpenCamera}>
         {camera.photo ? (
-          <img src={camera.photo} width="100%" height="100%" alt="user" />
+          <img
+            src={
+              typeof camera.photo === 'string'
+                ? camera.photo
+                : URL.createObjectURL(new Blob([camera.photo]))
+            }
+            width="100%"
+            height="100%"
+            alt="user"
+          />
         ) : (
           <PhotoCameraIcon />
         )}
@@ -120,13 +140,25 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
           }}
           render={({ field }) => (
             <TextField
-              disabled={isEditMode}
+              disabled={!isKeyLost && isEditMode}
               type="text"
               fullWidth
               {...field}
               label="id"
               error={!!errors.id}
               helperText={<> {errors.id?.message || ''} </>}
+              InputProps={{
+                ...(isEditMode && {
+                  endAdornment: (
+                    <Button
+                      onClick={() => setIsKeyLost(!isKeyLost)}
+                      size="small"
+                    >
+                      key lost ?
+                    </Button>
+                  ),
+                }),
+              }}
             />
           )}
         />

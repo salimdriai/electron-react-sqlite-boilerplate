@@ -1,4 +1,5 @@
 export const getAllQuery = 'SELECT * FROM Users';
+
 export const getByPermission = `SELECT * FROM Users WHERE sex = @sex`;
 
 export const getOneQuery = 'SELECT * FROM Users where id = @id';
@@ -8,18 +9,23 @@ export const removeAllQuery = 'DELETE FROM Users';
 export const createQuery = `INSERT INTO Users
   (id, firstName, lastName, phoneNumber, birthDate,
   height, weight, sex, photo, registeredAt,
-  allTimeSessions, status, bloodType)
+  bloodType,lastEntryTimestamp,
+  allTimeEntries,notes)
   VALUES (@id, @firstName, @lastName, @phoneNumber, @birthDate,
   @height, @weight, @sex, @photo, @registeredAt,
-  @allTimeSessions, @status, @bloodType)`;
+  @bloodType, @lastEntryTimestamp,
+  @allTimeEntries, @notes)`;
 
 export const updateQuery = `UPDATE Users SET
+  id = @id,
   firstName = @firstName, lastName = @lastName,
   phoneNumber = @phoneNumber, birthDate = @birthDate,
   height = @height, weight = @weight, sex = @sex, photo = @photo,
   registeredAt = @registeredAt,
-  allTimeSessions = @allTimeSessions, status = @status,
-  bloodType = @bloodType
+  bloodType = @bloodType,
+  lastEntryTimestamp = @lastEntryTimestamp,
+  allTimeEntries = @allTimeEntries,
+  notes = @notes
   WHERE id = @id`;
 
 export const searchQuery = `SELECT * FROM Users
@@ -37,8 +43,9 @@ CREATE TABLE IF NOT EXISTS Users(
   sex TEXT,
   photo BLOB,
   registeredAt TEXT,
-  allTimeSessions INTEGER,
-  status TEXT,
-  bloodType TEXT
+  bloodType TEXT,
+  lastEntryTimestamp INTEGER,
+  allTimeEntries INTEGER,
+  notes TEXT
 )
 `;

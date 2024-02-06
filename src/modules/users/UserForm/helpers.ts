@@ -11,11 +11,14 @@ export const userDefaultValues: User = {
   sex: Sex.Male,
   phoneNumber: '',
   birthDate: '',
-  height: 0,
-  weight: 0,
-  photo: '',
+  height: undefined,
+  weight: undefined,
+  photo: undefined,
   registeredAt: '',
   bloodType: BloodType.Op,
+  lastEntryTimestamp: 0,
+  allTimeEntries: 0,
+  notes: '',
 };
 
 export const subscriptionOptions = [

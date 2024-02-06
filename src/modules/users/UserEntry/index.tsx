@@ -15,13 +15,9 @@ import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-
 import { sessionsEntry } from 'features/users/reducers';
 import { useAppDispatch } from 'features/store';
-
-import UserStatus from 'components/UserStatus';
 import { User } from 'types';
-
 import UserSubscriptions from '../UserDetails/UserSubscriptions';
 
 function UserEntry() {
@@ -156,7 +152,7 @@ function UserEntry() {
                   <Typography fontSize={32} fontWeight={500}>
                     {`${enteredUser.user.firstName} ${enteredUser.user.lastName}`}{' '}
                     <span>
-                      <UserStatus status={enteredUser.user.status} />
+                      {/* <UserStatus status={enteredUser.user.status} /> */}
                     </span>
                   </Typography>
                   <Typography>id : {enteredUser.user.id} </Typography>
