@@ -16,7 +16,7 @@ const headCells = [
     id: 'totalPaid',
     numeric: false,
     disablePadding: false,
-    label: 'total paid',
+    label: 'totalPaid',
   },
 ];
 
@@ -32,7 +32,7 @@ export default function EnhancedTableHead() {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
           >
-            {t(`user.${headCell.label}`)}
+            {t(`common.${headCell.label}`)}
           </TableCell>
         ))}
       </TableRow>

@@ -61,13 +61,16 @@ function NewPlan({
                   type={key === 'name' ? 'text' : 'number'}
                   name={key}
                   onChange={onChange}
-                  label={t(key)}
+                  label={t(`settings.plans.${key}`)}
                   value={value}
+                  InputProps={{
+                    ...(key !== 'name' && { endAdornment: <p>DA</p> }),
+                  }}
                 />
               )
           )}
           <Button variant="contained" onClick={savePlan}>
-            Save
+            {t('actions.save')}
           </Button>
         </Stack>
       </Card>

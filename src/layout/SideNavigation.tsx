@@ -12,33 +12,50 @@ import Divider from '@mui/material/Divider';
 
 import PeopleIcon from '@mui/icons-material/People';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-// import CategoryIcon from '@mui/icons-material/Category';
+import CategoryIcon from '@mui/icons-material/Category';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import { useAppSelector, useAppDispatch } from 'features/store';
 import { Permission } from 'types';
 import { logout } from 'features/authentication';
 
 const routes = [
-  { label: 'dashboard', path: '/', icon: <DashboardIcon />, adminOnly: false },
-  { label: 'users', path: '/users', icon: <PeopleIcon />, adminOnly: false },
-  // {
-  //   label: 'products',
-  //   path: '/products',
-  //   icon: <CategoryIcon />,
-  //   adminOnly: false,
-  // },
+  {
+    label: 'dashboard',
+    path: '/',
+    icon: <DashboardIcon color="secondary" />,
+    adminOnly: false,
+  },
+  {
+    label: 'users',
+    path: '/users',
+    icon: <PeopleIcon color="secondary" />,
+    adminOnly: false,
+  },
+  {
+    label: 'products',
+    path: '/products',
+    icon: <CategoryIcon color="secondary" />,
+    adminOnly: false,
+  },
   {
     label: 'settings',
     path: '/settings',
-    icon: <SettingsIcon />,
+    icon: <SettingsIcon color="secondary" />,
     adminOnly: false,
+  },
+  {
+    label: 'report',
+    path: '/report',
+    icon: <AssessmentIcon color="secondary" />,
+    adminOnly: true,
   },
   {
     label: 'administration',
     path: '/administration',
-    icon: <AdminPanelSettingsIcon />,
+    icon: <AdminPanelSettingsIcon color="secondary" />,
     adminOnly: true,
   },
 ];
@@ -66,12 +83,12 @@ export default function SideNavigation() {
       sx={{ pt: 0, display: 'flex', flexDirection: 'column', height: '100%' }}
     >
       {permittedRoutes.map((route) => (
-        <ListItem
-          key={route.path}
-          disablePadding
-          onClick={handleClick(route.path)}
-        >
-          <ListItemButton selected={pathname === route.path}>
+        <ListItem key={route.path} disablePadding>
+          <ListItemButton
+            onClick={handleClick(route.path)}
+            selected={pathname === route.path}
+            disabled={route.label === 'products'}
+          >
             <ListItemIcon>{route.icon}</ListItemIcon>
             <ListItemText
               primary={

@@ -1,11 +1,13 @@
 import * as React from 'react';
+import { toast } from 'react-toastify';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Card, Typography } from '@mui/material';
-import { importUsers } from 'utils/importUsers';
+import { importSubscriptions, importUsers, importPlans } from 'utils';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -36,9 +38,11 @@ function ImportUsers() {
   const [filesData, setFilesData] = React.useState<{
     users: any;
     subscriptions: any;
+    plans: any;
   }>({
     users: null,
     subscriptions: null,
+    plans: null,
   });
 
   const readFile = (name: string, file: File) => {
@@ -59,34 +63,59 @@ function ImportUsers() {
     }
   };
 
-  const createUser = async (data: any) => {
-    await window.electron.insertUser(data);
+  const createUsers = async () => {
+    const usersPayload = importUsers(filesData.users);
+
+    const promises = usersPayload.map((payload) => {
+      setCreatedUsers((prev) => prev + 1);
+      return window.electron.createUser(payload);
+    });
+    await Promise.all(promises);
+  };
+
+  const createPlans = async () => {
+    const plansPayload = importPlans(filesData.plans);
+    const promises = plansPayload.map((payload) =>
+      window.electron.createSubscriptionPlan(payload)
+    );
+    await Promise.all(promises);
+  };
+
+  const createSubscriptions = async () => {
+    const subscriptionsPayload = importSubscriptions(
+      filesData.subscriptions,
+      filesData.users
+    );
+    const promises = subscriptionsPayload.map((payload) =>
+      window.electron.createSubscription(payload)
+    );
+    await Promise.all(promises);
   };
 
   const onImport = async () => {
     try {
       setIsloading(true);
-
-      const payload = importUsers({
-        members: filesData.users,
-        subscriptions: filesData.subscriptions,
-      });
-
-      const promises = payload.map(async (user) => {
-        await createUser(user);
-        setCreatedUsers((prev) => prev + 1);
-      });
-
-      await Promise.all(promises);
+      await createPlans();
+      await createUsers();
+      await createSubscriptions();
       setIsloading(false);
     } catch (error) {
+      setIsloading(false);
+      toast(JSON.stringify(error));
       console.log('error', error);
     }
   };
 
   return (
-    <Card variant="outlined" sx={{ p: 2, display: 'inline-block' }}>
-      <Stack direction="row" spacing={2} mb={1}>
+    <Card variant="outlined" sx={{ p: 2, borderColor: 'red' }}>
+      <Typography variant="h6" gutterBottom>
+        Data import{' '}
+        <Typography color="error" component="span">
+          {' '}
+          ( This area is for developers only ! )
+        </Typography>
+      </Typography>
+      <Stack direction="row" justifyContent="start" spacing={2} my={2}>
         <Box>
           <FileBox>
             {filesData.users?.length
@@ -128,16 +157,31 @@ function ImportUsers() {
             />
           </Button>
         </Box>
+        <Box>
+          <FileBox>
+            {filesData.plans?.length
+              ? `${filesData.plans?.length} plans found`
+              : 'nothing uploaded !'}
+          </FileBox>
+
+          <Button
+            fullWidth
+            component="label"
+            variant="outlined"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload plans
+            <VisuallyHiddenInput
+              type="file"
+              onChange={(e: any) => readFile('plans', e.target.files[0])}
+            />
+          </Button>
+        </Box>
       </Stack>
       <Stack>
         <Typography gutterBottom>Users created : {createdUsers}</Typography>
       </Stack>
-      <Button
-        disabled={isLoading}
-        fullWidth
-        variant="contained"
-        onClick={onImport}
-      >
+      <Button disabled={isLoading} variant="contained" onClick={onImport}>
         {isLoading ? 'processing...' : 'import'}
       </Button>
     </Card>

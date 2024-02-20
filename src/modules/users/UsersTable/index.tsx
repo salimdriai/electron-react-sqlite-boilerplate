@@ -1,7 +1,10 @@
+/* eslint-disable promise/catch-or-return */
+/* eslint-disable promise/always-return */
 import * as React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
@@ -15,14 +18,26 @@ import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
+import Chip from '@mui/material/Chip';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
+import RemainigDays from 'components/RemainingDays';
 import { User } from 'types';
-import { useAppSelector } from 'features/store';
-import UserStatus from 'components/UserStatus';
+import {
+  sessionsEntry,
+  fetchUsers,
+  filterByExpirationDate,
+} from 'features/users/reducers';
+import { setUsers } from 'features/users';
+import { useAppDispatch, useAppSelector } from 'features/store';
+import { getAge } from 'utils';
 import TableHead from './TableHead';
 import UserDetails from '../UserDetails';
 
@@ -30,12 +45,26 @@ export default function UsersTable() {
   const [page, setPage] = React.useState(0);
   const [seachQuery, setSearchQuery] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [users, setUsers] = React.useState<User[]>([]);
-
   const [usersDetails, setUsersDetails] = React.useState<User | null>(null);
-  const { t } = useTranslation();
 
+  const { t } = useTranslation();
   const { permission } = useAppSelector((state) => state.authentication);
+  const { users, isLoading } = useAppSelector((state) => state.users);
+  const dispatch = useAppDispatch();
+
+  const [filterOption, setFilterOption] = React.useState('all');
+
+  const handleFilterChange = async (event: SelectChangeEvent) => {
+    const selectedOption = event.target.value;
+    setFilterOption(selectedOption);
+    if (selectedOption === 'all') {
+      dispatch(fetchUsers(permission));
+    } else {
+      dispatch(
+        filterByExpirationDate({ expireIn: Number(selectedOption), permission })
+      );
+    }
+  };
 
   const handleSearch = async (e: any) => {
     setSearchQuery(e.target.value);
@@ -69,6 +98,20 @@ export default function UsersTable() {
     setPage(0);
   };
 
+  const manualEntry = (id: string) => {
+    dispatch(sessionsEntry(id))
+      .unwrap()
+      .then(({ isEnteredThreeHoursAgo, message }) => {
+        if (isEnteredThreeHoursAgo) {
+          toast.warning(t(message));
+        } else {
+          toast.success(t(message));
+        }
+        return null;
+      })
+      .catch((err) => toast.error(err));
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
@@ -77,6 +120,7 @@ export default function UsersTable() {
     () => users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [page, rowsPerPage, users]
   );
+
   const navigate = useNavigate();
 
   const handleEdit = (e: any, row: any) => {
@@ -85,20 +129,17 @@ export default function UsersTable() {
   };
 
   React.useEffect(() => {
-    const getUsers = async (per: string) => {
-      const data = await window.electron.getAllUsers(per);
-      setUsers(data);
-    };
-
     if (permission) {
-      getUsers(permission);
+      dispatch(fetchUsers(permission));
     }
-  }, [permission]);
+  }, [permission, dispatch]);
+
+  if (isLoading) return <p>is loading...</p>;
 
   return (
     <Card variant="outlined" sx={{ width: '100%', mb: 2 }}>
       <div>
-        <Stack direction="row" py={1} px={2}>
+        <Stack direction="row" spacing={2} p={2}>
           <TextField
             onChange={handleSearch}
             value={seachQuery}
@@ -119,6 +160,21 @@ export default function UsersTable() {
               ),
             }}
           />
+          <FormControl sx={{ width: 200 }}>
+            <InputLabel id="demo-simple-select-label">filter</InputLabel>
+            <Select
+              size="small"
+              value={filterOption}
+              label="filter"
+              onChange={handleFilterChange}
+            >
+              <MenuItem value="all">{t('subscriptions.all')}</MenuItem>
+              <MenuItem value={7}>{t('subscriptions.expireIn7Days')}</MenuItem>
+              <MenuItem value={3}>{t('subscriptions.expireIn3Days')}</MenuItem>
+              <MenuItem value={1}>{t('subscriptions.expireIn1Day')}</MenuItem>
+              <MenuItem value={0}>{t('subscriptions.expired')}</MenuItem>
+            </Select>
+          </FormControl>
         </Stack>
 
         <TableContainer>
@@ -138,10 +194,10 @@ export default function UsersTable() {
                     sx={{ cursor: 'pointer' }}
                   >
                     <TableCell>
-                      <Avatar sx={{ backgroundColor: 'secondary.main' }}>
+                      <Avatar sx={{ backgroundColor: 'info.main' }}>
                         {row.photo ? (
                           <img
-                            src={URL.createObjectURL(new Blob([row.photo]))}
+                            src={row.photo as string}
                             width="100%"
                             alt={row.firstName}
                           />
@@ -160,13 +216,41 @@ export default function UsersTable() {
                       {`${row.firstName} ${row.lastName}`}
                     </TableCell>
 
+                    <TableCell align="right">{getAge(row.birthDate)}</TableCell>
                     <TableCell align="right">{row.phoneNumber}</TableCell>
                     <TableCell align="right">{row.registeredAt}</TableCell>
                     <TableCell align="right">
-                      <UserStatus status="new" />
+                      {row.subscriptions?.length > 1 ? (
+                        <>
+                          {row.subscriptions?.map(
+                            (sub, i) =>
+                              i < 1 && (
+                                <RemainigDays key={sub.id} date={sub.endsAt} />
+                              )
+                          )}
+                          <Chip
+                            variant="outlined"
+                            size="small"
+                            label={`& ${row.subscriptions.length - 1} ${t(
+                              'info.more'
+                            )}..`}
+                          />
+                        </>
+                      ) : (
+                        row?.subscriptions?.map((sub) => (
+                          <RemainigDays key={sub.id} date={sub.endsAt} />
+                        ))
+                      )}
                     </TableCell>
                     <TableCell align="right">
-                      <Button>manual entry</Button>
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          manualEntry(row.id);
+                        }}
+                      >
+                        {t('actions.manualEntry')}
+                      </Button>
                       <IconButton onClick={(e) => handleEdit(e, row)}>
                         <EditIcon />
                       </IconButton>
@@ -202,15 +286,22 @@ export default function UsersTable() {
         anchor="right"
         sx={{
           '& > .MuiPaper-root': {
-            width: '50%',
+            width: '70%',
             p: 5,
             backgroundColor: 'background.default',
+            overflowY: 'auto',
           },
         }}
         open={!!usersDetails}
         onClose={() => setUsersDetails(null)}
       >
-        <UserDetails userId={usersDetails?.id!} />
+        {usersDetails && (
+          <UserDetails
+            usersDetails={usersDetails as User}
+            manualEntry={manualEntry}
+            setUsersDetails={setUsersDetails}
+          />
+        )}
       </Drawer>
     </Card>
   );

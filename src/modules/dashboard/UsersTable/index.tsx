@@ -10,7 +10,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Avatar from '@mui/material/Avatar';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
@@ -22,11 +21,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import { User } from 'types';
 import { useAppSelector } from 'features/store';
-import UserStatus from 'components/UserStatus';
 import UserDetails from 'modules/users/UserDetails';
 import TableHead from './TableHead';
-
-const colors = ['info', 'primary', 'secondary'];
 
 export default function UsersTable({
   latestEnteredUsers,
@@ -107,10 +103,9 @@ export default function UsersTable({
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-          py={1}
-          px={2}
+          p={2}
         >
-          <Typography variant="h6"> {t('user.latest')}</Typography>
+          <Typography variant="h6"> {t('user.latestEntries')}</Typography>
           <TextField
             onChange={handleSearch}
             value={seachQuery}
@@ -174,21 +169,7 @@ export default function UsersTable({
                     <TableCell align="left">{row.id}</TableCell>
 
                     <TableCell align="right">{row.phoneNumber}</TableCell>
-                    <TableCell align="right">
-                      <Stack direction="row" spacing={1} justifyContent="end">
-                        {/* {row.currentSubscriptions.map(
-                          ({ subscription }: any, i: number) => (
-                            <Chip
-                              key={subscription.name}
-                              size="small"
-                              label={subscription.name}
-                              // @ts-ignore
-                              color={colors[i] as string}
-                            />
-                          )
-                        )} */}
-                      </Stack>
-                    </TableCell>
+                    <TableCell align="right">{row.registeredAt}</TableCell>
                     <TableCell align="right">
                       {/* <UserStatus status={row.status} /> */}
                     </TableCell>
@@ -210,7 +191,7 @@ export default function UsersTable({
         </TableContainer>
         {visibleRows.length === 0 && (
           <Typography color="text.secondary" sx={{ my: 20 }} align="center">
-            No users to show
+            {t('common.nothingToShow')}
           </Typography>
         )}
         <TablePagination

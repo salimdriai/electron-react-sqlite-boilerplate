@@ -14,6 +14,8 @@ import createDarkTheme from '../theme/dark';
 import createLightTheme from '../theme/light';
 import Pages from '../pages';
 import '../i18n';
+import './index.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function App() {
   const {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { CircularProgress, Stack } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import Stack from '@mui/material/Stack';
 
 function Loading() {
   return (

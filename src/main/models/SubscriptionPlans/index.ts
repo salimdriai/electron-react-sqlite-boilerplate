@@ -4,6 +4,7 @@ import {
   getQuery,
   createQuery,
   removeQuery,
+  updateQuery,
 } from './queries';
 import { SubscriptionPlan } from '../../../types';
 
@@ -20,6 +21,11 @@ export default class SubscriptionsModel extends DB {
     const stm = this.db.prepare(getQuery);
     const subscriptionPlans = stm.all();
     return subscriptionPlans;
+  }
+
+  update(subscriptionPlan: SubscriptionPlan) {
+    const stm = this.db.prepare(updateQuery);
+    stm.run(subscriptionPlan);
   }
 
   create(subscriptionPlan: SubscriptionPlan) {

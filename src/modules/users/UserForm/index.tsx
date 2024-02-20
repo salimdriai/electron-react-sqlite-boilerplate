@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import { Subscription, User } from 'types';
-import Info from './info';
-import Subscriptions from './subscriptions';
+import UserSubscription from 'components/Subscription';
+import Info from './Info';
+import AddSubscriptions from './AddSubscriptions';
 import { userDefaultValues } from './helpers';
 
 export interface IForm extends User {
@@ -15,6 +21,7 @@ export interface IForm extends User {
 }
 
 const UserForm = () => {
+  const [openAddSubscription, setOpenAddSubscription] = useState(false);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [deletedSubscriptions, setDeletedSubscriptions] = useState<string[]>(
     []
@@ -28,9 +35,23 @@ const UserForm = () => {
     defaultValues: { ...userDefaultValues },
   });
 
-  const saveSubscriptions = async (subs: Subscription[]) => {
+  const cancelAddsubscription = () => setOpenAddSubscription(false);
+
+  const refetchData = async (updatedSub: any) => {
+    const updateSubscriptions = subscriptions.map((sub) =>
+      sub.id === updatedSub.id ? updatedSub : sub
+    );
+    // const data = await window.electron.getOneUser(formMethods.watch('id'));
+    setSubscriptions(updateSubscriptions);
+  };
+
+  const saveSubscriptions = async () => {
     const userId = formMethods.watch('id');
-    const promises = subs.map((sub) => {
+    if (!userId) {
+      toast.error('user ID missing !');
+      return;
+    }
+    const promises = subscriptions.map((sub) => {
       if (sub.id) {
         return window.electron.updateSubscription({ ...sub, userId });
       }
@@ -42,6 +63,8 @@ const UserForm = () => {
     });
 
     await Promise.all([...promises, ...deletedSubsPromises]);
+    toast.success('Success');
+    cancelAddsubscription();
   };
 
   const saveUser = async (data: User) => {
@@ -58,7 +81,6 @@ const UserForm = () => {
   const onSubmit = async (data: IForm) => {
     try {
       await saveUser(data);
-      await saveSubscriptions(subscriptions);
       toast.success('Success');
     } catch (error) {
       toast.error('Something went wrong');
@@ -87,17 +109,61 @@ const UserForm = () => {
       component="form"
       onSubmit={formMethods.handleSubmit(onSubmit, onError)}
     >
-      <Stack direction="row" spacing={2} mb={2}>
+      <Stack direction="row" spacing={4} mb={2}>
         <Info isEditMode={isEditMode} formMethods={formMethods} />
-        <Subscriptions
-          subscriptions={subscriptions}
-          setSubscriptions={setSubscriptions}
-          setDeletedSubscriptions={setDeletedSubscriptions}
-        />
+
+        <Stack flex={3} spacing={2} component={Card} variant="outlined" p={2}>
+          <Typography variant="h6" gutterBottom>
+            {t('subscriptions.subscriptions')}
+          </Typography>
+
+          {subscriptions.length === 0 ? (
+            <Card variant="outlined">
+              <Typography align="center" sx={{ py: 4 }}>
+                user have no subscriptions
+              </Typography>
+            </Card>
+          ) : (
+            subscriptions.map((sub) => (
+              <UserSubscription
+                subscription={sub}
+                user={formMethods.watch()}
+                refetchData={refetchData}
+              />
+            ))
+          )}
+
+          <Button
+            onClick={() => setOpenAddSubscription(true)}
+            variant="outlined"
+            color="secondary"
+            startIcon={subscriptions.length ? <EditIcon /> : <AddIcon />}
+          >
+            {subscriptions.length
+              ? t('subscriptions.edit')
+              : t('subscriptions.add')}
+          </Button>
+        </Stack>
+        <Dialog
+          sx={{
+            '& .MuiPaper-root': {
+              maxWidth: 'unset',
+              minWidth: '800px',
+              overflow: 'visible',
+            },
+          }}
+          open={openAddSubscription}
+          onClose={cancelAddsubscription}
+        >
+          <AddSubscriptions
+            saveSubscriptions={saveSubscriptions}
+            subscriptions={subscriptions}
+            setSubscriptions={setSubscriptions}
+            setDeletedSubscriptions={setDeletedSubscriptions}
+            cancelAddsubscription={cancelAddsubscription}
+          />
+        </Dialog>
       </Stack>
-      <Button type="submit" size="large" variant="contained">
-        {isEditMode ? t('actions.update') : t('actions.register')}
-      </Button>
     </Stack>
   );
 };

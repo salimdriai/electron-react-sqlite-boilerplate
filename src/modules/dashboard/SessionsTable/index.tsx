@@ -59,8 +59,7 @@ export default function SessionsTable() {
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-          py={2}
-          px={2}
+          p={2}
         >
           <Typography variant="h6">
             {' '}
@@ -99,7 +98,7 @@ export default function SessionsTable() {
         </TableContainer>
         {visibleRows.length === 0 && (
           <Typography color="text.secondary" sx={{ my: 20 }} align="center">
-            No users to show
+            {t('common.nothingToShow')}
           </Typography>
         )}
         <TablePagination

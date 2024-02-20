@@ -1,7 +1,7 @@
 export const getQuery = `SELECT * FROM FreeSessions`;
 export const createQuery = `INSERT INTO FreeSessions
 (firstName, lastName, plansIds, enteredAt, totalPaid)
-VALUES (@firstName, @lastName, @sessionType, @enteredAt, @totalPaid)
+VALUES (@firstName, @lastName, @plansIds, @enteredAt, @totalPaid)
 `;
 
 export const removeQuery = `DELETE FROM Users WHERE id = @id`;

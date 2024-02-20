@@ -1,0 +1,26 @@
+import React from 'react';
+import QRCode from 'react-qr-code';
+import Card from '@mui/material/Card';
+
+const QrCode = ({ value }: { value: any }) => {
+  return (
+    <Card sx={{ p: 1, backgroundColor: 'white' }}>
+      <div
+        style={{
+          height: 116,
+          maxWidth: 116,
+          width: '100%',
+        }}
+      >
+        <QRCode
+          size={256}
+          style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+          value={value}
+          viewBox="0 0 256 256"
+        />
+      </div>
+    </Card>
+  );
+};
+
+export default QrCode;

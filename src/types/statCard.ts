@@ -9,4 +9,5 @@ export interface StatCardProps {
   positive?: boolean;
   color?: string;
   img: any;
+  maxWidth?: string;
 }

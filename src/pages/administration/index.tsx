@@ -1,19 +1,19 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import PageToolbar from 'components/Toolbar';
 import PageSection from 'layout/PageSection';
-import Accounts from 'modules/administration/Accounts';
+import Administration from 'modules/administration';
 
 function AdministrationPage() {
-  const navigate = useNavigate();
   const { t } = useTranslation();
+  const [openCreateAccount, setOpenCreateAccount] = React.useState(false);
 
   const navigateToAddAccount = () => {
-    navigate('/administration/add-account');
+    setOpenCreateAccount(true);
   };
+
   return (
     <>
       <PageToolbar
@@ -23,7 +23,10 @@ function AdministrationPage() {
         buttonOnClick={navigateToAddAccount}
       />
       <PageSection>
-        <Accounts />
+        <Administration
+          openCreateAccount={openCreateAccount}
+          setOpenCreateAccount={setOpenCreateAccount}
+        />
       </PageSection>
     </>
   );

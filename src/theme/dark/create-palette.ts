@@ -21,10 +21,13 @@ export default function createPalette() {
     mode: 'dark',
     neutral,
     primary: indigo,
+    secondary: {
+      main: '#FC6736',
+    },
     success,
     text: {
       primary: '#ffffff',
-      secondary: '#f3f4f7',
+      secondary: '#bbb',
       disabled: '#cccccc',
     },
 

@@ -9,7 +9,16 @@ export const createSubscriptionPlansTable = `CREATE TABLE IF NOT EXISTS Subscrip
 export const getQuery = `SELECT * FROM SubscriptionPlans`;
 
 export const createQuery = `INSERT INTO SubscriptionPlans
-(name, monthPrice, sessionPrice, sessionsPerMonth)
-VALUES (@name, @monthPrice, @sessionPrice, @sessionsPerMonth)`;
+(id, name, monthPrice, sessionPrice, sessionsPerMonth)
+VALUES (@id, @name, @monthPrice, @sessionPrice, @sessionsPerMonth)`;
+
+export const updateQuery = `
+UPDATE SubscriptionPlans
+SET name = @name,
+    monthPrice = @monthPrice,
+    sessionPrice = @sessionPrice,
+    sessionsPerMonth = @sessionsPerMonth
+    WHERE id = @id;
+`;
 
 export const removeQuery = 'DELETE FROM SubscriptionPlans WHERE id = @id';

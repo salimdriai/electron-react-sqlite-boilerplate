@@ -17,7 +17,9 @@
       "close": "close",
       "cancel": "cancel",
       "goToUserInfo": "go to user info",
-      "goToLogin": "go to login"
+      "goToLogin": "go to login",
+      "manualEntry": "manual entry",
+      "renew": "renew"
     },
     "info": {
       "id": "id",
@@ -41,7 +43,14 @@
       "password": "password",
       "passwordConfirm": "confirm password",
       "permission": "permission",
-      "role": "role"
+      "role": "role",
+      "notes": "notes",
+      "noAccountAdded": "No account added yet! ",
+      "more": "more",
+      "entredInThreeHours": "This user entered in less than 3 hours !",
+      "subscriptionExpired": "This user subscription is expired !",
+      "maxSessionsSpent": "This user spent max sessions amount !",
+      "noSubscriptions": "User have no subscriptions !"
     },
     "common": {
       "freeSession": "free session",
@@ -67,7 +76,13 @@
       "saveCopyCredentials": "please make sure to save a copy of your credentials .",
       "alreadyActivated": "Already activated the app ?",
       "notActivated": "your app not active yet ?",
-      "freeSessionsLatest": "latest free sessions"
+      "freeSessionsLatest": "latest free sessions",
+      "totalPaid": "total paid",
+      "date": "date",
+      "nothingToShow": "Nothing to show here !",
+      "latestEntry": "last entry",
+      "latestPayment": "last payment",
+      "history": "history"
     },
     "user": {
       "users": "users",
@@ -81,22 +96,77 @@
       "name": "name",
       "status": "status",
       "id": "id",
+      "age": "age",
       "phoneNumber": "phone number",
       "subscriptions": "subscriptions",
       "latest": "latest entered users",
-      "registredAt": "registered at"
+      "registredAt": "registered at",
+      "actions": "actions",
+      "latestEntries": "Latest entries",
+      "confirmDelete": "Do you wanna delete this user ?"
     },
     "account": {
       "add": "add account",
-      "myAccount": "my account"
+      "myAccount": "my account",
+      "admin": "admin",
+      "male": "homme",
+      "female": "femme",
+      "all": "all"
     },
     "subscriptions": {
-      "subscriptions": "subscriptions",
+      "subscriptions": "Subscriptions",
       "new": "new subscriptions",
-      "add ": "new subscriptions",
-      "edit ": "edit subscriptions",
-      "delete ": "delete subscriptions",
-      "confirmDelete": "Do you wanna delete this subscription ?"
+      "add": "add subscription",
+      "edit": "edit subscriptions",
+      "delete": "delete subscriptions",
+      "confirmDelete": "Do you wanna delete this subscription ?",
+      "expireIn7Days": "Expire in 7 days",
+      "expireIn3Days": "Expire in 3 days",
+      "expireIn1Day": "Expire in 1 day",
+      "expired": "Expired",
+      "expiredAt": "Expired at",
+      "all": "All",
+      "startFromNow": "start from now",
+      "startFromExpiration": "start from expiration date"
+    },
+    "settings": {
+      "genaral": "generale settings",
+      "plans": {
+        "plans": "subscription plans",
+        "add": "add subscription plan",
+        "edit": "edit subscription plan",
+        "sessionPrice": "session price",
+        "monthPrice": "month price",
+        "sessionsPerMonth": "sessions per month"
+      },
+      "theme": {
+        "dark": "dark",
+        "light": "light"
+      },
+      "language": {
+        "french": "french",
+        "english": "english"
+      }
+    },
+    "administration": {
+      "accounts": "Accounts",
+      "dataImport": "Data import"
+    },
+    "report": {
+      "report": "report",
+      "analytics": "analytics"
+    },
+    "payments": {
+      "payments": "payments",
+      "history": "payments history",
+      "userId": "user ID",
+      "fullName": "full name",
+      "amount": "amount paid",
+      "paidAt": "paidAt",
+      "lastMonth": "last month revenue",
+      "currentMonth": "current month revenue",
+      "lastYear": "last year revenue",
+      "currentYear": "current year revenue"
     }
   }
 }

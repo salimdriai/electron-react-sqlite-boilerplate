@@ -24,7 +24,6 @@ const settingsSlice = createSlice({
   initialState,
   reducers: {
     switchTheme: (state, action) => {
-      console.log('payload', action.payload);
       state.settings.theme = action.payload;
       window.electron.setStoreData('settings.theme', action.payload);
     },

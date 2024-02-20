@@ -1,10 +1,10 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { Controller, UseFormReturn } from 'react-hook-form';
-// import QRCode from 'qrcode';
 
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -16,12 +16,12 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
+import QrCode from 'components/Qrcode';
 import { Sex, BloodType, Subscription, User } from 'types';
 import { photoStyle, cameraModalStyle } from './helpers';
 import TakePhoto from './TakePhoto';
@@ -79,7 +79,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
   }, [camera]);
 
   return (
-    <Stack flex={1} spacing={1.5} component={Card} variant="outlined" p={2}>
+    <Stack flex={2} spacing={1.5} component={Card} variant="outlined" p={2}>
       <Typography gutterBottom variant="h6">
         Info
       </Typography>
@@ -92,28 +92,36 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
         <TakePhoto setCamera={setCamera} />
       </Modal>
 
-      <Card elevation={4} sx={photoStyle} onClick={handleOpenCamera}>
-        {camera.photo ? (
-          <img
-            src={
-              typeof camera.photo === 'string'
-                ? camera.photo
-                : URL.createObjectURL(new Blob([camera.photo]))
-            }
-            width="100%"
-            height="100%"
-            alt="user"
-          />
-        ) : (
-          <PhotoCameraIcon />
-        )}
-      </Card>
-
-      <Box height={40}>
+      <Stack direction="row" spacing={2}>
+        <Card elevation={4} sx={photoStyle} onClick={handleOpenCamera}>
+          {camera.photo ? (
+            <img
+              src={
+                typeof camera.photo === 'string'
+                  ? camera.photo
+                  : URL.createObjectURL(new Blob([camera.photo]))
+              }
+              width="100%"
+              height="100%"
+              alt="user"
+            />
+          ) : (
+            <PhotoCameraIcon />
+          )}
+        </Card>
+        <QrCode value={watch('id')} />
+      </Stack>
+      <Box height={30}>
         {camera.photo && (
-          <Button size="small" color="error" onClick={removePhoto}>
+          // @ts-ignore
+          <Link
+            component="button"
+            size="small"
+            color="error"
+            onClick={removePhoto}
+          >
             {t('actions.delete')}
-          </Button>
+          </Link>
         )}
       </Box>
 
@@ -144,6 +152,9 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
               type="text"
               fullWidth
               {...field}
+              onChange={(e) =>
+                field.onChange(e.target.value.replace(/^0+/, '').trim())
+              }
               label="id"
               error={!!errors.id}
               helperText={<> {errors.id?.message || ''} </>}
@@ -209,7 +220,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
           control={control}
           rules={{
             pattern: {
-              value: /^[A-Za-z]*$/,
+              value: /^[A-Za-z\s]*$/,
               message: 'Only letters are allowed.',
             },
             required: 'first name is required.',
@@ -240,7 +251,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
           control={control}
           rules={{
             pattern: {
-              value: /^[A-Za-z]*$/,
+              value: /^[A-Za-z\s]*$/,
               message: 'Only letters are allowed.',
             },
             required: 'last name is required.',
@@ -357,7 +368,12 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
             },
           }}
           render={({ field }) => (
-            <TextField type="number" {...field} label={t('info.height')} />
+            <TextField
+              type="number"
+              fullWidth
+              {...field}
+              label={t('info.height')}
+            />
           )}
         />
 
@@ -371,7 +387,12 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
             },
           }}
           render={({ field }) => (
-            <TextField type="number" {...field} label={t('info.weight')} />
+            <TextField
+              type="number"
+              fullWidth
+              {...field}
+              label={t('info.weight')}
+            />
           )}
         />
 
@@ -379,7 +400,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
           name="bloodType"
           control={control}
           render={({ field }) => (
-            <FormControl sx={{ width: 140 }}>
+            <FormControl fullWidth>
               <InputLabel>{t('info.bloodType')}</InputLabel>
               <Select
                 onChange={(v) => field.onChange(v as any)}
@@ -395,6 +416,15 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
           )}
         />
       </Box>
+
+      <Controller
+        name="notes"
+        control={control}
+        render={({ field }) => <TextField {...field} label={t('info.notes')} />}
+      />
+      <Button type="submit" size="large" variant="contained" color="secondary">
+        {isEditMode ? t('actions.update') : t('actions.register')}
+      </Button>
     </Stack>
   );
 };

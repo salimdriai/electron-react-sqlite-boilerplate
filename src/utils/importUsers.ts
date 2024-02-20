@@ -1,7 +1,7 @@
-import { Sex, User, UserSubscription, Status } from 'types';
+import { Sex, User } from 'types';
 
 /* eslint-disable import/prefer-default-export */
-export const importUsers = ({ members, subscriptions }: any) => {
+export const importUsers = (members: any) => {
   const users: User[] = [];
   members.forEach((member: any) => {
     const user: User = {
@@ -15,10 +15,10 @@ export const importUsers = ({ members, subscriptions }: any) => {
       weight: 0,
       photo: '',
       registeredAt: '',
-      allTimeSessions: 0,
-      status: Status.Active, // active | expired | new
+      allTimeEntries: 0,
       bloodType: undefined,
-      currentSubscriptions: [],
+      lastEntryTimestamp: 0,
+      notes: '',
     };
 
     user.id = member.matricule;
@@ -29,36 +29,6 @@ export const importUsers = ({ members, subscriptions }: any) => {
     user.sex = member.sexe === 'homme' ? Sex.Male : Sex.Female;
     user.registeredAt = new Date(member.created_at).toDateString();
     user.bloodType = member.sang;
-
-    subscriptions.forEach((sub: any) => {
-      if (sub.membre === member.id) {
-        const subscription: UserSubscription = {
-          subscription: sub.abonnement,
-          startedAt: new Date(sub.debut).toDateString(),
-          endsAt: new Date(sub.fin).toDateString(),
-          paid: parseInt(sub.versement),
-          sessionsAvailable: parseInt(sub.nbsseance),
-          sessionsSpent: parseInt(sub.nbsseance) - parseInt(sub.reste),
-          lastEntryTimestamp: undefined,
-        };
-        if (new Date(subscription.endsAt).getTime() > new Date().getTime()) {
-          user.currentSubscriptions.push(subscription);
-        }
-      }
-    });
-
-    if (user.currentSubscriptions.length > 0) {
-      const isActive = user.currentSubscriptions.find(
-        (sub: any) => new Date(sub.endsAt).getTime() > new Date().getTime()
-      );
-      user.status = isActive ? Status.Active : Status.Expired;
-    } else {
-      user.status = Status.New;
-    }
-
-    user.currentSubscriptions = JSON.stringify(
-      user.currentSubscriptions
-    ) as any;
 
     users.push(user);
   });

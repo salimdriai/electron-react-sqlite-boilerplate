@@ -3,16 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import {
-  Box,
-  Card,
-  CardContent,
-  CardHeader,
-  Stack,
-  SvgIcon,
-  Typography,
-  useTheme,
-} from '@mui/material';
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Stack from '@mui/material/Stack';
+import SvgIcon from '@mui/material/SvgIcon';
+import Typography from '@mui/material/Typography';
+import useTheme from '@mui/material/styles/useTheme';
 import Chart from 'react-apexcharts';
 import { Sex, User } from 'types';
 import { useAppSelector } from 'features/store';

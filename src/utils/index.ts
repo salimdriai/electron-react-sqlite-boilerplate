@@ -6,7 +6,7 @@ export const getAge = (birthDate: Date | string) => {
   const millisecondsInYear = 31557600000;
 
   const age = ageTimestamp / millisecondsInYear;
-  return age.toFixed(0);
+  return Number(age.toFixed(0)) || 'N/A';
 };
 
 export function displayFormat(inputString: string) {
@@ -18,3 +18,23 @@ export function displayFormat(inputString: string) {
 
   return formattedString;
 }
+
+export const formatDate = (date: string | Date | number) => {
+  const d = new Date(date);
+  const day = d.getDate() < 10 ? `0${d.getDate()}` : d.getDate();
+  const month =
+    d.getMonth() + 1 < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1;
+  const year = d.getFullYear();
+
+  return `${day}-${month}-${year}`;
+};
+
+export const oneMonthFromDate = (date: Date | string) => {
+  const oneMonthTimestamp = 30 * 24 * 60 * 60 * 1000;
+  const start = new Date(date).getTime();
+  return new Date(start + oneMonthTimestamp).toDateString();
+};
+
+export * from './importPlans';
+export * from './importSubscriptions';
+export * from './importUsers';

@@ -1,70 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
-import { styled } from '@mui/material/styles';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { FreeSession as FreeSessionType, SubscriptionPlan } from 'types';
-
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-  '& .MuiToggleButtonGroup-grouped': {
-    margin: theme.spacing(1.5),
-
-    '&.Mui-disabled': {
-      border: 0,
-    },
-    '&:not(:first-of-type)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:first-of-type': {
-      borderRadius: theme.shape.borderRadius,
-    },
-  },
-  '& .MuiButtonBase-root': {
-    textTransform: 'none',
-    display: 'flex',
-    justifyContent: 'start',
-    alignItems: 'center',
-    gap: 16,
-    border: '1px solid!important',
-    borderColor: `${theme.palette.primary.light}!important`,
-  },
-  '& .Mui-selected': {
-    color: theme.palette.primary.main,
-    borderColor: `${theme.palette.primary.main}!important`,
-  },
-}));
-
-const style = {
-  '& .MuiButtonBase-root': {
-    margin: '0px!important',
-    borderColor: 'lightblue!important',
-  },
-  mt: 2,
-  gap: 2,
-};
 
 interface Props {
   freeSessionsModalOpen: boolean;
   onFreeSessionModalClose: () => void;
 }
-
-const getTotal = (plans: SubscriptionPlan[], selected: string[]): number => {
-  let total = 0;
-  plans.forEach((plan) => {
-    if (selected.includes(plan.name)) {
-      total += Number(plan.sessionPrice);
-    }
-  });
-  return total;
-};
 
 function FreeSession({
   freeSessionsModalOpen,
@@ -74,30 +28,33 @@ function FreeSession({
     SubscriptionPlan[]
   >([]);
 
-  const [selected, setSelected] = React.useState<any>(() => []);
+  const [selected, setSelected] = React.useState('');
   const [fullName, setFullName] = useState({ firstName: '', lastName: '' });
+  const [session, setSession] = React.useState<FreeSessionType | null>(null);
 
-  const handleFormat = (
-    event: React.MouseEvent<HTMLElement>,
-    session: string[]
-  ) => {
-    setSelected(session);
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelected(event.target.value);
+    const selectedSession = subscriptionsPlans.find(
+      (plan) => plan.id === event.target.value
+    );
+
+    setSession((prev: any) => ({
+      ...prev,
+      plansIds: event.target.value,
+      totalPaid: selectedSession?.sessionPrice,
+      enteredAt: new Date().toISOString(),
+      ...fullName,
+    }));
   };
+
+  const { t } = useTranslation();
 
   const handleChangeName = (e: any) => {
     setFullName((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleAddSession = async () => {
-    const session: FreeSessionType = {
-      firstName: fullName.firstName,
-      lastName: fullName.lastName,
-      plansIds: subscriptionsPlans.map(({ id }) => id).join(','),
-      enteredAt: new Date().toISOString(),
-      totalPaid: getTotal(subscriptionsPlans, selected),
-    };
-
-    await window.electron.createFreeSessions(session);
+    await window.electron.createFreeSessions(session as FreeSessionType);
     toast.success('Sessions succesfully added !');
     onFreeSessionModalClose();
   };
@@ -118,32 +75,45 @@ function FreeSession({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        maxWidth: '80%',
+        m: 'auto',
       }}
     >
       <Card sx={{ p: 5 }}>
         <Typography gutterBottom variant="h5">
-          Free session entry
+          {t('common.freeSession')}
         </Typography>
         <Divider />
 
         <Stack direction="row" spacing={2} my={2}>
           <TextField
             value={fullName.firstName}
-            label="first name"
+            label={t('info.firstname')}
             name="firstName"
             onChange={handleChangeName}
             fullWidth
           />
           <TextField
             value={fullName.lastName}
-            label="last name"
+            label={t('info.lastname')}
             name="lastName"
             onChange={handleChangeName}
             fullWidth
           />
         </Stack>
-        <Divider />
-        <StyledToggleButtonGroup
+
+        <FormControl fullWidth>
+          <InputLabel>Select type</InputLabel>
+          <Select value={selected} label="Select type" onChange={handleChange}>
+            {subscriptionsPlans.map((plan) => (
+              <MenuItem value={plan.id}>
+                {`${plan.name} / ${plan.sessionPrice} DA`}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {/* <StyledToggleButtonGroup
           value={selected}
           onChange={handleFormat}
           sx={style}
@@ -154,29 +124,28 @@ function FreeSession({
               key={subscription.id}
               value={subscription.name}
             >
-              {/* @ts-ignore */}
-              {/*  <img src={images[subscription.name]} width={40} alt="icon" /> */}
+
               <Stack alignItems="start">
-                <Typography variant="h5">{subscription.name}</Typography>
-                <Typography color="secondary">
-                  {subscription.sessionPrice} DZD
+                <Typography variant="h6" color="primary">
+                  {subscription.name.toLocaleLowerCase()}
                 </Typography>
+                <Typography>{subscription.sessionPrice} DZD</Typography>
               </Stack>
             </ToggleButton>
           ))}
-        </StyledToggleButtonGroup>
+        </StyledToggleButtonGroup> */}
 
         <Stack spacing={2} mt={2}>
           <Card sx={{ p: 1 }} variant="outlined">
             <Typography color="text.secondary" variant="h6" align="center">
               Total :{' '}
               <Typography variant="h5" component="span" color="secondary">
-                {getTotal(subscriptionsPlans, selected)} DZD
+                {session?.totalPaid} DZD
               </Typography>
             </Typography>
           </Card>
           <Button onClick={handleAddSession} variant="contained" size="large">
-            Confirm
+            {t('actions.confirm')}
           </Button>
         </Stack>
       </Card>

@@ -17,7 +17,9 @@
       "close": "fermer",
       "cancel": "annuler",
       "goToUserInfo": "aller aux informations utilisateur",
-      "goToLogin": "aller à la connexion"
+      "goToLogin": "aller à la connexion",
+      "manualEntry": "entré manual",
+      "renew": "renouveler"
     },
     "info": {
       "id": "identifiant",
@@ -41,10 +43,17 @@
       "password": "mot de passe",
       "passwordConfirm": "confirmer le mot de passe",
       "permission": "autorisation",
-      "role": "rôle"
+      "role": "rôle",
+      "notes": "notes",
+      "noAccountAdded": "aucune compte ajouté pour le moment !",
+      "more": "autres",
+      "entredInThreeHours": "Cet utilisateur est entré il y a moins de 3 heures !",
+      "subscriptionExpired": "L'abonnement de cet utilisateur a expiré !",
+      "maxSessionsSpent": "Cet utilisateur a utilisé le nombre maximum de sessions autorisé ",
+      "noSubscriptions": "L'utilisateur n'a pas d'abonnements !"
     },
     "common": {
-      "freeSession": "session gratuite",
+      "freeSession": "séance libre",
       "dashboard": "tableau de bord",
       "users": "utilisateurs",
       "products": "produits",
@@ -53,7 +62,7 @@
       "language": "langue",
       "theme": "thème",
       "info": "informations",
-      "subscriptions": "abonnements",
+      "subscriptions": "Abonnements",
       "entries": "entrées",
       "rowsPerPage": "lignes par page",
       "month": "mois",
@@ -66,35 +75,97 @@
       "yourCredentials": "vos identifiants",
       "saveCopyCredentials": "assurez-vous de sauvegarder une copie de vos identifiants.",
       "alreadyActivated": "L'application est déjà activée ?",
-      "notActivated": "Votre application n'est pas encore activée ?"
+      "notActivated": "Votre application n'est pas encore activée ?",
+      "freeSessionsLatest": "Dernières séance libre",
+      "totalPaid": "Total payé",
+      "date": "Date",
+      "nothingToShow": "Rien à afficher ici !",
+      "latestEntry": "Dernière entée",
+      "latestPayment": "Dernière payment",
+      "history": "historique"
     },
     "user": {
-      "users": "utilisateurs",
-      "add": "ajouter un utilisateur",
-      "edit": "modifier un utilisateur",
-      "delete": "supprimer un utilisateur",
-      "create": "créer un utilisateur",
-      "register": "enregistrer un utilisateur",
-      "update": "mettre à jour un utilisateur",
-      "newUsers": "nouveaux utilisateurs",
+      "users": "membres",
+      "add": "ajouter un membre",
+      "edit": "modifier un membre",
+      "delete": "supprimer un membre",
+      "create": "créer un membre",
+      "register": "enregistrer un membre",
+      "update": "mettre à jour un membre",
+      "newUsers": "nouveaux membre",
       "name": "nom",
       "status": "statut",
       "id": "identifiant",
+      "age": "age",
       "phoneNumber": "numéro de téléphone",
       "subscriptions": "abonnements",
-      "registredAt": "enregistré le"
+      "registredAt": "enregistré le",
+      "actions": "actions",
+      "latestEntries": "Dernières entrées",
+      "confirmDelete": "Voulez-vous supprimer ce membre ?"
     },
     "account": {
       "add": "ajouter un compte",
-      "myAccount": "mon compte"
+      "myAccount": "mon compte",
+      "Admin": "administrateur",
+      "Male": "homme",
+      "Female": "femme",
+      "All": "tous"
     },
     "subscriptions": {
-      "subscriptions": "abonnements",
+      "subscriptions": "Abonnements",
       "new": "nouveaux abonnements",
-      "add ": "ajouter des abonnements",
-      "edit ": "modifier des abonnements",
-      "delete ": "supprimer des abonnements",
-      "confirmDelete": "Voulez-vous supprimer cet abonnement ?"
+      "add": "ajouter un abonnement",
+      "edit": "modifier des abonnements",
+      "delete": "supprimer des abonnements",
+      "confirmDelete": "Voulez-vous supprimer cet abonnement ?",
+      "expireIn7Days": "Expire dans 7 jours",
+      "expireIn3Days": "Expire dans 3 jours",
+      "expireIn1Day": "Expire dans 1 jour",
+      "expired": "Expiré",
+      "expiredAt": "Expiré le",
+      "all": "Tous",
+      "startFromNow": "démarrer à partir de maintenant",
+      "startFromExpiration": "démarrer à partir de la date d'expiration"
+    },
+    "settings": {
+      "genaral": "Paramètres généraux",
+      "plans": {
+        "plans": "Plans d'abonnement",
+        "add": "Ajouter un plan d'abonnement",
+        "edit": "Modifier le plan d'abonnement",
+        "sessionPrice": "Prix par séance",
+        "monthPrice": "Prix par mois",
+        "sessionsPerMonth": "Séances par mois"
+      },
+      "theme": {
+        "dark": "Sombre",
+        "light": "Clair"
+      },
+      "language": {
+        "fr": "Français",
+        "en": "Anglais"
+      }
+    },
+    "administration": {
+      "accounts": "Comptes",
+      "dataImport": "Import des données"
+    },
+    "report": {
+      "report": "rapport",
+      "analytics": "analytique"
+    },
+    "payments": {
+      "payments": "payments",
+      "history": "historique des paiements",
+      "userId": "identifiant de membre",
+      "fullName": "nom complet",
+      "amount": "montant payé",
+      "paidAt": "payé à",
+      "lastMonth": "revenu du mois dernier",
+      "currentMonth": "revenu du mois en cours",
+      "lastYear": "revenu de l'année dernière",
+      "currentYear": "revenu de l'année en cours"
     }
   }
 }

@@ -37,5 +37,5 @@ export interface User {
   lastEntryTimestamp: number;
   allTimeEntries?: number;
   notes?: string;
-  subscriptions?: Subscription[];
+  subscriptions: Subscription[];
 }

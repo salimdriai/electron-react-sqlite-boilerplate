@@ -19,6 +19,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useAppDispatch } from '../../features/store';
 import { logAccount } from '../../features/authentication/reducers';
 import logo from '../../../assets/icon.png';
+import backgroundImg from '../../../assets/bg5.jpg';
 
 export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
@@ -52,8 +53,27 @@ export default function Login() {
       >
         <img src={logo} width={250} alt="logo" />
       </Stack>
-      <Stack height="100%" flex={2} justifyContent="center" alignItems="center">
-        <Card variant="outlined" sx={{ p: 5 }}>
+      <Stack
+        height="100%"
+        flex={2}
+        justifyContent="center"
+        alignItems="center"
+        position="relative"
+        // sx={{
+        //   backgroundImage: background,
+        // }}
+      >
+        <img
+          src={backgroundImg}
+          width="100%"
+          height="100%"
+          style={{ position: 'absolute', right: 0, bottom: 0, zIndex: -1 }}
+          alt="bg"
+        />
+        <Card
+          variant="outlined"
+          sx={{ p: 5, background: 'background.default' }}
+        >
           <Stack component="form" onSubmit={handleSubmit(onSubmit)} spacing={2}>
             <Typography variant="h2">{t('actions.login')}</Typography>
             <Controller

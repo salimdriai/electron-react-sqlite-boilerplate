@@ -1,13 +1,12 @@
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import {
-  Avatar,
-  Card,
-  CardContent,
-  Stack,
-  SvgIcon,
-  Typography,
-} from '@mui/material';
+
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Stack from '@mui/material/Stack';
+import SvgIcon from '@mui/material/SvgIcon';
+import Typography from '@mui/material/Typography';
 import { StatCardProps } from '../../types';
 
 export default function StatCard(props: Partial<StatCardProps>) {
@@ -19,6 +18,7 @@ export default function StatCard(props: Partial<StatCardProps>) {
     icon,
     color,
     img,
+    maxWidth = '300px',
   } = props;
 
   return (
@@ -26,7 +26,7 @@ export default function StatCard(props: Partial<StatCardProps>) {
       sx={{
         height: '100%',
         flex: 1,
-        maxWidth: '300px',
+        maxWidth,
         backgroundImage: `url(${img})`, // Set the background image correctly
         backgroundSize: 'cover', // Optional: Set the background size as needed
       }}

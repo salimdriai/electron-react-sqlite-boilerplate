@@ -5,6 +5,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import {
   Account,
   FreeSession,
+  Payment,
   Settings,
   Subscription,
   SubscriptionPlan,
@@ -74,7 +75,9 @@ const electronHandler = {
   // subscription plans
   getSubscriptionPlans: () => ipcRenderer.invoke('subscriptionPlan:getAll'),
   createSubscriptionPlan: (plan: SubscriptionPlan) =>
-    ipcRenderer.invoke('subscriptionPlan:insert', plan),
+    ipcRenderer.invoke('subscriptionPlan:create', plan),
+  updateSubscriptionPlan: (plan: SubscriptionPlan) =>
+    ipcRenderer.invoke('subscriptionPlan:update', plan),
 
   // subscriptions
   getAllSubscriptions: () => ipcRenderer.invoke('subscriptions:getAll'),
@@ -86,6 +89,13 @@ const electronHandler = {
     ipcRenderer.invoke('subscriptions:update', subscription),
   deleteSubscription: (id: string) =>
     ipcRenderer.invoke('subscriptions:delete', id),
+
+  // payments
+  getAllPayments: () => ipcRenderer.invoke('payments:getAll'),
+  getUserPayments: (userId: string) =>
+    ipcRenderer.invoke('payments:getUserPayments', userId),
+  createPayment: (payment: Payment) =>
+    ipcRenderer.invoke('payments:create', payment),
 
   // other -----------------------
   decryptData: (data: string) => ipcRenderer.invoke('data:decrypt', data),

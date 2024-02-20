@@ -1,34 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Chip } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
 import { Account } from 'types';
 
-function Administration() {
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  const navigate = useNavigate();
+function Accounts({
+  accounts,
+  setEditAccount,
+  setOpenCreateAccount,
+}: {
+  accounts: Account[];
+  setEditAccount: (arg: Account | null) => void;
+  setOpenCreateAccount: (arg: boolean) => void;
+}) {
+  const { t } = useTranslation();
 
   const handleClickEdit = (account: Account) => () => {
-    navigate('/administration/add-account', { state: account });
+    setEditAccount(account);
+    setOpenCreateAccount(true);
   };
 
-  useEffect(() => {
-    const getAccounts = async () => {
-      const res = await window.electron.getAllAccounts();
-      setAccounts(res);
-    };
-    getAccounts();
-  }, []);
-
   return (
-    <Stack spacing={2}>
+    <Card component={Stack} variant="outlined" spacing={2} p={2}>
+      {accounts.length === 0 && (
+        <Stack alignItems="center" spacing={2}>
+          <Typography align="center">{t('info.noAccountAdded')}</Typography>
+          <Button
+            startIcon={<AddIcon />}
+            onClick={() => setOpenCreateAccount(true)}
+            variant="outlined"
+          >
+            {t('account.add')}
+          </Button>
+        </Stack>
+      )}
       {accounts.map((account) => (
         <Card
           key={account.username}
@@ -73,7 +87,7 @@ function Administration() {
           </Stack>
         </Card>
       ))}
-    </Stack>
+    </Card>
   );
 }
-export default Administration;
+export default Accounts;

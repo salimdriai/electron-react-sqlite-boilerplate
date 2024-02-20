@@ -16,4 +16,5 @@ export interface Subscription {
   sessionsAvailable: number;
   sessionsSpent: number;
   lastEntryTimestamp?: number;
+  lastPaymentId?: string;
 }

@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
@@ -15,11 +14,18 @@ import Typography from '@mui/material/Typography';
 import { toast } from 'react-toastify';
 import { Role, Permission, Account } from 'types';
 
-function AccountForm() {
-  const { state } = useLocation();
+function AccountForm({
+  closeDialog,
+  editAccount,
+  getAccounts,
+}: {
+  closeDialog: () => void;
+  editAccount: Account | null;
+  getAccounts: () => void;
+}) {
   const { t } = useTranslation();
 
-  const isEditMode = useMemo(() => !!state, [state]);
+  const isEditMode = useMemo(() => !!editAccount, [editAccount]);
 
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const { handleSubmit, control, watch, reset, setValue } = useForm({
@@ -52,6 +58,8 @@ function AccountForm() {
     }
     setPasswordConfirmation('');
     reset();
+    closeDialog();
+    getAccounts();
   };
 
   useEffect(() => {
@@ -66,7 +74,7 @@ function AccountForm() {
         setValue('createdAt', data.createdAt);
         setPasswordConfirmation(decryptedPass);
       };
-      updateDefaultValues(state);
+      updateDefaultValues(editAccount as Account);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditMode]);

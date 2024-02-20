@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { Permission } from 'types';
 
@@ -13,8 +13,8 @@ import ProductPage from './products/product';
 import AddProductPage from './products/add-product';
 import SettingsPage from './settings';
 import AdministrationPage from './administration';
+import ReportPage from './report';
 import { useAppSelector } from '../features/store';
-import AddAccountPage from './administration/add-account';
 import ActivationPage from './activation';
 
 const privateRoutes = [
@@ -64,8 +64,8 @@ const privateRoutes = [
     adminOnly: true,
   },
   {
-    path: '/administration/add-account',
-    element: <AddAccountPage />,
+    path: '/report',
+    element: <ReportPage />,
     adminOnly: true,
   },
   {
@@ -82,6 +82,11 @@ export default function Pages() {
   );
 
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    const entryInput = document.getElementById('entry-input');
+    entryInput?.focus();
+  }, [pathname]);
 
   if (pathname === '/activation') {
     return <ActivationPage />;

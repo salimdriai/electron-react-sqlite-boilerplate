@@ -5,12 +5,14 @@ import type { TypedUseSelectorHook } from 'react-redux';
 import usersSlice from './users';
 import authenticationSlice from './authentication';
 import settingsSlice from './settings';
+import paymentsSlice from './payments';
 
 const store = configureStore({
   reducer: {
     users: usersSlice,
     authentication: authenticationSlice,
     settings: settingsSlice,
+    payments: paymentsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

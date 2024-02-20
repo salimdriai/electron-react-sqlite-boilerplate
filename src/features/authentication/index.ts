@@ -54,12 +54,13 @@ const authenticationSlice = createSlice({
     builder.addCase(logAccount.fulfilled, (state, { payload }) => {
       if (payload === undefined) {
         toast.error('User not found !');
+        state.loading = false;
         return;
       }
-      state.loading = false;
       state.username = payload.username;
       state.permission = payload.permission;
       state.isAuthneticated = true;
+      state.loading = false;
 
       saveToLocalStorage(AuthLsKey, {
         username: payload.username,

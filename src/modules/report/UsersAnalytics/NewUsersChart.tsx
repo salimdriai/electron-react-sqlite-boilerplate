@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, Divider } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
 import { toast } from 'react-toastify';
 import { alpha, useTheme } from '@mui/material/styles';
 import Chart from 'react-apexcharts';

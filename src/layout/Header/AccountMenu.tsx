@@ -7,7 +7,6 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Badge from '@mui/material/Badge';
@@ -137,17 +136,17 @@ function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
+        {/* <MenuItem onClick={handleClose}>
           <Avatar /> {t('account.myAccount')}
         </MenuItem>
-        <Divider />
+        <Divider /> */}
         {permission === Permission.Admin && (
           <div>
-            <MenuItem onClick={() => navigate('/administration/add-account')}>
+            <MenuItem onClick={() => navigate('/administration')}>
               <ListItemIcon>
                 <PersonAdd fontSize="small" />
               </ListItemIcon>
-              {t('account.add')}
+              {t('common.administration')}
             </MenuItem>
             <MenuItem onClick={() => navigate('/settings')}>
               <ListItemIcon>

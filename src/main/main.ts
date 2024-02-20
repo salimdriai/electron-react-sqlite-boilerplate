@@ -19,6 +19,7 @@ import {
   Settings as SettingsType,
   FreeSession as FreeSessionType,
   SubscriptionPlan as SubscriptionPlanType,
+  Payment as PaymentType,
   Subscription,
 } from 'types';
 import MenuBuilder from './menu';
@@ -32,6 +33,7 @@ import SettingsModel from './models/Settings';
 import FreeSessionModel from './models/FreeSession';
 import SubscriptionPlanModel from './models/SubscriptionPlans';
 import SubscriptionsModel from './models/Subscription';
+import PaymentsModel from './models/Payments';
 
 class AppUpdater {
   constructor() {
@@ -160,6 +162,7 @@ app
     const FreeSession = new FreeSessionModel();
     const SubscriptionPlan = new SubscriptionPlanModel();
     const Subscriptions = new SubscriptionsModel();
+    const Payments = new PaymentsModel();
 
     // settings
     ipcMain.handle('settings:get', async () => {
@@ -206,9 +209,16 @@ app
     });
 
     ipcMain.handle(
-      'subscriptionPlan:insert',
+      'subscriptionPlan:create',
       async (_, plan: SubscriptionPlanType) => {
         await SubscriptionPlan.create(plan);
+        return plan;
+      }
+    );
+    ipcMain.handle(
+      'subscriptionPlan:update',
+      async (_, plan: SubscriptionPlanType) => {
+        await SubscriptionPlan.update(plan);
         return plan;
       }
     );
@@ -312,6 +322,21 @@ app
     );
     ipcMain.handle('freeSession:delete', async (_, id: string) => {
       await FreeSession.remove(id);
+    });
+
+    // payments
+
+    ipcMain.handle('payments:getAll', async () => {
+      const payments = await Payments.getAll();
+      return payments;
+    });
+    ipcMain.handle('payments:getUserPayments', async (_, userId) => {
+      const payments = await Payments.get(userId);
+      return payments;
+    });
+    ipcMain.handle('payments:create', async (_, payment: PaymentType) => {
+      await Payments.create(payment);
+      return payment;
     });
 
     // store

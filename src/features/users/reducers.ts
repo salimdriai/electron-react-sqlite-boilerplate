@@ -13,37 +13,43 @@ export const sessionsEntry = createAsyncThunk(
 
     const result = {
       user,
-      isEnteredSixHoursAgo: false,
+      isEnteredThreeHoursAgo: false,
       isSubscriptionExpired: false,
       isMaxSessionsSpent: false,
       message: 'Welcome !',
     };
 
+    if (!user.subscriptions?.length) {
+      return {
+        user,
+        isEnteredThreeHoursAgo: false,
+        isSubscriptionExpired: true,
+        isMaxSessionsSpent: false,
+        message: 'info.noSubscriptions',
+      };
+    }
+
     user.subscriptions!.forEach(
       ({ endsAt, sessionsAvailable, sessionsSpent }: Subscription) => {
         if (currentTimestamp - user.lastEntryTimestamp < threeHoursTimestamp) {
-          result.isEnteredSixHoursAgo = true;
-          result.message = 'This user entered in less than 6 hours !';
+          result.isEnteredThreeHoursAgo = true;
+          result.message = 'info.entredInThreeHours';
         }
 
         const endsAtTimestamp = new Date(endsAt).getTime();
         if (endsAtTimestamp < currentTimestamp) {
           result.isSubscriptionExpired = true;
-          result.message = 'This user subscription is expired !';
+          result.message = 'info.subscriptionExpired';
         }
 
         if (sessionsSpent >= sessionsAvailable) {
           result.isMaxSessionsSpent = true;
-          result.message = 'This user spent max sessions amount !';
+          result.message = 'info.maxSessionsSpent';
         }
       }
     );
 
-    if (
-      result.isEnteredSixHoursAgo ||
-      result.isMaxSessionsSpent ||
-      result.isSubscriptionExpired
-    ) {
+    if (result.isEnteredThreeHoursAgo) {
       return result;
     }
 
@@ -72,7 +78,46 @@ export const sessionsEntry = createAsyncThunk(
   }
 );
 
-export const updateSubscriptions = createAsyncThunk(
-  'updateSubscriptions',
-  async () => {}
+export const fetchUsers = createAsyncThunk(
+  'fetchUsers',
+  async (permission: string) => {
+    const users = await window.electron.getAllUsers(permission);
+    return users as User[];
+  }
+);
+
+export const getOneUser = createAsyncThunk(
+  'getOneUser',
+  async (userId: string) => {
+    const user = await window.electron.getOneUser(userId);
+    return user as User;
+  }
+);
+
+export const filterByExpirationDate = createAsyncThunk(
+  'filterByExpirationDate',
+  async ({
+    expireIn,
+    permission,
+  }: {
+    expireIn: number;
+    permission: string;
+  }) => {
+    const oneDayMs = 86_400_000;
+
+    const data = await window.electron.getAllUsers(permission);
+    const filteredUsers: User[] = data.filter((user: User) => {
+      return user.subscriptions?.some((sub) => {
+        const endsAt = new Date(sub.endsAt).getTime();
+        const now = new Date().getTime();
+        const daysAfter = now + oneDayMs * expireIn;
+        if (expireIn === 0) {
+          return endsAt < now;
+        }
+        return endsAt < daysAfter && endsAt > now;
+      });
+    });
+
+    return filteredUsers as User[];
+  }
 );

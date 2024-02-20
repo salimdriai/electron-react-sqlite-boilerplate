@@ -36,7 +36,7 @@ function Theme() {
               checked={settings.theme === Themes.Dark}
             />
           }
-          label={Themes.Dark}
+          label={t(`settings.theme.${Themes.Dark}`)}
         />
       </CardContent>
     </Card>

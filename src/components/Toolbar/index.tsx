@@ -29,7 +29,8 @@ export default function PageToolbar({
       <Typography variant="h4">{title}</Typography>
       {buttonLabel && (
         <Button
-          variant="contained"
+          variant="outlined"
+          color="secondary"
           onClick={buttonOnClick}
           startIcon={buttonIcon}
         >

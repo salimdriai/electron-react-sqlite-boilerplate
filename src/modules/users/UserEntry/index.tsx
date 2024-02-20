@@ -12,17 +12,15 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { sessionsEntry } from 'features/users/reducers';
 import { useAppDispatch } from 'features/store';
 import { User } from 'types';
-import UserSubscriptions from '../UserDetails/UserSubscriptions';
+// import UserSubscriptions from '../UserDetails/UserSubscriptions';
 
 function UserEntry() {
   const [userId, setUserId] = useState('');
-  const [showEditButton, setShowEditButton] = useState(false);
 
   const [enteredUser, setEnteredUser] = React.useState<{
     open: boolean;
@@ -49,40 +47,41 @@ function UserEntry() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleEntry = (e: any) => {
-    const { value } = e.target;
-    setUserId(value.trim());
+    const id = e.target.value.replace(/^0+/, '').trim();
+    setUserId(id);
 
-    dispatch(sessionsEntry(e.target.value))
-      .unwrap()
-      .then(
-        ({
-          user: entered,
-          isEnteredSixHoursAgo,
-          isSubscriptionExpired,
-          isMaxSessionsSpent,
-          message,
-        }) => {
-          if (
-            isEnteredSixHoursAgo ||
-            isMaxSessionsSpent ||
-            isSubscriptionExpired
-          ) {
-            setShowEditButton(true);
-            toast.warning(message);
-          } else {
-            toast.success(message);
-          }
-
-          setUserId('');
-          setEnteredUser({
-            open: true,
+    setTimeout(() => {
+      dispatch(sessionsEntry(id))
+        .unwrap()
+        .then(
+          ({
             user: entered,
+            isEnteredThreeHoursAgo,
+            isSubscriptionExpired,
+            isMaxSessionsSpent,
             message,
-          });
-          return null;
-        }
-      )
-      .catch((err) => toast.error(err));
+          }) => {
+            if (
+              isEnteredThreeHoursAgo ||
+              isMaxSessionsSpent ||
+              isSubscriptionExpired
+            ) {
+              toast.warning(t(message));
+            } else {
+              toast.success(t(message));
+            }
+
+            setUserId('');
+            setEnteredUser({
+              open: true,
+              user: entered,
+              message,
+            });
+            return null;
+          }
+        )
+        .catch((err) => toast.error(err));
+    }, 1000);
   };
 
   const navigateToUser = () => {
@@ -96,7 +95,13 @@ function UserEntry() {
         sx={{ height: '40px' }}
         size="small"
         value={userId}
+        id="entry-input"
         onChange={handleEntry}
+        onBlur={(e) => {
+          if (e.relatedTarget === null) {
+            e.target.focus();
+          }
+        }}
       />
       <Modal
         disableAutoFocus
@@ -107,24 +112,28 @@ function UserEntry() {
         <Card sx={{ width: '60%', p: 3 }}>
           {enteredUser.user && (
             <>
-              {!showEditButton && enteredUser.open && (
-                <>
-                  <Stack direction="row" justifyContent="space-between" mb={2}>
-                    <TextField
-                      autoFocus
-                      id="hidden-input"
-                      size="small"
-                      value={userId}
-                      onChange={handleEntry}
-                    />
-                    <IconButton onClick={handleclose}>
-                      <CloseIcon />
-                    </IconButton>
-                  </Stack>
-                  <Divider />
-                </>
-              )}
-              <Stack direction="row" alignItems="center" spacing={2} mt={2}>
+              <>
+                <Stack direction="row" justifyContent="space-between" mb={2}>
+                  <TextField
+                    autoFocus
+                    id="hidden-input"
+                    size="small"
+                    value={userId}
+                    onChange={handleEntry}
+                  />
+                  <IconButton onClick={handleclose}>
+                    <CloseIcon />
+                  </IconButton>
+                </Stack>
+                <Divider />
+              </>
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={2}
+                mt={2}
+                mb={4}
+              >
                 <Card
                   variant="outlined"
                   sx={{ height: '100px', width: '100px', borderRadius: '50%' }}
@@ -157,17 +166,21 @@ function UserEntry() {
                   </Typography>
                   <Typography>id : {enteredUser.user.id} </Typography>
                 </Stack>
-                <Stack direction="row">
+                {/* <Stack direction="row">
                   {showEditButton && (
                     <IconButton onClick={navigateToUser}>
                       <EditIcon />
                     </IconButton>
                   )}
-                </Stack>
+                </Stack> */}
               </Stack>
-              <Card variant="outlined" sx={{ p: 2, mt: 4 }}>
-                <UserSubscriptions user={enteredUser.user} />
-              </Card>
+
+              {/* <UserSubscriptions
+                user={enteredUser.user}
+                setUsersDetails={(user) =>
+                  setEnteredUser((prev) => ({ ...prev, user }))
+                }
+              /> */}
             </>
           )}
           <Stack direction="row" justifyContent="end" spacing={2} mt={2}>
