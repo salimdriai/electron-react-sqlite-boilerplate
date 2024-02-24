@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 interface ToolbarProps {
-  title: string;
+  title?: string;
   buttonLabel?: string;
   buttonIcon?: React.ReactNode;
   buttonOnClick?: () => void;
@@ -26,7 +26,7 @@ export default function PageToolbar({
         px: '0!important',
       }}
     >
-      <Typography variant="h4">{title}</Typography>
+      {title && <Typography variant="h4">{title}</Typography>}
       {buttonLabel && (
         <Button
           variant="outlined"

@@ -56,6 +56,7 @@
       "freeSession": "free session",
       "dashboard": "dashboard",
       "users": "users",
+      "report": "report",
       "products": "products",
       "settings": "settings",
       "administration": "administration",
@@ -103,7 +104,8 @@
       "registredAt": "registered at",
       "actions": "actions",
       "latestEntries": "Latest entries",
-      "confirmDelete": "Do you wanna delete this user ?"
+      "confirmDelete": "Do you wanna delete this user ?",
+      "entranceTime": "Entries Time"
     },
     "account": {
       "add": "add account",
@@ -163,10 +165,10 @@
       "fullName": "full name",
       "amount": "amount paid",
       "paidAt": "paidAt",
-      "lastMonth": "last month revenue",
-      "currentMonth": "current month revenue",
-      "lastYear": "last year revenue",
-      "currentYear": "current year revenue"
+      "lastMonth": "last month total revenue",
+      "currentMonth": "current month total revenue",
+      "lastYear": "last year total revenue",
+      "currentYear": "current year total revenue"
     }
   }
 }

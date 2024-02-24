@@ -61,7 +61,7 @@ export default function SessionsTable() {
           alignItems="center"
           p={2}
         >
-          <Typography variant="h6">
+          <Typography color="primary" variant="h6">
             {' '}
             {t('common.freeSessionsLatest')}
           </Typography>

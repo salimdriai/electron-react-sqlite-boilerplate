@@ -46,6 +46,9 @@ export default function createComponents(config: any) {
         textSizeLarge: {
           padding: '12px 16px',
         },
+        contained: {
+          color: 'white',
+        },
       },
     },
     MuiCard: {

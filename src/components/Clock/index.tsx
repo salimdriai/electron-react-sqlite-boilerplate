@@ -1,26 +1,48 @@
 import React, { useState, useEffect } from 'react';
+import Card from '@mui/material/Card';
+import './index.css';
 
 function Clock() {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState('');
+  const today = new Date().toLocaleDateString();
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTime(new Date());
+    const interval = setInterval(() => {
+      const date = new Date();
+      let hr: string | number = date.getHours();
+      let min: string | number = date.getMinutes();
+      let sec: string | number = date.getSeconds();
+      let session = 'AM';
+
+      hr = hr === 0 ? 12 : hr;
+      if (hr > 12) {
+        hr -= 12;
+        session = 'PM';
+      }
+      hr = hr < 10 ? `0${hr}` : hr;
+      min = min < 10 ? `0${min}` : min;
+      sec = sec < 10 ? `0${sec}` : sec;
+
+      const currentTime = `${hr}:${min}:${sec} ${session}`;
+      setTime(currentTime);
     }, 1000);
 
-    return () => {
-      clearInterval(intervalId);
-    };
+    return () => clearInterval(interval);
   }, []);
 
-  const hours = String(time.getHours()).padStart(2, '0');
-  const minutes = String(time.getMinutes()).padStart(2, '0');
-  const seconds = String(time.getSeconds()).padStart(2, '0');
-
   return (
-    <>
-      {hours}:{minutes}:{seconds}
-    </>
+    <Card
+      sx={{
+        width: 600,
+        p: 1,
+        px: 3,
+        backgroundColor: '#000',
+        border: '1px solid #5ceea7',
+      }}
+    >
+      <div id="clock">{time}</div>
+      <div id="date">{today}</div>
+    </Card>
   );
 }
 

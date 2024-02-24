@@ -2,81 +2,43 @@ import React, { useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import StatCard from 'components/StatCard';
-import { Payment } from 'types';
+import { FreeSession, Payment } from 'types';
+import { getStats, StatData } from '../helpers';
 
-const PaymentStats = ({ payments }: { payments: Payment[] }) => {
+const PaymentStats = ({
+  payments,
+  freeSessions,
+}: {
+  payments: Payment[];
+  freeSessions: FreeSession[];
+}) => {
   const { t } = useTranslation();
 
   const stats = useMemo(() => {
-    const currentDate = new Date();
-    const firstDayOfLastYear = new Date(currentDate.getFullYear() - 1, 0, 1);
-    const lastDayOfLastYear = new Date(currentDate.getFullYear(), 0, 0);
-    const firstDayOfCurrentYear = new Date(currentDate.getFullYear(), 0, 1);
+    const paymentData = payments.map((payment) => ({
+      paidAt: payment.paidAt,
+      amount: payment.amount,
+    })) as StatData[];
 
-    const firstDayOfLastMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() - 1,
-      1
-    );
+    const freeSessionsData = freeSessions.map((session) => ({
+      paidAt: session.enteredAt,
+      amount: session.totalPaid,
+    }));
 
-    const lastDayOfLastMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      0
-    );
+    const freeSessionsStats = getStats(freeSessionsData);
+    const paymentsStats = getStats(paymentData);
 
-    const firstDayOfMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
-
-    const lastDayOfMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      0
-    );
-
-    const revenueLastMonth = payments.reduce((acc, current) => {
-      const paymentDate = new Date(current.paidAt);
-      if (
-        paymentDate >= firstDayOfLastMonth &&
-        paymentDate <= lastDayOfLastMonth
-      ) {
-        return acc + Number(current.amount);
-      }
-      return acc;
-    }, 0);
-
-    // Filter payments made within this month and sum their amounts
-    const revenueThisMonth = payments.reduce((acc, current) => {
-      const paymentDate = new Date(current.paidAt);
-      if (paymentDate >= firstDayOfMonth && paymentDate <= lastDayOfMonth) {
-        return acc + Number(current.amount);
-      }
-      return acc;
-    }, 0);
-
-    const revenueLastYear = payments.reduce((acc, current) => {
-      const paymentDate = new Date(current.paidAt);
-      if (
-        paymentDate >= firstDayOfLastYear &&
-        paymentDate <= lastDayOfLastYear
-      ) {
-        return acc + Number(current.amount);
-      }
-      return acc;
-    }, 0);
-
-    const revenueThisYear = payments.reduce((acc, current) => {
-      const paymentDate = new Date(current.paidAt);
-      if (paymentDate >= firstDayOfCurrentYear && paymentDate <= currentDate) {
-        return acc + Number(current.amount);
-      }
-      return acc;
-    }, 0);
+    const revenueLastMonth =
+      freeSessionsStats.revenueLastMonth + paymentsStats.revenueLastMonth;
+    const revenueThisMonth =
+      freeSessionsStats.revenueThisMonth + paymentsStats.revenueThisMonth;
+    const revenueLastYear =
+      freeSessionsStats.revenueLastYear + paymentsStats.revenueLastYear;
+    const revenueThisYear =
+      freeSessionsStats.revenueThisYear + paymentsStats.revenueThisYear;
 
     return [
       {
@@ -113,19 +75,22 @@ const PaymentStats = ({ payments }: { payments: Payment[] }) => {
       },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [payments]);
+  }, [payments, freeSessions]);
 
   return (
-    <Stack flex={2} spacing={2}>
+    <Stack direction="row" flexWrap="wrap" gap={2}>
       {stats.map((stat) => (
-        <StatCard
-          key={stat.id}
-          maxWidth="unset"
-          label={stat.label}
-          icon={stat.icon}
-          value={stat.value}
-          color={stat.color}
-        />
+        <Box sx={{ minWidth: 350 }}>
+          <StatCard
+            key={stat.id}
+            maxWidth="unset"
+            label={stat.label}
+            icon={stat.icon}
+            value={stat.value}
+            color={stat.color}
+            valueTag="h5"
+          />
+        </Box>
       ))}
     </Stack>
   );

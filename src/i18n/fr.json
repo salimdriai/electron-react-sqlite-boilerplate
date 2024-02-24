@@ -56,6 +56,7 @@
       "freeSession": "séance libre",
       "dashboard": "tableau de bord",
       "users": "utilisateurs",
+      "report": "rapport",
       "products": "produits",
       "settings": "paramètres",
       "administration": "administration",
@@ -102,7 +103,8 @@
       "registredAt": "enregistré le",
       "actions": "actions",
       "latestEntries": "Dernières entrées",
-      "confirmDelete": "Voulez-vous supprimer ce membre ?"
+      "confirmDelete": "Voulez-vous supprimer ce membre ?",
+      "entranceTime": "Temps des entrées"
     },
     "account": {
       "add": "ajouter un compte",
@@ -162,10 +164,10 @@
       "fullName": "nom complet",
       "amount": "montant payé",
       "paidAt": "payé à",
-      "lastMonth": "revenu du mois dernier",
-      "currentMonth": "revenu du mois en cours",
-      "lastYear": "revenu de l'année dernière",
-      "currentYear": "revenu de l'année en cours"
+      "lastMonth": "revenu total du mois dernier",
+      "currentMonth": "revenu total du mois en cours",
+      "lastYear": "revenu total de l'année dernière",
+      "currentYear": "revenu total de l'année en cours"
     }
   }
 }

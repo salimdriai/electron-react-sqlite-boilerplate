@@ -12,10 +12,12 @@ import { User, StatCardProps } from 'types';
 import img1 from 'assets/images/img-6.jpg';
 import img2 from 'assets/images/img-2.png';
 import img3 from 'assets/images/img-4.jpg';
+import Clock from 'components/Clock';
 import StatCard from '../../components/StatCard';
 
 import UsersTable from './UsersTable';
 import SessionsTable from './SessionsTable';
+import AccessTimeChart from './AccessTimeChart';
 
 export default function Dashbaors() {
   const { t } = useTranslation();
@@ -129,8 +131,9 @@ export default function Dashbaors() {
             img={img}
           />
         ))}
+        <Clock />
       </Stack>
-
+      <AccessTimeChart latestEnteredUsers={latestEnteredUsers} />
       <Stack direction="row" spacing={5}>
         <Box flex={4}>
           <UsersTable latestEnteredUsers={latestEnteredUsers} />

@@ -14,10 +14,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { sessionsEntry } from 'features/users/reducers';
-import { useAppDispatch } from 'features/store';
+import { sessionsEntry, fetchUsers } from 'features/users/reducers';
+import { useAppDispatch, useAppSelector } from 'features/store';
 import { User } from 'types';
-// import UserSubscriptions from '../UserDetails/UserSubscriptions';
+import Subscription from 'components/Subscription';
 
 function UserEntry() {
   const [userId, setUserId] = useState('');
@@ -35,7 +35,7 @@ function UserEntry() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const { permission } = useAppSelector((state) => state.authentication);
   const handleclose = () => {
     setEnteredUser({
       open: false,
@@ -57,8 +57,8 @@ function UserEntry() {
           ({
             user: entered,
             isEnteredThreeHoursAgo,
-            isSubscriptionExpired,
             isMaxSessionsSpent,
+            isSubscriptionExpired,
             message,
           }) => {
             if (
@@ -89,6 +89,14 @@ function UserEntry() {
     handleclose();
   };
 
+  const refetchData = async () => {
+    const user = await window.electron.getOneUser(
+      enteredUser.user?.id as string
+    );
+    setEnteredUser(user);
+    dispatch(fetchUsers(permission));
+  };
+
   return (
     <>
       <TextField
@@ -113,7 +121,7 @@ function UserEntry() {
           {enteredUser.user && (
             <>
               <>
-                <Stack direction="row" justifyContent="space-between" mb={2}>
+                <Stack gap={2} direction="row" justifyContent="end" mb={2}>
                   <TextField
                     autoFocus
                     id="hidden-input"
@@ -166,21 +174,15 @@ function UserEntry() {
                   </Typography>
                   <Typography>id : {enteredUser.user.id} </Typography>
                 </Stack>
-                {/* <Stack direction="row">
-                  {showEditButton && (
-                    <IconButton onClick={navigateToUser}>
-                      <EditIcon />
-                    </IconButton>
-                  )}
-                </Stack> */}
               </Stack>
-
-              {/* <UserSubscriptions
-                user={enteredUser.user}
-                setUsersDetails={(user) =>
-                  setEnteredUser((prev) => ({ ...prev, user }))
-                }
-              /> */}
+              {enteredUser.user.subscriptions.map((sub) => (
+                <Subscription
+                  subscription={sub}
+                  user={enteredUser.user as User}
+                  key={sub.id}
+                  refetchData={refetchData}
+                />
+              ))}
             </>
           )}
           <Stack direction="row" justifyContent="end" spacing={2} mt={2}>

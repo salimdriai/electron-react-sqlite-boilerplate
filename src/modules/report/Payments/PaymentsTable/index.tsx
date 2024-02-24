@@ -41,7 +41,7 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
   );
 
   return (
-    <Card variant="outlined" sx={{ width: '100%', mb: 2, flex: 4 }}>
+    <Card variant="outlined" sx={{ width: '100%', mb: 2, flex: 5 }}>
       <div>
         <Stack
           direction="row"
@@ -49,7 +49,10 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
           alignItems="center"
           p={2}
         >
-          <Typography variant="h6"> {t('payments.history')}</Typography>
+          <Typography variant="h6" color="primary">
+            {' '}
+            {t('payments.history')}
+          </Typography>
         </Stack>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">

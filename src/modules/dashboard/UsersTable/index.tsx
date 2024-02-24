@@ -87,13 +87,6 @@ export default function UsersTable({
 
   React.useEffect(() => {
     setUsers(latestEnteredUsers);
-    /*   const getUsers = async (per: string) => {
-      const data = await window.electron.getAllUsers(per);
-      setUsers(latestEnteredUsers);
-    };
-    if (permission) {
-      getUsers(permission);
-    } */
   }, [permission, latestEnteredUsers]);
 
   return (
@@ -105,7 +98,10 @@ export default function UsersTable({
           alignItems="center"
           p={2}
         >
-          <Typography variant="h6"> {t('user.latestEntries')}</Typography>
+          <Typography color="primary" variant="h6">
+            {' '}
+            {t('user.latestEntries')}
+          </Typography>
           <TextField
             onChange={handleSearch}
             value={seachQuery}

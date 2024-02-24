@@ -9,7 +9,9 @@ import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 import { StatCardProps } from '../../types';
 
-export default function StatCard(props: Partial<StatCardProps>) {
+export default function StatCard(
+  props: Partial<StatCardProps> & { valueTag?: string }
+) {
   const {
     difference,
     positive = false,
@@ -19,6 +21,7 @@ export default function StatCard(props: Partial<StatCardProps>) {
     color,
     img,
     maxWidth = '300px',
+    valueTag = 'h3',
   } = props;
 
   return (
@@ -42,7 +45,7 @@ export default function StatCard(props: Partial<StatCardProps>) {
             <Typography color="text.secondary" variant="overline">
               {label}
             </Typography>
-            <Typography variant="h3" fontWeight={800}>
+            <Typography variant={valueTag as any} fontWeight={800}>
               {value}
             </Typography>
           </Stack>

@@ -18,9 +18,6 @@ const useChartOptions = () => {
     chart: {
       background: 'transparent',
       stacked: false,
-      toolbar: {
-        show: false,
-      },
     },
     colors: [
       theme.palette.primary.main,
@@ -96,7 +93,7 @@ const useChartOptions = () => {
     yaxis: {
       labels: {
         formatter: (value: number) =>
-          value > 0 ? `${value} users` : `${value}`,
+          value > 0 ? `${value} members` : `${value}`,
         offsetX: -10,
         style: {
           colors: theme.palette.text.secondary,
