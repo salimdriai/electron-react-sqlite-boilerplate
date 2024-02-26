@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS Payments(
   userId INTEGER,
   username TEXT,
   amount INTEGER,
+  remaining INTEGER,
   paidAt TEXT,
   startedAt TEXT,
   endsAt TEXT
@@ -14,8 +15,8 @@ export const getQuery = `SELECT * FROM Payments`;
 export const getUserPaymentsQuery = `SELECT * FROM Payments WHERE userId = @userId`;
 
 export const createQuery = `INSERT INTO Payments
-(userId, subscriptionId, startedAt, endsAt, amount, paidAt, username)
-VALUES (@userId, @subscriptionId, @startedAt, @endsAt, @amount, @paidAt, @username)
+(userId, subscriptionId, startedAt, endsAt, amount,remaining, paidAt, username)
+VALUES (@userId, @subscriptionId, @startedAt, @endsAt, @amount, @remaining, @paidAt, @username)
 `;
 
 export const removeQuery = `DELETE FROM Payments WHERE id = @id`;
@@ -26,6 +27,7 @@ SET startedAt = @startedAt,
     endsAt = @endsAt,
     paidAt = @paidAt,
     amount = @amount,
+    remaining = @remaining,
     username = @username,
     userId = @userId,
     subscriptionId = @subscriptionId

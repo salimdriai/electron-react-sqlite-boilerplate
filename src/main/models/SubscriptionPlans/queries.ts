@@ -12,6 +12,10 @@ export const createQuery = `INSERT INTO SubscriptionPlans
 (id, name, monthPrice, sessionPrice, sessionsPerMonth)
 VALUES (@id, @name, @monthPrice, @sessionPrice, @sessionsPerMonth)`;
 
+export const createQueryWithouId = `INSERT INTO SubscriptionPlans
+(name, monthPrice, sessionPrice, sessionsPerMonth)
+VALUES (@name, @monthPrice, @sessionPrice, @sessionsPerMonth)`;
+
 export const updateQuery = `
 UPDATE SubscriptionPlans
 SET name = @name,

@@ -67,8 +67,11 @@ interface IAddSubscriptions {
   setDeletedSubscriptions: (subIds: any) => void;
   saveSubscriptions: () => void;
   cancelAddsubscription: () => void;
-  paidAmount: null | number;
-  setPaidAmount: (a: null | number) => void;
+  payment: {
+    paid: null | number;
+    remaining: null | number;
+  };
+  setPayment: (a: any) => void;
 }
 
 const AddSubscriptions = ({
@@ -77,8 +80,8 @@ const AddSubscriptions = ({
   setDeletedSubscriptions,
   saveSubscriptions,
   cancelAddsubscription,
-  paidAmount,
-  setPaidAmount,
+  payment,
+  setPayment,
 }: IAddSubscriptions) => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [selectOpen, setSelectOpen] = useState(false);
@@ -130,7 +133,7 @@ const AddSubscriptions = ({
       deleteSubscription(planId, existing.id);
     } else {
       const plan = getPlan(planId);
-      setPaidAmount(plan?.monthPrice || 0);
+      setPayment({ paid: plan?.monthPrice || 0, remaining: 0 });
       const newSubscription = getSubscriptionInitial(plan as SubscriptionPlan);
       setSubscriptions((prev: Subscription[]) => [...prev, newSubscription]);
       setSelectOpen(false);
@@ -243,9 +246,23 @@ const AddSubscriptions = ({
               <TextField
                 label={t('payments.amount')}
                 type="number"
-                value={paidAmount}
+                value={payment.paid}
                 InputProps={{ endAdornment: <>DA</> }}
-                onChange={(e) => setPaidAmount(Number(e.target.value))}
+                onChange={(e) =>
+                  setPayment({ ...payment, paid: Number(e.target.value) })
+                }
+              />
+              <TextField
+                label={t('payments.remaining')}
+                type="number"
+                value={payment.remaining}
+                InputProps={{ endAdornment: <>DA</> }}
+                onChange={(e) =>
+                  setPayment({
+                    ...payment,
+                    remaining: Number(e.target.value),
+                  })
+                }
               />
             </Stack>
           </Card>

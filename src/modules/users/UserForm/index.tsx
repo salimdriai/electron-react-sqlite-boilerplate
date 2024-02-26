@@ -25,11 +25,18 @@ export interface IForm extends User {
 
 const UserForm = () => {
   const [openAddSubscription, setOpenAddSubscription] = useState(false);
-  const [paidAmount, setPaidAmount] = useState<number | null>(null);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [deletedSubscriptions, setDeletedSubscriptions] = useState<string[]>(
     []
   );
+
+  const [payment, setPayment] = useState<{
+    paid: null | number;
+    remaining: null | number;
+  }>({
+    paid: null,
+    remaining: null,
+  });
 
   const { t } = useTranslation();
   const { state } = useLocation();
@@ -41,20 +48,30 @@ const UserForm = () => {
     defaultValues: { ...userDefaultValues },
   });
 
-  const cancelAddsubscription = () => setOpenAddSubscription(false);
+  const cancelAddsubscription = async () => {
+    const userId = formMethods.watch('id');
+    if (userId) {
+      const subs = await window.electron.getUsersubscriptions(userId);
+      setSubscriptions(subs);
+    } else {
+      setSubscriptions([]);
+    }
+    setOpenAddSubscription(false);
+  };
 
   const savePayment = async (sub: Subscription) => {
     const user = formMethods.watch();
-    const payment: Payment = {
+    const paymentData: Payment = {
       subscriptionId: sub.id as string,
       userId: sub.userId,
       username: `${user.firstName} ${user.lastName}`,
-      amount: paidAmount,
+      amount: payment.paid,
+      remaining: payment.remaining,
       paidAt: new Date().toDateString(),
       startedAt: sub.startedAt,
       endsAt: sub.endsAt,
     };
-    dispatch(createPayment(payment));
+    dispatch(createPayment(paymentData));
   };
 
   const refetchData = async (updatedSub: any) => {
@@ -67,7 +84,6 @@ const UserForm = () => {
 
   const createSubscription = async (sub: Subscription) => {
     const subId = await window.electron.createSubscription(sub);
-    console.log('subscriptionId', subId);
     await savePayment({ ...sub, id: subId });
   };
 
@@ -194,8 +210,8 @@ const UserForm = () => {
             setSubscriptions={setSubscriptions}
             setDeletedSubscriptions={setDeletedSubscriptions}
             cancelAddsubscription={cancelAddsubscription}
-            paidAmount={paidAmount}
-            setPaidAmount={setPaidAmount}
+            payment={payment}
+            setPayment={setPayment}
           />
         </Dialog>
       </Stack>

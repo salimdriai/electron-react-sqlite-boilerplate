@@ -50,7 +50,8 @@
       "entredInThreeHours": "This user entered in less than 3 hours !",
       "subscriptionExpired": "This user subscription is expired !",
       "maxSessionsSpent": "This user spent max sessions amount !",
-      "noSubscriptions": "User have no subscriptions !"
+      "noSubscriptions": "User have no subscriptions !",
+      "confirmPayment": "confirm payment"
     },
     "common": {
       "freeSession": "free session",
@@ -173,7 +174,9 @@
       "lastMonth": "last month total revenue",
       "currentMonth": "current month total revenue",
       "lastYear": "last year total revenue",
-      "currentYear": "current year total revenue"
+      "currentYear": "current year total revenue",
+      "remaining": "remaining",
+      "pay": "pay"
     }
   }
 }

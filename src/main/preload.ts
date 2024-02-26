@@ -96,6 +96,8 @@ const electronHandler = {
     ipcRenderer.invoke('payments:getUserPayments', userId),
   createPayment: (payment: Payment) =>
     ipcRenderer.invoke('payments:create', payment),
+  updatePayment: (payment: Payment) =>
+    ipcRenderer.invoke('payments:update', payment),
 
   // other -----------------------
   decryptData: (data: string) => ipcRenderer.invoke('data:decrypt', data),

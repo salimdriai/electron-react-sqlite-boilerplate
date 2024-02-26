@@ -5,6 +5,7 @@ import {
   createQuery,
   removeQuery,
   updateQuery,
+  createQueryWithouId,
 } from './queries';
 import { SubscriptionPlan } from '../../../types';
 
@@ -29,7 +30,9 @@ export default class SubscriptionsModel extends DB {
   }
 
   create(subscriptionPlan: SubscriptionPlan) {
-    const stm = this.db.prepare(createQuery);
+    const stm = subscriptionPlan.id
+      ? this.db.prepare(createQuery)
+      : this.db.prepare(createQueryWithouId);
     stm.run(subscriptionPlan);
   }
 

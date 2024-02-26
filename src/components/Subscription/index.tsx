@@ -1,6 +1,6 @@
 /* eslint-disable promise/always-return */
 /* eslint-disable promise/catch-or-return */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import CardActions from '@mui/material/CardActions';
 import Divider from '@mui/material/Divider';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import SyncIcon from '@mui/icons-material/Sync';
@@ -28,8 +32,8 @@ import ProgressBar from 'components/ProgressBar';
 import RemainigDays from 'components/RemainingDays';
 import { Payment, Subscription, SubscriptionPlan, User } from 'types';
 import { formatDate } from 'utils';
-import { useAppDispatch } from 'features/store';
-import { createPayment } from 'features/payments/reducers';
+import { useAppDispatch, useAppSelector } from 'features/store';
+import { createPayment, getUserPayments } from 'features/payments/reducers';
 import { getOneUser } from 'features/users/reducers';
 import { calculateProgress } from './helpers';
 
@@ -56,13 +60,34 @@ const UserSubscription = ({
   refetchData,
 }: IUserSubscription) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [payRemaining, setPayRemaining] = useState({
+    open: false,
+    amount: 0,
+    payment: null,
+  });
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
   const [renewType, setRenewType] = useState<StartFrom>(StartFrom.Now);
-  const [paidAmount, setPaidAmount] = useState<number | null>(null);
+  const [payment, setPayment] = useState<{
+    paid: null | number;
+    remaining: null | number;
+  }>({
+    paid: null,
+    remaining: null,
+  });
+
   const [renewSubscription, setRenewSubscription] =
     React.useState<Subscription | null>(null);
 
   const { t } = useTranslation();
+  const { userPayments } = useAppSelector((state) => state.payments);
+  const paymentsWithCredit = useMemo(
+    () =>
+      userPayments.filter(
+        (p) => p.subscriptionId === subscription.id && p.remaining! > 0
+      ),
+    [userPayments, subscription]
+  );
+
   const dispatch = useAppDispatch();
 
   const calculateSessions = (spent: number, available: number) => {
@@ -73,16 +98,17 @@ const UserSubscription = ({
   };
 
   const savePayment = async (sub: Subscription) => {
-    const payment: Payment = {
+    const paymentData: Payment = {
       subscriptionId: sub.id as string,
       userId: sub.userId,
       username: `${user.firstName} ${user.lastName}`,
-      amount: paidAmount,
+      amount: payment.paid,
+      remaining: payment.remaining,
       paidAt: new Date().toDateString(),
       startedAt: sub.startedAt,
       endsAt: sub.endsAt,
     };
-    dispatch(createPayment(payment));
+    dispatch(createPayment(paymentData));
   };
 
   const onChangeRenewType = (e: any) => {
@@ -132,11 +158,6 @@ const UserSubscription = ({
   };
 
   const confirmRenew = async () => {
-    if (!paidAmount) {
-      toast.error('Please add payment amount !');
-      return;
-    }
-
     setIsLoading(true);
     window.electron
       .updateSubscription(renewSubscription as Subscription)
@@ -154,11 +175,28 @@ const UserSubscription = ({
       });
   };
 
+  const confimPayRemaining = async () => {
+    const oldPaid = Number((payRemaining.payment as any)?.amount);
+    const oldRemaining = Number((payRemaining.payment as any)?.remaining);
+
+    const peymentData = {
+      ...(payRemaining.payment as any),
+      amount: oldPaid + payRemaining.amount,
+      remaining: oldRemaining - payRemaining.amount,
+    };
+
+    await window.electron.updatePayment(peymentData);
+    dispatch(getUserPayments(user.id));
+    console.log('peymentData', peymentData);
+  };
+
   useEffect(() => {
     (async () => {
       const res = await window.electron.getSubscriptionPlans();
       setPlans(res);
     })();
+    dispatch(getUserPayments(user.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, subscription]);
 
   if (isLoading) return <p>is Loading ...</p>;
@@ -197,7 +235,7 @@ const UserSubscription = ({
                 endsAt: onMonthFromDate(new Date()),
               });
               const planPrice = getPlan(subscription.planId)?.monthPrice;
-              setPaidAmount(planPrice || 0);
+              setPayment({ paid: planPrice || 0, remaining: 0 });
             }}
           >
             {t('actions.renew')}
@@ -205,18 +243,63 @@ const UserSubscription = ({
         </Stack>
         <Divider />
 
-        <CardContent sx={{ py: 0, display: 'flex', gap: 4, mb: 1 }}>
-          <Typography variant="body2">
-            {t('info.startsAt')} :<br />{' '}
-            <b>{formatDate(subscription.startedAt)}</b>
-          </Typography>
-          <Typography variant="body2">
-            {t('info.endsAt')} :<br /> <b>{formatDate(subscription.endsAt)}</b>
-          </Typography>
-          <Typography variant="body2">
-            {t('info.sessionsSpent')} :<br />
-            <b> {subscription.sessionsSpent}</b>
-          </Typography>
+        <CardContent sx={{ display: 'flex', gap: 4, mb: 1 }}>
+          <Stack flex={4} direction="row" spacing={4}>
+            <Typography variant="body2">
+              {t('info.startsAt')} :<br />{' '}
+              <b>{formatDate(subscription.startedAt)}</b>
+            </Typography>
+            <Typography variant="body2">
+              {t('info.endsAt')} :<br />{' '}
+              <b>{formatDate(subscription.endsAt)}</b>
+            </Typography>
+            <Typography variant="body2">
+              {t('info.sessionsSpent')} :<br />
+              <b>
+                {' '}
+                {subscription.sessionsSpent} /{' '}
+                {getPlan(subscription.planId)?.sessionsPerMonth}
+              </b>
+            </Typography>
+          </Stack>
+          <Stack flex={2}>
+            <Typography variant="body2">
+              {t('payments.remaining')} :<br />
+              {paymentsWithCredit.length === 0 && <b> 0 DA</b>}
+            </Typography>
+            {paymentsWithCredit.map((p) => (
+              <Stack
+                component={Card}
+                variant="outlined"
+                direction="row"
+                justifyContent="space-between"
+                alignItems="baseline"
+                spacing={2}
+                pl={1}
+                mb={0.5}
+              >
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <Typography variant="h6" color="error">
+                  {' '}
+                  {p.remaining} DA{' '}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  color="success"
+                  size="small"
+                  onClick={() =>
+                    setPayRemaining({
+                      open: true,
+                      amount: Number(p.remaining),
+                      payment: p as any,
+                    })
+                  }
+                >
+                  {t('payments.pay')}
+                </Button>{' '}
+              </Stack>
+            ))}
+          </Stack>
         </CardContent>
         <ProgressBar
           progress={calculateProgress(
@@ -304,9 +387,23 @@ const UserSubscription = ({
                 <TextField
                   label={t('payments.amount')}
                   type="number"
-                  value={paidAmount}
+                  value={payment.paid}
                   InputProps={{ endAdornment: <>DA</> }}
-                  onChange={(e) => setPaidAmount(Number(e.target.value))}
+                  onChange={(e) =>
+                    setPayment({ ...payment, paid: Number(e.target.value) })
+                  }
+                />
+                <TextField
+                  label={t('payments.remaining')}
+                  type="number"
+                  value={payment.remaining}
+                  InputProps={{ endAdornment: <>DA</> }}
+                  onChange={(e) =>
+                    setPayment({
+                      ...payment,
+                      remaining: Number(e.target.value),
+                    })
+                  }
                 />
               </Stack>
             </FormControl>
@@ -331,6 +428,54 @@ const UserSubscription = ({
           </CardActions>
         </Card>
       </Modal>
+      <Dialog
+        open={payRemaining.open}
+        onClose={() =>
+          setPayRemaining({ amount: 0, open: false, payment: null })
+        }
+        maxWidth="md"
+        sx={{ '& .MuiPaper-root': { minWidth: '400px' } }}
+      >
+        <DialogTitle>{t('info.confirmPayment')}</DialogTitle>
+        <DialogContent>
+          <TextField
+            sx={{ my: 2 }}
+            label={t('payments.amount')}
+            fullWidth
+            type="number"
+            value={payRemaining.amount}
+            onChange={(e) =>
+              setPayRemaining({
+                ...payRemaining,
+                amount: Number(e.target.value),
+              })
+            }
+            InputProps={{
+              endAdornment: <>DA</>,
+            }}
+          />
+        </DialogContent>
+        <DialogActions sx={{ px: 3, py: 2 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            color="error"
+            onClick={() =>
+              setPayRemaining({ amount: 0, open: false, payment: null })
+            }
+          >
+            {t('actions.cancel')}
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            color="success"
+            onClick={confimPayRemaining}
+          >
+            {t('actions.confirm')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

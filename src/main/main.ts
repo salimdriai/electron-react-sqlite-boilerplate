@@ -338,6 +338,10 @@ app
       await Payments.create(payment);
       return payment;
     });
+    ipcMain.handle('payments:update', async (_, payment: PaymentType) => {
+      await Payments.update(payment);
+      return payment;
+    });
 
     // store
 

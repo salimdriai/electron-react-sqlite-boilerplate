@@ -50,7 +50,8 @@
       "entredInThreeHours": "Cet utilisateur est entré il y a moins de 3 heures !",
       "subscriptionExpired": "L'abonnement de cet utilisateur a expiré !",
       "maxSessionsSpent": "Cet utilisateur a utilisé le nombre maximum de sessions autorisé ",
-      "noSubscriptions": "L'utilisateur n'a pas d'abonnements !"
+      "noSubscriptions": "L'utilisateur n'a pas d'abonnements !",
+      "confirmPayment": "confirmer payment"
     },
     "common": {
       "freeSession": "séance libre",
@@ -167,12 +168,14 @@
       "history": "historique des paiements",
       "userId": "identifiant de membre",
       "fullName": "nom complet",
-      "amount": "montant payé",
+      "amount": "montant",
       "paidAt": "payé à",
       "lastMonth": "revenu total du mois dernier",
       "currentMonth": "revenu total du mois en cours",
       "lastYear": "revenu total de l'année dernière",
-      "currentYear": "revenu total de l'année en cours"
+      "currentYear": "revenu total de l'année en cours",
+      "remaining": "restant (credit)",
+      "pay": "payer"
     }
   }
 }

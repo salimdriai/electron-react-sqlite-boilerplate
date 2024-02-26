@@ -91,11 +91,7 @@ function UserEntry() {
             value={userId}
             id="entry-input"
             onChange={handleEntry}
-            onBlur={(e) => {
-              if (e.relatedTarget === null) {
-                e.target.focus();
-              }
-            }}
+            autoFocus
           />
         </Stack>
         {userDetails && <UserDetails />}
