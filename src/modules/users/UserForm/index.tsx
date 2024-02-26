@@ -10,8 +10,11 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import { Subscription, User } from 'types';
+import { Permission, Subscription, User, Payment } from 'types';
 import UserSubscription from 'components/Subscription';
+import { useAppDispatch, useAppSelector } from 'features/store';
+import { fetchUsers } from 'features/users/reducers';
+import { createPayment } from 'features/payments/reducers';
 import Info from './Info';
 import AddSubscriptions from './AddSubscriptions';
 import { userDefaultValues } from './helpers';
@@ -22,6 +25,7 @@ export interface IForm extends User {
 
 const UserForm = () => {
   const [openAddSubscription, setOpenAddSubscription] = useState(false);
+  const [paidAmount, setPaidAmount] = useState<number | null>(null);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [deletedSubscriptions, setDeletedSubscriptions] = useState<string[]>(
     []
@@ -30,12 +34,28 @@ const UserForm = () => {
   const { t } = useTranslation();
   const { state } = useLocation();
   const isEditMode = React.useMemo(() => !!state, [state]);
+  const dispatch = useAppDispatch();
+  const { users } = useAppSelector((s) => s.users);
 
   const formMethods = useForm<IForm>({
     defaultValues: { ...userDefaultValues },
   });
 
   const cancelAddsubscription = () => setOpenAddSubscription(false);
+
+  const savePayment = async (sub: Subscription) => {
+    const user = formMethods.watch();
+    const payment: Payment = {
+      subscriptionId: sub.id as string,
+      userId: sub.userId,
+      username: `${user.firstName} ${user.lastName}`,
+      amount: paidAmount,
+      paidAt: new Date().toDateString(),
+      startedAt: sub.startedAt,
+      endsAt: sub.endsAt,
+    };
+    dispatch(createPayment(payment));
+  };
 
   const refetchData = async (updatedSub: any) => {
     const updateSubscriptions = subscriptions.map((sub) =>
@@ -45,17 +65,24 @@ const UserForm = () => {
     setSubscriptions(updateSubscriptions);
   };
 
+  const createSubscription = async (sub: Subscription) => {
+    const subId = await window.electron.createSubscription(sub);
+    console.log('subscriptionId', subId);
+    await savePayment({ ...sub, id: subId });
+  };
+
   const saveSubscriptions = async () => {
     const userId = formMethods.watch('id');
     if (!userId) {
       toast.error('user ID missing !');
       return;
     }
+
     const promises = subscriptions.map((sub) => {
       if (sub.id) {
         return window.electron.updateSubscription({ ...sub, userId });
       }
-      return window.electron.createSubscription({ ...sub, userId });
+      return createSubscription({ ...sub, userId });
     });
 
     const deletedSubsPromises = deletedSubscriptions.map((id) => {
@@ -80,16 +107,18 @@ const UserForm = () => {
 
   const onSubmit = async (data: IForm) => {
     try {
+      const ids = users.map(({ id }) => id);
+      const userId = formMethods.watch('id');
+      if (ids.includes(userId)) {
+        toast.error('ID Exist !');
+        return;
+      }
       await saveUser(data);
       toast.success('Success');
     } catch (error) {
       toast.error('Something went wrong');
       console.log('ERRRR', error);
     }
-  };
-
-  const onError = (err: any) => {
-    console.log('ERR', err);
   };
 
   useEffect(() => {
@@ -101,14 +130,17 @@ const UserForm = () => {
     if (state?.id) {
       getUser();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
+  useEffect(() => {
+    dispatch(fetchUsers(Permission.All));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <Stack
-      component="form"
-      onSubmit={formMethods.handleSubmit(onSubmit, onError)}
-    >
+    <Stack component="form" onSubmit={formMethods.handleSubmit(onSubmit)}>
       <Stack direction="row" spacing={4} mb={2}>
         <Info isEditMode={isEditMode} formMethods={formMethods} />
 
@@ -126,6 +158,7 @@ const UserForm = () => {
           ) : (
             subscriptions.map((sub) => (
               <UserSubscription
+                key={sub.id}
                 subscription={sub}
                 user={formMethods.watch()}
                 refetchData={refetchData}
@@ -161,6 +194,8 @@ const UserForm = () => {
             setSubscriptions={setSubscriptions}
             setDeletedSubscriptions={setDeletedSubscriptions}
             cancelAddsubscription={cancelAddsubscription}
+            paidAmount={paidAmount}
+            setPaidAmount={setPaidAmount}
           />
         </Dialog>
       </Stack>

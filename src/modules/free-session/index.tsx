@@ -29,6 +29,7 @@ function FreeSession({
   >([]);
 
   const [selected, setSelected] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
   const [fullName, setFullName] = useState({ firstName: '', lastName: '' });
   const [session, setSession] = React.useState<FreeSessionType | null>(null);
 
@@ -55,14 +56,16 @@ function FreeSession({
 
   const handleAddSession = async () => {
     await window.electron.createFreeSessions(session as FreeSessionType);
-    toast.success('Sessions succesfully added !');
+    toast.success('Success !');
     onFreeSessionModalClose();
   };
 
   useEffect(() => {
     const getPlans = async () => {
+      setIsLoading(true);
       const res = await window.electron.getSubscriptionPlans();
       setSubscriptionsPlans(res);
+      setIsLoading(false);
     };
     getPlans();
   }, []);
@@ -103,37 +106,20 @@ function FreeSession({
         </Stack>
 
         <FormControl fullWidth>
-          <InputLabel>Select type</InputLabel>
-          <Select value={selected} label="Select type" onChange={handleChange}>
+          <InputLabel>Type</InputLabel>
+          <Select
+            disabled={isLoading}
+            value={selected}
+            label="Type"
+            onChange={handleChange}
+          >
             {subscriptionsPlans.map((plan) => (
-              <MenuItem value={plan.id}>
+              <MenuItem key={plan.id} value={plan.id}>
                 {`${plan.name} / ${plan.sessionPrice} DA`}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
-
-        {/* <StyledToggleButtonGroup
-          value={selected}
-          onChange={handleFormat}
-          sx={style}
-        >
-          {subscriptionsPlans!.map((subscription: SubscriptionPlan) => (
-            <ToggleButton
-              sx={{ minWidth: '200px' }}
-              key={subscription.id}
-              value={subscription.name}
-            >
-
-              <Stack alignItems="start">
-                <Typography variant="h6" color="primary">
-                  {subscription.name.toLocaleLowerCase()}
-                </Typography>
-                <Typography>{subscription.sessionPrice} DZD</Typography>
-              </Stack>
-            </ToggleButton>
-          ))}
-        </StyledToggleButtonGroup> */}
 
         <Stack spacing={2} mt={2}>
           <Card sx={{ p: 1 }} variant="outlined">

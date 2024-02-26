@@ -14,7 +14,6 @@ import Typography from '@mui/material/Typography';
 import useTheme from '@mui/material/styles/useTheme';
 import Chart from 'react-apexcharts';
 import { Sex, User } from 'types';
-import { useAppSelector } from 'features/store';
 
 const useChartOptions = (labels: string[]) => {
   const theme = useTheme();
@@ -73,9 +72,8 @@ const iconMap: any = {
   ),
 };
 
-function SexChart() {
+function SexChart({ users }: { users: User[] }) {
   const [sexSeries, setSexSeries] = useState([0, 0]);
-  const { permission } = useAppSelector((state) => state.authentication);
   const { t } = useTranslation();
   const labels = [t('info.male'), t('info.female')];
   const chartOptions = useChartOptions(labels);
@@ -85,11 +83,9 @@ function SexChart() {
       let males = 0;
       let females = 0;
 
-      const allUsers = await window.electron.getAllUsers(permission);
+      if (!Array.isArray(users)) return toast.error('Cant get users !');
 
-      if (!Array.isArray(allUsers)) return toast.error('Cant get users !');
-
-      allUsers.forEach((user: User) => {
+      users.forEach((user: User) => {
         // @ts-ignore
         if (user.sex === Sex.Male) {
           males += 1;
@@ -100,8 +96,8 @@ function SexChart() {
         }
       });
 
-      const malePercentage = ((100 * males) / allUsers.length).toFixed(2);
-      const femalePercentage = ((100 * females) / allUsers.length).toFixed(2);
+      const malePercentage = ((100 * males) / users.length).toFixed(2);
+      const femalePercentage = ((100 * females) / users.length).toFixed(2);
 
       setSexSeries([
         Number(malePercentage) || 0,
@@ -109,9 +105,11 @@ function SexChart() {
       ]);
       return null;
     };
-    getSeries();
+    if (users) {
+      getSeries();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [users]);
 
   return (
     <Card variant="outlined" sx={{ height: '100%', flex: 1 }}>

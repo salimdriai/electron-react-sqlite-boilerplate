@@ -227,8 +227,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "gym-boss",
-      "repo": "gym-boss"
+      "owner": "flexfit",
+      "repo": "flexfit"
     }
   },
   "env": {

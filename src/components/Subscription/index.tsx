@@ -30,6 +30,7 @@ import { Payment, Subscription, SubscriptionPlan, User } from 'types';
 import { formatDate } from 'utils';
 import { useAppDispatch } from 'features/store';
 import { createPayment } from 'features/payments/reducers';
+import { getOneUser } from 'features/users/reducers';
 import { calculateProgress } from './helpers';
 
 enum StartFrom {
@@ -142,10 +143,13 @@ const UserSubscription = ({
       .then(() => {
         toast.success('success');
         savePayment(renewSubscription as Subscription);
-        setRenewSubscription(null);
+        dispatch(getOneUser(renewSubscription?.userId as string));
+      })
+      .then(() => {
         if (refetchData) {
           refetchData(renewSubscription);
         }
+        setRenewSubscription(null);
         setIsLoading(false);
       });
   };
@@ -186,13 +190,15 @@ const UserSubscription = ({
             variant="contained"
             size="small"
             color="success"
-            onClick={() =>
+            onClick={() => {
               setRenewSubscription({
                 ...subscription,
                 startedAt: new Date().toDateString(),
                 endsAt: onMonthFromDate(new Date()),
-              })
-            }
+              });
+              const planPrice = getPlan(subscription.planId)?.monthPrice;
+              setPaidAmount(planPrice || 0);
+            }}
           >
             {t('actions.renew')}
           </Button>
@@ -260,7 +266,7 @@ const UserSubscription = ({
                   label={`${t(
                     'subscriptions.startFromExpiration'
                   )} | ${formatDate(
-                    user.subscriptions.find(
+                    user.subscriptions?.find(
                       (sub) => sub.id === renewSubscription?.id
                     )?.endsAt || new Date()
                   )}`}
@@ -287,12 +293,16 @@ const UserSubscription = ({
                 <DatePicker
                   name="endsAt"
                   dateFormat="dd-MM-yyyy"
+                  minDate={
+                    new Date(renewSubscription?.startedAt ?? new Date()) ||
+                    new Date()
+                  }
                   customInput={<TextField fullWidth label={t('info.endsAt')} />}
                   selected={new Date(renewSubscription?.endsAt ?? new Date())}
                   onChange={onDateChange('endsAt')}
                 />
                 <TextField
-                  label="amount paid"
+                  label={t('payments.amount')}
                   type="number"
                   value={paidAmount}
                   InputProps={{ endAdornment: <>DA</> }}

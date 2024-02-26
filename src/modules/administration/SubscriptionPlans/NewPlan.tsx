@@ -58,6 +58,7 @@ function NewPlan({
             ([key, value]) =>
               key !== 'id' && (
                 <TextField
+                  key={key}
                   type={key === 'name' ? 'text' : 'number'}
                   name={key}
                   onChange={onChange}

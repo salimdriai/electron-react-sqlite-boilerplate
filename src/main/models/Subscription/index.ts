@@ -32,7 +32,8 @@ export default class SubscriptionsModel extends DB {
 
   create(subscription: Subscription) {
     const stm = this.db.prepare(createQuery);
-    stm.run(subscription);
+    const result = stm.run(subscription);
+    return result.lastInsertRowid;
   }
 
   update(subscription: Subscription) {

@@ -80,9 +80,8 @@ const PaymentStats = ({
   return (
     <Stack direction="row" flexWrap="wrap" gap={2}>
       {stats.map((stat) => (
-        <Box sx={{ minWidth: 350 }}>
+        <Box key={stat.id} sx={{ minWidth: 350 }}>
           <StatCard
-            key={stat.id}
             maxWidth="unset"
             label={stat.label}
             icon={stat.icon}

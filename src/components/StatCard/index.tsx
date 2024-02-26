@@ -42,9 +42,7 @@ export default function StatCard(
           spacing={3}
         >
           <Stack spacing={1}>
-            <Typography color="text.secondary" variant="overline">
-              {label}
-            </Typography>
+            <Typography variant="overline">{label}</Typography>
             <Typography variant={valueTag as any} fontWeight={800}>
               {value}
             </Typography>

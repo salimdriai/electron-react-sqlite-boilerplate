@@ -134,7 +134,7 @@ export default function Dashbaors() {
         <Clock />
       </Stack>
       <AccessTimeChart latestEnteredUsers={latestEnteredUsers} />
-      <Stack direction="row" spacing={5}>
+      <Stack direction="row" spacing={2}>
         <Box flex={4}>
           <UsersTable latestEnteredUsers={latestEnteredUsers} />
         </Box>

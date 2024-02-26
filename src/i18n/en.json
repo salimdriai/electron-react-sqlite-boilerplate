@@ -105,7 +105,11 @@
       "actions": "actions",
       "latestEntries": "Latest entries",
       "confirmDelete": "Do you wanna delete this user ?",
-      "entranceTime": "Entries Time"
+      "entranceTime": "Entries Time",
+      "total": "Total users",
+      "active": "Active users",
+      "male": "Men",
+      "female": "Women"
     },
     "account": {
       "add": "add account",
@@ -125,6 +129,7 @@
       "expireIn7Days": "Expire in 7 days",
       "expireIn3Days": "Expire in 3 days",
       "expireIn1Day": "Expire in 1 day",
+      "plus7Days": "+7 days remaining",
       "expired": "Expired",
       "expiredAt": "Expired at",
       "all": "All",

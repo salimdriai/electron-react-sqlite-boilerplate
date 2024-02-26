@@ -21,7 +21,7 @@ const Payments = () => {
   return (
     <Stack spacing={4}>
       <PaymentStats payments={payments} freeSessions={freeSessions} />
-      <Stack direction="row" spacing={4} alignItems="start">
+      <Stack direction="row" spacing={2} alignItems="start">
         <PaymentsTable payments={payments} />
         <PaymentDetails payments={payments} freeSessions={freeSessions} />
       </Stack>

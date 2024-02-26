@@ -45,12 +45,6 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'registredAt',
   },
-  {
-    id: 'status',
-    numeric: true,
-    disablePadding: false,
-    label: 'status',
-  },
 ];
 
 export default function EnhancedTableHead() {

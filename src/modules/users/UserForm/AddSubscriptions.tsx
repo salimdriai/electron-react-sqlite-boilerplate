@@ -67,6 +67,8 @@ interface IAddSubscriptions {
   setDeletedSubscriptions: (subIds: any) => void;
   saveSubscriptions: () => void;
   cancelAddsubscription: () => void;
+  paidAmount: null | number;
+  setPaidAmount: (a: null | number) => void;
 }
 
 const AddSubscriptions = ({
@@ -75,8 +77,12 @@ const AddSubscriptions = ({
   setDeletedSubscriptions,
   saveSubscriptions,
   cancelAddsubscription,
+  paidAmount,
+  setPaidAmount,
 }: IAddSubscriptions) => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
+  const [selectOpen, setSelectOpen] = useState(false);
+
   const [targetDeleteId, setTargetDeleteId] = useState<string | undefined>(
     undefined
   );
@@ -124,8 +130,10 @@ const AddSubscriptions = ({
       deleteSubscription(planId, existing.id);
     } else {
       const plan = getPlan(planId);
+      setPaidAmount(plan?.monthPrice || 0);
       const newSubscription = getSubscriptionInitial(plan as SubscriptionPlan);
       setSubscriptions((prev: Subscription[]) => [...prev, newSubscription]);
+      setSelectOpen(false);
     }
   };
 
@@ -152,6 +160,8 @@ const AddSubscriptions = ({
             <InputLabel> {t('settings.plans.plans')}</InputLabel>
             <Select
               multiple
+              open={selectOpen}
+              onOpen={() => setSelectOpen(true)}
               value={subscriptions.map(({ planId }) => planId)}
               onChange={handleChangePlan}
               input={<OutlinedInput label="Subscription plans" />}
@@ -216,6 +226,7 @@ const AddSubscriptions = ({
               <DatePicker
                 name="startedAt"
                 dateFormat="dd-MM-yyyy"
+                minDate={new Date(subscription.startedAt) || new Date()}
                 customInput={<TextField fullWidth label={t('info.startsAt')} />}
                 selected={new Date(subscription.startedAt ?? new Date())}
                 onChange={onDateChange('startedAt', subscription.planId)}
@@ -224,9 +235,17 @@ const AddSubscriptions = ({
               <DatePicker
                 name="endsAt"
                 dateFormat="dd-MM-yyyy"
+                minDate={new Date(subscription.startedAt) || new Date()}
                 customInput={<TextField fullWidth label={t('info.endsAt')} />}
                 selected={new Date(subscription.endsAt ?? new Date())}
                 onChange={onDateChange('endsAt', subscription.planId)}
+              />
+              <TextField
+                label={t('payments.amount')}
+                type="number"
+                value={paidAmount}
+                InputProps={{ endAdornment: <>DA</> }}
+                onChange={(e) => setPaidAmount(Number(e.target.value))}
               />
             </Stack>
           </Card>

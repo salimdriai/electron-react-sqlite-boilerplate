@@ -20,7 +20,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import { User } from 'types';
-import { useAppSelector } from 'features/store';
+import { useAppDispatch, useAppSelector } from 'features/store';
+import { setUser } from 'features/users';
 import UserDetails from 'modules/users/UserDetails';
 import TableHead from './TableHead';
 
@@ -33,10 +34,12 @@ export default function UsersTable({
   const [seachQuery, setSearchQuery] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = React.useState<User[]>([]);
-  const [usersDetails, setUsersDetails] = React.useState<User | null>(null);
+  const [openDetails, setOpenDetails] = React.useState(false);
   const { t } = useTranslation();
 
   const { permission } = useAppSelector((state) => state.authentication);
+  const { user } = useAppSelector((state) => state.users);
+  const dispatch = useAppDispatch();
 
   const handleSearch = async (e: any) => {
     setSearchQuery(e.target.value);
@@ -56,7 +59,8 @@ export default function UsersTable({
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, row: User) => {
-    setUsersDetails(row);
+    dispatch(setUser(row));
+    setOpenDetails(true);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -166,9 +170,7 @@ export default function UsersTable({
 
                     <TableCell align="right">{row.phoneNumber}</TableCell>
                     <TableCell align="right">{row.registeredAt}</TableCell>
-                    <TableCell align="right">
-                      {/* <UserStatus status={row.status} /> */}
-                    </TableCell>
+
                     <TableCell align="right">
                       <IconButton onClick={(e) => handleEdit(e, row)}>
                         <EditIcon />
@@ -210,10 +212,13 @@ export default function UsersTable({
             backgroundColor: 'background.default',
           },
         }}
-        open={!!usersDetails}
-        onClose={() => setUsersDetails(null)}
+        open={!!user && openDetails}
+        onClose={() => {
+          setOpenDetails(false);
+          dispatch(setUser(null));
+        }}
       >
-        <UserDetails userId={usersDetails?.id as string} />
+        {user && <UserDetails />}
       </Drawer>
     </Card>
   );

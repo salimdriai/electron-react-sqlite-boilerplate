@@ -12,12 +12,12 @@ const RemainigDays = ({
   date: string;
   size?: 'small' | 'medium';
 }) => {
+  const { t } = useTranslation();
   const [result, setResult] = useState({
-    label: '+ 7 days remaining',
-    color: 'success',
+    label: t('subscriptions.noSubs'),
+    color: 'default',
   });
 
-  const { t } = useTranslation();
   useEffect(() => {
     const calcutateDays = (d: any) => {
       const endsAt = new Date(d).getTime();
@@ -37,9 +37,13 @@ const RemainigDays = ({
         });
       } else if (gap < oneDayMs * 7) {
         setResult({ label: t('subscriptions.expireIn7Days'), color: 'info' });
+      } else {
+        setResult({ label: t('subscriptions.plus7Days'), color: 'success' });
       }
     };
-    calcutateDays(date);
+    if (date) {
+      calcutateDays(date);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 

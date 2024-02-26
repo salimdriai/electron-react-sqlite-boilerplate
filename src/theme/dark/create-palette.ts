@@ -13,8 +13,8 @@ export default function createPalette() {
       selected: alpha(neutral[900], 0.12),
     },
     background: {
-      default: '#141627',
-      paper: '#1C1F36',
+      default: '#1A1A1B',
+      paper: '#222831',
     },
     error,
     info,

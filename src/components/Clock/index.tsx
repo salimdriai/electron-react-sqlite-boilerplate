@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
 import './index.css';
 
 function Clock() {
@@ -33,14 +34,16 @@ function Clock() {
   return (
     <Card
       sx={{
-        width: 600,
+        width: 540,
         p: 1,
         px: 3,
         backgroundColor: '#000',
         border: '1px solid #5ceea7',
       }}
+      component={Stack}
+      justifyContent="center"
     >
-      <div id="clock">{time}</div>
+      <div id="clock">{time === '' ? '00:00:00 PM' : time}</div>
       <div id="date">{today}</div>
     </Card>
   );

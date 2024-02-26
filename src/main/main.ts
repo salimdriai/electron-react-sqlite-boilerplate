@@ -240,8 +240,8 @@ app
     ipcMain.handle(
       'subscriptions:create',
       async (_, subscription: Subscription) => {
-        await Subscriptions.create(subscription);
-        return subscription;
+        const res = await Subscriptions.create(subscription);
+        return res;
       }
     );
 

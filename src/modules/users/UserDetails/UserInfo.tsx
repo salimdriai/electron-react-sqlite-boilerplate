@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
@@ -17,6 +17,15 @@ function UserInfo({ user }: { user: User }) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { userPayments = [] } = useAppSelector((state) => state.payments);
+
+  const latestPayment = useMemo(() => {
+    const sortedPayments = [...userPayments]?.sort(
+      (a, b) => new Date(b.paidAt).getTime() - new Date(a.paidAt).getTime()
+    );
+
+    const res = sortedPayments.length > 0 ? sortedPayments[0] : null;
+    return res;
+  }, [userPayments]);
 
   useEffect(() => {
     dispatch(getUserPayments(user.id));
@@ -67,27 +76,29 @@ function UserInfo({ user }: { user: User }) {
           title={<Typography variant="h6">{t('common.history')}</Typography>}
         />
         <CardContent>
-          {user.lastEntryTimestamp !== 0 && (
-            <Stack spacing={2}>
+          <Stack spacing={2}>
+            {user.lastEntryTimestamp !== 0 && (
               <Box>
                 <Typography variant="body2">
                   {t('common.latestEntry')}
                 </Typography>
                 {formatDate(user.lastEntryTimestamp)}
               </Box>
-              <Box>
-                <Typography variant="body2">
-                  {t('common.latestPayment')}
-                </Typography>
-                {userPayments.map((payment) => (
-                  <>
-                    {`${formatDate(payment.paidAt)} | ${payment.amount} DA`}{' '}
-                    <br />
-                  </>
-                ))}
-              </Box>
-            </Stack>
-          )}
+            )}
+            <Box>
+              <Typography variant="body2">
+                {t('common.latestPayment')}
+              </Typography>
+              {latestPayment && (
+                <span>
+                  {`${formatDate(latestPayment.paidAt)} | ${
+                    latestPayment.amount
+                  } DA`}{' '}
+                  <br />
+                </span>
+              )}
+            </Box>
+          </Stack>
         </CardContent>
       </Card>
     </Stack>

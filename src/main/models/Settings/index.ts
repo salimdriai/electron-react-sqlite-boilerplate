@@ -22,7 +22,7 @@ export default class SettingsModel extends DB {
       const initialSettings = {
         theme: 'dark',
         lang: 'en',
-        gymName: 'gym boss',
+        gymName: 'Flex Fit',
         subscriptions: JSON.stringify([]),
       };
 

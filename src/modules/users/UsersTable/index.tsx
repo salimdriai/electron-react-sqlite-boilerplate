@@ -35,7 +35,7 @@ import {
   fetchUsers,
   filterByExpirationDate,
 } from 'features/users/reducers';
-import { setUsers } from 'features/users';
+import { setUser, setUsers } from 'features/users';
 import { useAppDispatch, useAppSelector } from 'features/store';
 import { getAge } from 'utils';
 import TableHead from './TableHead';
@@ -45,15 +45,18 @@ export default function UsersTable() {
   const [page, setPage] = React.useState(0);
   const [seachQuery, setSearchQuery] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [usersDetails, setUsersDetails] = React.useState<User | null>(null);
+  const [openUserDetails, setOpenUserDetails] = React.useState(false);
 
   const { t } = useTranslation();
   const { permission } = useAppSelector((state) => state.authentication);
-  const { users, isLoading } = useAppSelector((state) => state.users);
+  const {
+    users,
+    isLoading,
+    user: userDetails,
+  } = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
 
   const [filterOption, setFilterOption] = React.useState('all');
-
   const handleFilterChange = async (event: SelectChangeEvent) => {
     const selectedOption = event.target.value;
     setFilterOption(selectedOption);
@@ -71,7 +74,7 @@ export default function UsersTable() {
     const query = e.target.value.toLowerCase();
     try {
       const result = await window.electron.searchUsers(query);
-      setUsers(result);
+      dispatch(setUsers(result));
     } catch (error) {
       console.error('ERRR', error);
     }
@@ -84,7 +87,8 @@ export default function UsersTable() {
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, row: User) => {
-    setUsersDetails(row);
+    setOpenUserDetails(true);
+    dispatch(setUser(row));
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -260,7 +264,7 @@ export default function UsersTable() {
               })}
               {emptyRows > 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={8} />
                 </TableRow>
               )}
             </TableBody>
@@ -292,16 +296,13 @@ export default function UsersTable() {
             overflowY: 'auto',
           },
         }}
-        open={!!usersDetails}
-        onClose={() => setUsersDetails(null)}
+        open={!!userDetails && openUserDetails}
+        onClose={() => {
+          dispatch(setUser(null));
+          setOpenUserDetails(false);
+        }}
       >
-        {usersDetails && (
-          <UserDetails
-            usersDetails={usersDetails as User}
-            manualEntry={manualEntry}
-            setUsersDetails={setUsersDetails}
-          />
-        )}
+        {userDetails && <UserDetails manualEntry={manualEntry} />}
       </Drawer>
     </Card>
   );

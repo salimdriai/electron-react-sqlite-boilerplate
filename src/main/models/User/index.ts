@@ -17,12 +17,6 @@ import {
   getQuery as getSubscriptions,
 } from '../Subscription/queries';
 
-const convertPhotoToBase64 = (buffer: Buffer) => {
-  if (!buffer) return null;
-  const base64 = Buffer.from(buffer).toString('base64');
-  return base64;
-};
-
 export default class UserModel extends DB {
   private db: any;
 
@@ -44,7 +38,6 @@ export default class UserModel extends DB {
 
     const users = stm.all({ sex: permission }).map((user: User) => ({
       ...user,
-      // photo: convertPhotoToBase64(user.photo as any),
       subscriptions: subs.filter((sub: Subscription) => sub.userId === user.id),
     }));
     return users;
@@ -56,7 +49,6 @@ export default class UserModel extends DB {
     const user = userStm.get({ id });
     const subscriptions = subStm.all({ userId: id });
     user.subscriptions = subscriptions;
-    // user.photo = convertPhotoToBase64(user.photo as any);
     return user;
   }
 
@@ -67,7 +59,6 @@ export default class UserModel extends DB {
 
     const users = stm.all(query, query, query).map((user: User) => ({
       ...user,
-      photo: convertPhotoToBase64(user.photo as any),
       subscriptions: subs.filter((sub: Subscription) => sub.userId === user.id),
     }));
 
@@ -75,17 +66,11 @@ export default class UserModel extends DB {
   }
 
   async create(user: User) {
-    // if (user.photo) {
-    //   user.photo = Buffer.from(user.photo as string, 'base64');
-    // }
     const stm = this.db.prepare(createQuery);
     stm.run(user);
   }
 
   async update(user: User) {
-    // if (user.photo) {
-    //   user.photo = Buffer.from(user.photo as string, 'base64');
-    // }
     const stm = this.db.prepare(updateQuery);
     stm.run(user);
   }

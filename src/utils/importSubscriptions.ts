@@ -13,12 +13,13 @@ export const importSubscriptions = (
   subscriptions: Array<any>,
   users: Array<any>
 ) => {
-  const result: Subscription[] = [];
+  let result: Subscription[] = [];
+
   subscriptions.forEach((sub) => {
     const userId = getUserId(users, sub.membre);
 
     const endsAt = new Date(sub.fin).getTime();
-    if (endsAt < new Date().getTime()) return;
+    //   if (endsAt < new Date().getTime()) return;
 
     const payload: Subscription = {
       startedAt: new Date(sub.debut).toDateString(),
@@ -30,7 +31,18 @@ export const importSubscriptions = (
       userId,
     };
 
-    result.push(payload);
+    const existing = result.find(
+      (subscription) => subscription.userId === userId
+    );
+
+    if (existing && new Date(existing?.endsAt).getTime() < endsAt) {
+      const updatedResults = result.map((subsctiprion) =>
+        subsctiprion.userId === existing.userId ? payload : subsctiprion
+      );
+      result = [...updatedResults];
+    } else {
+      result.push(payload);
+    }
   });
 
   return result;

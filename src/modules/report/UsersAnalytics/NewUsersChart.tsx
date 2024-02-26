@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { alpha, useTheme } from '@mui/material/styles';
 import Chart from 'react-apexcharts';
 import { User } from 'types';
-import { useAppSelector } from 'features/store';
 
 const useChartOptions = () => {
   const theme = useTheme();
@@ -103,15 +102,13 @@ const useChartOptions = () => {
   };
 };
 
-function NewUsersChart() {
+function NewUsersChart({ users }: { users: User[] }) {
   const chartOptions = useChartOptions();
   const { t } = useTranslation();
   const [series, setSeries] = useState<any>({
     currentYearSeries: new Array(12).fill(0),
     lastYearSeries: new Array(12).fill(0),
   });
-
-  const { permission } = useAppSelector((state) => state.authentication);
 
   useEffect(() => {
     const getSeries = async () => {
@@ -121,10 +118,9 @@ function NewUsersChart() {
       const currentYear = new Date().getFullYear();
       const lastYear = currentYear - 1;
 
-      const allUsers = await window.electron.getAllUsers(permission);
-      if (!Array.isArray(allUsers)) return toast.error('somthing went wrong !');
+      if (!Array.isArray(users)) return toast.error('somthing went wrong !');
 
-      allUsers.forEach((user: User) => {
+      users.forEach((user: User) => {
         const registrationYear = new Date(user.registeredAt).getFullYear();
         const registrationMonth = new Date(user.registeredAt).getMonth();
 

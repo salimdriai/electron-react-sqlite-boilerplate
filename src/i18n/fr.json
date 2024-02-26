@@ -104,7 +104,11 @@
       "actions": "actions",
       "latestEntries": "Dernières entrées",
       "confirmDelete": "Voulez-vous supprimer ce membre ?",
-      "entranceTime": "Temps des entrées"
+      "entranceTime": "Temps des entrées",
+      "total": "Membres total",
+      "active": "Membres active",
+      "male": "Hommes",
+      "female": "Femmes"
     },
     "account": {
       "add": "ajouter un compte",
@@ -124,6 +128,7 @@
       "expireIn7Days": "Expire dans 7 jours",
       "expireIn3Days": "Expire dans 3 jours",
       "expireIn1Day": "Expire dans 1 jour",
+      "plus7Days": "+7 jours restants",
       "expired": "Expiré",
       "expiredAt": "Expiré le",
       "all": "Tous",

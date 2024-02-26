@@ -15,6 +15,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -22,30 +23,28 @@ import { User } from 'types';
 
 import Subscription from 'components/Subscription';
 import { useAppSelector, useAppDispatch } from 'features/store';
-import { fetchUsers } from 'features/users/reducers';
+import { fetchUsers, getOneUser } from 'features/users/reducers';
+import { setUser } from 'features/users';
 import UserInfo from './UserInfo';
 
-function UserDetails({
-  usersDetails,
-  setUsersDetails,
-  manualEntry,
-}: {
-  usersDetails: User;
-  setUsersDetails: (user: User | null) => void;
-  manualEntry?: (id: string) => void;
-}) {
+function UserDetails({ manualEntry }: { manualEntry?: (id: string) => void }) {
   const [deleteUser, setDeleteUser] = useState<null | string>(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { permission } = useAppSelector((state) => state.authentication);
+  const { user: userDetails } = useAppSelector((state) => state.users) as {
+    user: User;
+  };
   const dispatch = useAppDispatch();
 
   const handleEdit = () => {
-    navigate('/users/add', { state: usersDetails });
+    dispatch(setUser(null));
+    navigate('/users/add', { state: userDetails });
   };
 
   const handleDelete = async () => {
-    setDeleteUser(usersDetails.id);
+    setDeleteUser(userDetails.id);
+    setDeleteUser(null);
   };
 
   const confirmDeleteUser = async () => {
@@ -55,8 +54,7 @@ function UserDetails({
   };
 
   const refetchData = async () => {
-    const data = await window.electron.getOneUser(usersDetails.id);
-    setUsersDetails(data);
+    await dispatch(getOneUser(userDetails.id));
     await dispatch(fetchUsers(permission));
   };
 
@@ -68,12 +66,12 @@ function UserDetails({
             variant="outlined"
             sx={{ height: '100px', width: '100px', borderRadius: '50%' }}
           >
-            {usersDetails?.photo ? (
+            {userDetails?.photo ? (
               <img
-                src={usersDetails.photo as string}
+                src={userDetails.photo as string}
                 width="100%"
                 height="100%"
-                alt={usersDetails.firstName}
+                alt={userDetails.firstName}
               />
             ) : (
               <Avatar
@@ -85,15 +83,15 @@ function UserDetails({
                   colro: '#fff',
                 }}
               >
-                {usersDetails.firstName.charAt(0).toLocaleUpperCase()}
+                {userDetails.firstName.charAt(0).toLocaleUpperCase()}
               </Avatar>
             )}
           </Card>
           <Stack>
             <Typography fontSize={32} fontWeight={500}>
-              {`${usersDetails.firstName} ${usersDetails.lastName}`}{' '}
+              {`${userDetails.firstName} ${userDetails.lastName}`}{' '}
             </Typography>
-            <Typography>id : {usersDetails.id} </Typography>
+            <Typography>id : {userDetails.id} </Typography>
           </Stack>
         </Stack>
 
@@ -119,7 +117,7 @@ function UserDetails({
       </Stack>
 
       <Box>
-        <UserInfo user={usersDetails} />
+        <UserInfo user={userDetails} />
       </Box>
       <Box>
         <Stack spacing={1} component={Card} variant="outlined">
@@ -132,10 +130,21 @@ function UserDetails({
             }
           />
           <CardContent>
-            {usersDetails.subscriptions.map((sub) => (
+            {!userDetails.subscriptions.length && (
+              <Button
+                onClick={handleEdit}
+                variant="outlined"
+                fullWidth
+                startIcon={<AddIcon />}
+              >
+                {t('subscriptions.new')}
+              </Button>
+            )}
+            {userDetails.subscriptions.map((sub) => (
               <Subscription
+                key={sub.id}
                 subscription={sub}
-                user={usersDetails}
+                user={userDetails}
                 refetchData={refetchData}
               />
             ))}
@@ -146,7 +155,7 @@ function UserDetails({
       <Box flex={1} />
       <Stack pb={2}>
         <Button
-          onClick={() => manualEntry && manualEntry(usersDetails.id)}
+          onClick={() => manualEntry && manualEntry(userDetails.id)}
           variant="contained"
         >
           {t('actions.manualEntry')}

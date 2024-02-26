@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
-import { useAppSelector } from 'features/store';
+import { useAppDispatch, useAppSelector } from 'features/store';
+import { fetchUsers } from 'features/users/reducers';
 import { Permission } from 'types';
 import NewUsersChart from './NewUsersChart';
 import SexChart from './SexChart';
+import UsersStats from './UsersStats';
 
 const UsersAnalytics = () => {
-  const { permission } = useAppSelector((state) => state.authentication);
+  const dispatch = useAppDispatch();
+  const { users } = useAppSelector((state) => state.users);
+
+  useEffect(() => {
+    dispatch(fetchUsers(Permission.Admin));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <Stack direction="row" spacing={5} sx={{ maxWidth: '100%' }}>
-      <NewUsersChart />
-      {(permission === Permission.Admin || permission === Permission.All) && (
-        <SexChart />
-      )}
+    <Stack spacing={4}>
+      <UsersStats users={users} />
+      <Stack direction="row" spacing={2} sx={{ maxWidth: '100%' }}>
+        <NewUsersChart users={users} />
+        <SexChart users={users} />
+      </Stack>
     </Stack>
   );
 };

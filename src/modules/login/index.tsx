@@ -114,7 +114,7 @@ export default function Login() {
               )}
             />
             <Button size="large" variant="contained" type="submit">
-              {t('actions.submit')}
+              {t('actions.login')}
             </Button>
           </Stack>
           <Stack mt={2}>
