@@ -85,7 +85,8 @@
       "nothingToShow": "Rien à afficher ici !",
       "latestEntry": "Dernière entée",
       "latestPayment": "Dernière payment",
-      "history": "historique"
+      "history": "historique",
+      "currency": "devise"
     },
     "user": {
       "users": "membres",

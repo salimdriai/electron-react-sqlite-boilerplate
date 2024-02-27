@@ -6,7 +6,6 @@ import {
   Account,
   FreeSession,
   Payment,
-  Settings,
   Subscription,
   SubscriptionPlan,
   User,
@@ -32,11 +31,6 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
-
-  // settings -------------------
-  getSettings: () => ipcRenderer.invoke('settings:get'),
-  updateSettings: (settings: Settings) =>
-    ipcRenderer.invoke('settings:update', settings),
 
   // users ----------------------
   getAllUsers: (permission: string) =>

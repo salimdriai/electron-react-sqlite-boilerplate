@@ -16,7 +16,6 @@ import log from 'electron-log';
 import {
   User as UserType,
   Account as AccountType,
-  Settings as SettingsType,
   FreeSession as FreeSessionType,
   SubscriptionPlan as SubscriptionPlanType,
   Payment as PaymentType,
@@ -29,7 +28,6 @@ import { decryptData } from './utils/Encription';
 import DB from './db';
 import UserModel from './models/User';
 import AccountModel from './models/Account';
-import SettingsModel from './models/Settings';
 import FreeSessionModel from './models/FreeSession';
 import SubscriptionPlanModel from './models/SubscriptionPlans';
 import SubscriptionsModel from './models/Subscription';
@@ -158,21 +156,10 @@ app
 
     const User = new UserModel();
     const Account = new AccountModel();
-    const Settings = new SettingsModel();
     const FreeSession = new FreeSessionModel();
     const SubscriptionPlan = new SubscriptionPlanModel();
     const Subscriptions = new SubscriptionsModel();
     const Payments = new PaymentsModel();
-
-    // settings
-    ipcMain.handle('settings:get', async () => {
-      const settings = await Settings.get();
-      return settings;
-    });
-    ipcMain.handle('settings:update', async (_, settings: SettingsType) => {
-      await Settings.update(settings);
-      return settings;
-    });
 
     // users ----------------------
     ipcMain.handle('user:getAll', async (_, permission: string) => {

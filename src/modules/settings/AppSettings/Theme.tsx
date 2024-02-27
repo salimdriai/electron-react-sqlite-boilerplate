@@ -1,11 +1,10 @@
 import * as React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
-import Card from '@mui/material/Card';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 import { Themes } from 'types';
@@ -23,23 +22,21 @@ function Theme() {
   };
 
   return (
-    <Card variant="outlined" sx={{ width: 200 }}>
-      <CardHeader
-        title={t('common.theme')}
-        action={<DarkModeIcon color="secondary" />}
+    <Stack direction="row" alignItems="center" spacing={2}>
+      <Stack direction="row" alignItems="center" spacing={1}>
+        <DarkModeIcon color="secondary" />
+        <Typography variant="h6">{t('common.theme')}</Typography>
+      </Stack>
+      <FormControlLabel
+        control={
+          <Switch
+            onChange={onChange}
+            checked={settings.theme === Themes.Dark}
+          />
+        }
+        label={t(`settings.theme.${Themes.Dark}`)}
       />
-      <CardContent>
-        <FormControlLabel
-          control={
-            <Switch
-              onChange={onChange}
-              checked={settings.theme === Themes.Dark}
-            />
-          }
-          label={t(`settings.theme.${Themes.Dark}`)}
-        />
-      </CardContent>
-    </Card>
+    </Stack>
   );
 }
 export default Theme;

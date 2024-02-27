@@ -3,17 +3,13 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Language from './Language';
 import Theme from './Theme';
+import Currency from './Currency';
 
 const AppSettings = () => {
   return (
-    <Card
-      component={Stack}
-      variant="outlined"
-      direction="row"
-      spacing={2}
-      p={2}
-    >
+    <Card component={Stack} variant="outlined" spacing={3} p={2}>
       <Language />
+      <Currency />
       <Theme />
     </Card>
   );

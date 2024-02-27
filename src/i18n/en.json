@@ -85,7 +85,8 @@
       "nothingToShow": "Nothing to show here !",
       "latestEntry": "last entry",
       "latestPayment": "last payment",
-      "history": "history"
+      "history": "history",
+      "currency": "currency"
     },
     "user": {
       "users": "users",

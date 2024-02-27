@@ -15,9 +15,9 @@ import UserSubscription from 'components/Subscription';
 import { useAppDispatch, useAppSelector } from 'features/store';
 import { fetchUsers } from 'features/users/reducers';
 import { createPayment } from 'features/payments/reducers';
-import Info from './Info';
 import AddSubscriptions from './AddSubscriptions';
 import { userDefaultValues } from './helpers';
+import Info from './Info';
 
 export interface IForm extends User {
   subscriptions: Subscription[];

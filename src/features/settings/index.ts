@@ -12,7 +12,7 @@ interface InitialState {
 const initialState: InitialState = {
   settings: {
     lang: Lang.English,
-    theme: Themes.Light,
+    theme: Themes.Dark,
     gymName: 'Gym Boss',
   },
   loading: false,
