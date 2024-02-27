@@ -41,8 +41,12 @@ function AccountForm({
 
   const createAccount = async (account: Account) => {
     account.createdAt = new Date().toLocaleString();
-    await window.electron.createAccount(account);
-    toast.success('Account successfuly created');
+    try {
+      await window.electron.createAccount(account);
+      toast.success('Account successfuly created');
+    } catch (error) {
+      toast.error('cannot create account !');
+    }
   };
 
   const updateAccount = async (account: Account) => {

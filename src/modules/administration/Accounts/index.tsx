@@ -90,14 +90,21 @@ function Accounts({
             />
           </Box>
           <Box>
-            <Chip sx={{ minWidth: 100 }} label="active" color="success" />
+            <Chip
+              sx={{ minWidth: 100 }}
+              label={account.role}
+              color="success"
+              variant="outlined"
+            />
           </Box>
           <Stack flex={1} direction="row" justifyContent="end" spacing={1}>
+            {account.username !== 'admin' && (
+              <IconButton onClick={handleClickDelete(account)}>
+                <DeleteIcon color="error" />
+              </IconButton>
+            )}
             <IconButton onClick={handleClickEdit(account)}>
               <EditIcon color="info" />
-            </IconButton>
-            <IconButton onClick={handleClickDelete(account)}>
-              <DeleteIcon color="error" />
             </IconButton>
           </Stack>
         </Card>

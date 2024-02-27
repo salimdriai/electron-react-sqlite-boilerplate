@@ -125,7 +125,7 @@ const UserForm = () => {
     try {
       const ids = users.map(({ id }) => id);
       const userId = formMethods.watch('id');
-      if (ids.includes(userId)) {
+      if (ids.includes(userId) && !isEditMode) {
         toast.error('ID Exist !');
         return;
       }
