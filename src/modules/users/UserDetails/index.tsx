@@ -44,12 +44,13 @@ function UserDetails({ manualEntry }: { manualEntry?: (id: string) => void }) {
 
   const handleDelete = async () => {
     setDeleteUser(userDetails.id);
-    setDeleteUser(null);
   };
 
   const confirmDeleteUser = async () => {
     await window.electron.removeUser(deleteUser as string);
     setDeleteUser(null);
+    dispatch(setUser(null));
+    dispatch(fetchUsers(permission));
     toast.success('success');
   };
 

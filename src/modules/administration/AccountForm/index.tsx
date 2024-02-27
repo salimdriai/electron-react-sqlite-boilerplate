@@ -137,10 +137,10 @@ function AccountForm({
                   value={field.value}
                   label={t('info.permission')}
                 >
-                  {Object.keys(Permission).map((key) => (
+                  {Object.entries(Permission).map(([key, value]) => (
                     /* @ts-ignore */
-                    <MenuItem key={key} value={Permission[key]}>
-                      {key}
+                    <MenuItem key={key} value={value}>
+                      {t(`account.${value}`)}
                     </MenuItem>
                   ))}
                 </Select>
@@ -150,7 +150,7 @@ function AccountForm({
           <Controller
             name="role"
             control={control}
-            rules={{ required: 'Permission is required.' }}
+            rules={{ required: 'Role is required.' }}
             render={({ field }) => (
               <FormControl fullWidth>
                 <InputLabel>role</InputLabel>
@@ -159,10 +159,10 @@ function AccountForm({
                   value={field.value}
                   label={t('info.role')}
                 >
-                  {Object.keys(Role).map((key) => (
+                  {Object.entries(Role).map(([key, value]) => (
                     /* @ts-ignore */
-                    <MenuItem key={key} value={Role[key]}>
-                      {key}
+                    <MenuItem key={key} value={value}>
+                      {t(`account.${value}`)}
                     </MenuItem>
                   ))}
                 </Select>

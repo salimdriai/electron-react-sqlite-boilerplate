@@ -187,7 +187,7 @@ const UserSubscription = ({
 
     await window.electron.updatePayment(peymentData);
     dispatch(getUserPayments(user.id));
-    console.log('peymentData', peymentData);
+    setPayRemaining({ amount: 0, open: false, payment: null });
   };
 
   useEffect(() => {

@@ -31,9 +31,9 @@ function Language() {
       />
       <CardContent>
         <Select sx={{ width: 200 }} value={settings.lang} onChange={onChange}>
-          {Object.keys(Lang).map((key: string) => (
-            <MenuItem key={key} value={(Lang as any)[key]}>
-              {key}
+          {Object.entries(Lang).map(([key, value]) => (
+            <MenuItem key={key} value={value}>
+              {t(`settings.language.${value}`)}
             </MenuItem>
           ))}
         </Select>

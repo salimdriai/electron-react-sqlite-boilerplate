@@ -51,7 +51,8 @@
       "subscriptionExpired": "L'abonnement de cet utilisateur a expiré !",
       "maxSessionsSpent": "Cet utilisateur a utilisé le nombre maximum de sessions autorisé ",
       "noSubscriptions": "L'utilisateur n'a pas d'abonnements !",
-      "confirmPayment": "confirmer payment"
+      "confirmPayment": "confirmer payment",
+      "accountInUse": "Compte en cours d'utilisation !"
     },
     "common": {
       "freeSession": "séance libre",
@@ -109,15 +110,20 @@
       "total": "Membres total",
       "active": "Membres active",
       "male": "Hommes",
-      "female": "Femmes"
+      "female": "Femmes",
+      "Male": "Homme",
+      "Female": "Femme"
     },
     "account": {
       "add": "ajouter un compte",
       "myAccount": "mon compte",
-      "Admin": "administrateur",
-      "Male": "homme",
-      "Female": "femme",
-      "All": "tous"
+      "admin": "Administrateur",
+      "male": "Homme",
+      "female": "Femme",
+      "all": "Tous",
+      "coach": "Entraîneur",
+      "employee": "Employé",
+      "owner": "Propriétaire"
     },
     "subscriptions": {
       "subscriptions": "Abonnements",

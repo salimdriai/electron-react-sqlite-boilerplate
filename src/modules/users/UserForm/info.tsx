@@ -189,15 +189,15 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
           control={control}
           rules={{ required: 'Sex is required.' }}
           render={({ field }) => (
-            <FormControl sx={{ width: 140 }}>
+            <FormControl sx={{ width: 180 }}>
               <InputLabel>sex</InputLabel>
               <Select
                 onChange={(v) => field.onChange(v as any)}
                 value={field.value}
                 label={t('info.sex')}
               >
-                <MenuItem value={Sex.Male}>Male</MenuItem>
-                <MenuItem value={Sex.Female}>Female</MenuItem>
+                <MenuItem value={Sex.Male}>{t('user.Male')}</MenuItem>
+                <MenuItem value={Sex.Female}>{t('user.Female')}</MenuItem>
               </Select>
             </FormControl>
           )}

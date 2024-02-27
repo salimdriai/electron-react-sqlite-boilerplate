@@ -84,6 +84,7 @@ function Administration({
           accounts={accounts}
           setEditAccount={setEditAccount}
           setOpenCreateAccount={setOpenCreateAccount}
+          setAccounts={setAccounts}
         />
         <Dialog
           open={openCreateAccount}

@@ -40,7 +40,12 @@ function PlanCard(props: Props) {
         action={
           <Stack direction="row" spacing={2}>
             {editPlan && editPlan.id === subscriptionPlan.id && (
-              <Button size="small" onClick={updatePlan}>
+              <Button
+                variant="contained"
+                color="success"
+                size="small"
+                onClick={updatePlan}
+              >
                 {t('actions.save')}
               </Button>
             )}

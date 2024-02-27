@@ -51,7 +51,8 @@
       "subscriptionExpired": "This user subscription is expired !",
       "maxSessionsSpent": "This user spent max sessions amount !",
       "noSubscriptions": "User have no subscriptions !",
-      "confirmPayment": "confirm payment"
+      "confirmPayment": "confirm payment",
+      "accountInUse": "account in use !"
     },
     "common": {
       "freeSession": "free session",
@@ -110,15 +111,20 @@
       "total": "Total users",
       "active": "Active users",
       "male": "Men",
-      "female": "Women"
+      "female": "Women",
+      "Male": "Man",
+      "Female": "Woman"
     },
     "account": {
-      "add": "add account",
-      "myAccount": "my account",
-      "admin": "admin",
-      "male": "homme",
-      "female": "femme",
-      "all": "all"
+      "add": "Add account",
+      "myAccount": "My account",
+      "Admin": "Admin",
+      "Male": "Men",
+      "Female": "Women",
+      "All": "All",
+      "Coach": "Coach",
+      "Employee": "Employee",
+      "Owner": "Owner"
     },
     "subscriptions": {
       "subscriptions": "Subscriptions",
@@ -148,12 +154,12 @@
         "sessionsPerMonth": "sessions per month"
       },
       "theme": {
-        "dark": "dark",
-        "light": "light"
+        "dark": "Dark",
+        "light": "Light"
       },
       "language": {
-        "french": "french",
-        "english": "english"
+        "fr": "French",
+        "en": "English"
       }
     },
     "administration": {
