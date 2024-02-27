@@ -11,7 +11,6 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
 import SyncIcon from '@mui/icons-material/Sync';
-import UserEntry from 'modules/users/UserEntry';
 
 import AccountMenu from './AccountMenu';
 
@@ -85,7 +84,6 @@ export default function Header({
           alignItems="center"
           spacing={2}
         >
-          <UserEntry />
           <IconButton onClick={() => window.location.reload()}>
             <SyncIcon />
           </IconButton>
