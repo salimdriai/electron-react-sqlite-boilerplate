@@ -83,6 +83,8 @@ function UserInfo({ user }: { user: User }) {
                   {t('common.latestEntry')}
                 </Typography>
                 {formatDate(user.lastEntryTimestamp)}
+                {' - '}
+                {new Date(user.lastEntryTimestamp).toLocaleTimeString()}
               </Box>
             )}
             <Box>

@@ -84,7 +84,6 @@ const AddSubscriptions = ({
   setPayment,
 }: IAddSubscriptions) => {
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
-  const [selectOpen, setSelectOpen] = useState(false);
 
   const [targetDeleteId, setTargetDeleteId] = useState<string | undefined>(
     undefined
@@ -136,7 +135,6 @@ const AddSubscriptions = ({
       setPayment({ paid: plan?.monthPrice || 0, remaining: 0 });
       const newSubscription = getSubscriptionInitial(plan as SubscriptionPlan);
       setSubscriptions((prev: Subscription[]) => [...prev, newSubscription]);
-      setSelectOpen(false);
     }
   };
 
@@ -163,8 +161,6 @@ const AddSubscriptions = ({
             <InputLabel> {t('settings.plans.plans')}</InputLabel>
             <Select
               multiple
-              open={selectOpen}
-              onOpen={() => setSelectOpen(true)}
               value={subscriptions.map(({ planId }) => planId)}
               onChange={handleChangePlan}
               input={<OutlinedInput label="Subscription plans" />}

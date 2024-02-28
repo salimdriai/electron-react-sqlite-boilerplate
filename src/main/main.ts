@@ -178,8 +178,8 @@ app
       await User.create(user);
       return user;
     });
-    ipcMain.handle('user:update', async (_, user: UserType) => {
-      await User.update(user);
+    ipcMain.handle('user:update', async (_, user: UserType, id: string) => {
+      await User.update(user, id);
       return user;
     });
     ipcMain.handle('user:remove', async (_, id: string) => {

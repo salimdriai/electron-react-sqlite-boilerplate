@@ -8,17 +8,17 @@ import { useAppDispatch, useAppSelector } from 'features/store';
 import { setUser } from 'features/users';
 import UserDetails from '../UserDetails';
 
-const getTypingDiffs = (timestamps: number[]): number[] => {
-  const diffs: number[] = [];
-  timestamps.forEach((time, i) => {
-    if (timestamps[i + 1]) {
-      const diff = timestamps[i + 1] - time;
-      diffs.push(diff);
-    }
-  });
+// const getTypingDiffs = (timestamps: number[]): number[] => {
+//   const diffs: number[] = [];
+//   timestamps.forEach((time, i) => {
+//     if (timestamps[i + 1]) {
+//       const diff = timestamps[i + 1] - time;
+//       diffs.push(diff);
+//     }
+//   });
 
-  return diffs;
-};
+//   return diffs;
+// };
 
 function UserEntry() {
   const { t } = useTranslation();
@@ -64,7 +64,7 @@ function UserEntry() {
   useEffect(() => {
     let scannedValue = '';
     let typingTimstamps: number[] = [];
-    const refusedTypingSpeed = 25;
+    // const refusedTypingSpeed = 25;
 
     const accessListener = (e: any) => {
       if (e.target.localName === 'input') return;
@@ -76,14 +76,9 @@ function UserEntry() {
         typingTimstamps.push(now);
         scannedValue += pressedKey;
       }
-      const diffs = getTypingDiffs(typingTimstamps);
-      const isLargeDiffExist = diffs.some((diff) => diff > refusedTypingSpeed);
+      // const diffs = getTypingDiffs(typingTimstamps);
 
-      if (
-        pressedKey === 'Enter' &&
-        scannedValue.length > 5 &&
-        !isLargeDiffExist
-      ) {
+      if (pressedKey === 'Enter' && scannedValue.length > 5) {
         setTimeout(() => {
           handleAccess(scannedValue);
           scannedValue = '';

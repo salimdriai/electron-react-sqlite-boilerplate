@@ -112,7 +112,7 @@ const UserForm = () => {
 
   const saveUser = async (data: User) => {
     if (isEditMode) {
-      await window.electron.updateUser(data);
+      await window.electron.updateUser(data, state.id);
     } else {
       await window.electron.createUser({
         ...data,

@@ -38,7 +38,8 @@ const electronHandler = {
   getOneUser: (id: string) => ipcRenderer.invoke('user:getOne', id),
   searchUsers: (query: string) => ipcRenderer.invoke('user:search', query),
   createUser: (user: User) => ipcRenderer.invoke('user:create', user),
-  updateUser: (user: User) => ipcRenderer.invoke('user:update', user),
+  updateUser: (user: User, id: string) =>
+    ipcRenderer.invoke('user:update', user, id),
   removeUser: (id: string) => ipcRenderer.invoke('user:remove', id),
   removeAllUsers: () => ipcRenderer.invoke('user:removeAll'),
 

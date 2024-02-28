@@ -70,9 +70,9 @@ export default class UserModel extends DB {
     stm.run(user);
   }
 
-  async update(user: User) {
+  async update(user: User, oldId: string) {
     const stm = this.db.prepare(updateQuery);
-    stm.run(user);
+    stm.run({ ...user, oldId });
   }
 
   remove(id: string) {

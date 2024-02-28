@@ -72,7 +72,7 @@ export const sessionsEntry = createAsyncThunk(
       .then((res) => console.log('res', res))
       .catch((err) => console.log('ERR updating subscriptions', err));
 
-    const updatedUser = await window.electron.updateUser(user);
+    const updatedUser = await window.electron.updateUser(user, userId);
     result.user = updatedUser;
     return result;
   }

@@ -9,8 +9,7 @@ interface Data {
   fullName: string;
   id: string;
   phoneNumber: number;
-  registredAt: any;
-  status: string;
+  enteredAt: any;
 }
 
 interface HeadCell {
@@ -40,10 +39,10 @@ const headCells: readonly HeadCell[] = [
     label: 'phoneNumber',
   },
   {
-    id: 'registredAt',
+    id: 'enteredAt',
     numeric: true,
     disablePadding: false,
-    label: 'registredAt',
+    label: 'enteredAt',
   },
 ];
 

@@ -255,11 +255,7 @@ const UserSubscription = ({
             </Typography>
             <Typography variant="body2">
               {t('info.sessionsSpent')} :<br />
-              <b>
-                {' '}
-                {subscription.sessionsSpent} /{' '}
-                {getPlan(subscription.planId)?.sessionsPerMonth}
-              </b>
+              <b> {subscription.sessionsSpent} </b>
             </Typography>
           </Stack>
           <Stack flex={2}>

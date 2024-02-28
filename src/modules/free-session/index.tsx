@@ -14,6 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { FreeSession as FreeSessionType, SubscriptionPlan } from 'types';
+import { useAppDispatch, useAppSelector } from 'features/store';
+import { fetchUsers } from 'features/users/reducers';
 
 interface Props {
   freeSessionsModalOpen: boolean;
@@ -32,6 +34,9 @@ function FreeSession({
   const [isLoading, setIsLoading] = React.useState(false);
   const [fullName, setFullName] = useState({ firstName: '', lastName: '' });
   const [session, setSession] = React.useState<FreeSessionType | null>(null);
+
+  const dispatch = useAppDispatch();
+  const { permission } = useAppSelector((state) => state.authentication);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelected(event.target.value);
@@ -56,6 +61,7 @@ function FreeSession({
 
   const handleAddSession = async () => {
     await window.electron.createFreeSessions(session as FreeSessionType);
+    dispatch(fetchUsers(permission));
     toast.success('Success !');
     onFreeSessionModalClose();
   };

@@ -169,7 +169,9 @@ export default function UsersTable({
                     <TableCell align="left">{row.id}</TableCell>
 
                     <TableCell align="right">{row.phoneNumber}</TableCell>
-                    <TableCell align="right">{row.registeredAt}</TableCell>
+                    <TableCell align="right">
+                      {new Date(row.lastEntryTimestamp).toLocaleTimeString()}
+                    </TableCell>
 
                     <TableCell align="right">
                       <IconButton onClick={(e) => handleEdit(e, row)}>

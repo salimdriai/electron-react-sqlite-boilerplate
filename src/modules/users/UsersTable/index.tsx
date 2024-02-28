@@ -71,7 +71,8 @@ export default function UsersTable() {
 
   const handleSearch = async (e: any) => {
     setSearchQuery(e.target.value);
-    const query = e.target.value.toLowerCase();
+    const query = e.target.value.toLowerCase().replace(/^0+/, '').trim();
+
     try {
       const result = await window.electron.searchUsers(query);
       dispatch(setUsers(result));
@@ -105,14 +106,25 @@ export default function UsersTable() {
   const manualEntry = (id: string) => {
     dispatch(sessionsEntry(id))
       .unwrap()
-      .then(({ isEnteredThreeHoursAgo, message }) => {
-        if (isEnteredThreeHoursAgo) {
-          toast.warning(t(message));
-        } else {
-          toast.success(t(message));
+      .then(
+        ({
+          isEnteredThreeHoursAgo,
+          isMaxSessionsSpent,
+          isSubscriptionExpired,
+          message,
+        }) => {
+          if (
+            isEnteredThreeHoursAgo ||
+            isMaxSessionsSpent ||
+            isSubscriptionExpired
+          ) {
+            toast.error(t(message));
+          } else {
+            toast.success(t(message));
+          }
+          return null;
         }
-        return null;
-      })
+      )
       .catch((err) => toast.error(err));
   };
 

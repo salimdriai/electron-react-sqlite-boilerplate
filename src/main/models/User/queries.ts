@@ -26,7 +26,7 @@ export const updateQuery = `UPDATE Users SET
   lastEntryTimestamp = @lastEntryTimestamp,
   allTimeEntries = @allTimeEntries,
   notes = @notes
-  WHERE id = @id`;
+  WHERE id = @oldId`;
 
 export const searchQuery = `SELECT * FROM Users
   WHERE id LIKE '%' || ? || '%' OR firstName LIKE '%' || ? || '%' OR lastName LIKE '%' || ? || '%'`;

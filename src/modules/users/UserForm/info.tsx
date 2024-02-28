@@ -165,7 +165,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
                       onClick={() => setIsKeyLost(!isKeyLost)}
                       size="small"
                     >
-                      key lost ?
+                      {t('info.keyLost')}
                     </Button>
                   ),
                 }),

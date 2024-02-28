@@ -52,7 +52,8 @@
       "maxSessionsSpent": "Cet utilisateur a utilisé le nombre maximum de sessions autorisé ",
       "noSubscriptions": "L'utilisateur n'a pas d'abonnements !",
       "confirmPayment": "confirmer payment",
-      "accountInUse": "Compte en cours d'utilisation !"
+      "accountInUse": "Compte en cours d'utilisation !",
+      "keyLost": "Puce perdu"
     },
     "common": {
       "freeSession": "séance libre",
@@ -113,7 +114,8 @@
       "male": "Hommes",
       "female": "Femmes",
       "Male": "Homme",
-      "Female": "Femme"
+      "Female": "Femme",
+      "enteredAt": "Entré à"
     },
     "account": {
       "add": "ajouter un compte",

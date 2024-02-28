@@ -7,12 +7,13 @@ import Box from '@mui/material/Box';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { useAppSelector } from 'features/store';
+import { useAppDispatch, useAppSelector } from 'features/store';
 import { User, StatCardProps } from 'types';
 import img1 from 'assets/images/img-6.jpg';
 import img2 from 'assets/images/img-2.png';
 import img3 from 'assets/images/img-4.jpg';
 import Clock from 'components/Clock';
+import { fetchUsers } from 'features/users/reducers';
 import StatCard from '../../components/StatCard';
 
 import UsersTable from './UsersTable';
@@ -51,6 +52,9 @@ export default function Dashbaors() {
     },
   ]);
 
+  const { users, isLoading } = useAppSelector((state) => state.users);
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     const getDayNewUsers = async () => {
       let newUsersCount = 0;
@@ -60,10 +64,10 @@ export default function Dashbaors() {
       const dayStart = new Date();
       dayStart.setHours(0, 0, 0, 0);
 
-      const allUsers = await window.electron.getAllUsers(permission);
-      if (!Array.isArray(allUsers)) return toast.error('somthing went wrong !');
+      // const users = await window.electron.getAllUsers(permission);
+      if (!Array.isArray(users)) return toast.error('somthing went wrong !');
 
-      allUsers.forEach((user: User) => {
+      users.forEach((user: User) => {
         const registrationTime = new Date(user.registeredAt).getTime();
         if (registrationTime === dayStart.getTime()) {
           newUsersCount += 1;
@@ -82,7 +86,7 @@ export default function Dashbaors() {
       });
 
       const freeSessions = await window.electron.getFreeSessions();
-      if (!Array.isArray(allUsers)) return toast.error('somthing went wrong !');
+      if (!Array.isArray(users)) return toast.error('somthing went wrong !');
 
       freeSessions.forEach((session: any) => {
         const entryTime = new Date(session.enteredAt).getTime();
@@ -115,7 +119,12 @@ export default function Dashbaors() {
     };
 
     getDayNewUsers();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
+  useEffect(() => {
+    dispatch(fetchUsers(permission));
   }, []);
 
   return (

@@ -52,7 +52,8 @@
       "maxSessionsSpent": "This user spent max sessions amount !",
       "noSubscriptions": "User have no subscriptions !",
       "confirmPayment": "confirm payment",
-      "accountInUse": "account in use !"
+      "accountInUse": "account in use !",
+      "keyLost": "Key lost"
     },
     "common": {
       "freeSession": "free session",
@@ -114,7 +115,8 @@
       "male": "Men",
       "female": "Women",
       "Male": "Man",
-      "Female": "Woman"
+      "Female": "Woman",
+      "enteredAt": "Entered at"
     },
     "account": {
       "add": "Add account",
