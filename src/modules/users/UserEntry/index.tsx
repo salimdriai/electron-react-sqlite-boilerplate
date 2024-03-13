@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -21,18 +21,18 @@ import UserDetails from '../UserDetails';
 // };
 
 function UserEntry() {
+  const [isUserAccessed, setIsUserAccessed] = useState(false);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { user: userDetails } = useAppSelector((state) => state.users);
+  const { user: accessedUser } = useAppSelector((state) => state.users);
 
   const handleclose = () => {
     dispatch(setUser(null));
+    setIsUserAccessed(false);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleAccess = (e: any) => {
-    const id = e.replace(/^0+/, '').trim();
-
+  const handleAccess = (id: any) => {
     dispatch(sessionsEntry(id))
       .unwrap()
       .then(
@@ -53,8 +53,8 @@ function UserEntry() {
             toast.success(t(message));
           }
 
+          setIsUserAccessed(true);
           dispatch(setUser(user));
-
           return null;
         }
       )
@@ -78,7 +78,7 @@ function UserEntry() {
       }
       // const diffs = getTypingDiffs(typingTimstamps);
 
-      if (pressedKey === 'Enter' && scannedValue.length > 5) {
+      if (pressedKey === 'Enter' && scannedValue.length > 3) {
         setTimeout(() => {
           handleAccess(scannedValue);
           scannedValue = '';
@@ -103,10 +103,10 @@ function UserEntry() {
           overflowY: 'auto',
         },
       }}
-      open={!!userDetails}
+      open={!!accessedUser && isUserAccessed}
       onClose={handleclose}
     >
-      {userDetails && <UserDetails />}
+      {accessedUser && <UserDetails />}
     </Drawer>
   );
 }

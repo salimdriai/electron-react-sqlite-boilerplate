@@ -55,7 +55,7 @@ const electronHandler = {
     ipcRenderer.invoke('account:update', account),
   removeAccount: (username: string) =>
     ipcRenderer.invoke('account:remove', username),
-  activateApp: (key: string) => ipcRenderer.invoke('app:activate', key),
+  activateApp: () => ipcRenderer.invoke('app:activate'),
   isAppActivated: () => ipcRenderer.invoke('app:isActivated'),
 
   // free session ----------------

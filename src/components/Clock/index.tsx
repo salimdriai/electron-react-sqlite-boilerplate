@@ -34,9 +34,9 @@ function Clock() {
   return (
     <Card
       sx={{
-        width: 540,
+        width: 320,
         p: 1,
-        px: 3,
+        px: 1,
         backgroundColor: '#000',
         border: '1px solid #5ceea7',
       }}

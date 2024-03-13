@@ -41,7 +41,10 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
   );
 
   return (
-    <Card variant="outlined" sx={{ width: '100%', mb: 2, flex: 5 }}>
+    <Card
+      variant="outlined"
+      sx={{ width: '100%', height: '100%', mb: 2, flex: 5 }}
+    >
       <div>
         <Stack
           direction="row"

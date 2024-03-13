@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, UseFormReturn } from 'react-hook-form';
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -18,26 +18,19 @@ function AccountForm({
   closeDialog,
   editAccount,
   getAccounts,
+  formMethods,
 }: {
   closeDialog: () => void;
-  editAccount: Account | null;
   getAccounts: () => void;
+  editAccount: Account | null;
+  formMethods: UseFormReturn<any>;
 }) {
   const { t } = useTranslation();
 
   const isEditMode = useMemo(() => !!editAccount, [editAccount]);
 
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const { handleSubmit, control, watch, reset, setValue } = useForm({
-    defaultValues: {
-      username: '',
-      password: '',
-      permission: '',
-      role: '',
-      status: '',
-      createdAt: '',
-    },
-  });
+  const { handleSubmit, control, watch, reset, setValue } = formMethods;
 
   const createAccount = async (account: Account) => {
     account.createdAt = new Date().toLocaleString();
@@ -62,8 +55,8 @@ function AccountForm({
     }
     setPasswordConfirmation('');
     reset();
-    closeDialog();
     getAccounts();
+    closeDialog();
   };
 
   useEffect(() => {
@@ -71,6 +64,7 @@ function AccountForm({
       const updateDefaultValues = async (data: Account) => {
         const decryptedPass = await window.electron.decryptData(data.password);
         setValue('username', data.username);
+        setValue('phoneNumber', data.phoneNumber);
         setValue('password', decryptedPass);
         setValue('permission', data.permission);
         setValue('role', data.role);
@@ -80,6 +74,7 @@ function AccountForm({
       };
       updateDefaultValues(editAccount as Account);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditMode]);
 
@@ -89,32 +84,47 @@ function AccountForm({
       component="form"
       onSubmit={handleSubmit(submitAccount)}
     >
-      <Typography variant="h5" gutterBottom>
-        {t('common.accountInfo')}:
-      </Typography>
+      <Stack mt={2} mb={3}>
+        <Typography variant="h5" gutterBottom>
+          {t('common.accountInfo')}:
+        </Typography>
+      </Stack>
       <Stack spacing={4}>
-        <Controller
-          name="username"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              disabled={isEditMode}
-              type="text"
-              label={t('info.username')}
-              {...field}
-            />
-          )}
-        />
+        <Stack direction="row" spacing={2}>
+          <Controller
+            name="username"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                disabled={isEditMode}
+                type="text"
+                label={t('info.username')}
+              />
+            )}
+          />
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                type="number"
+                label={t('info.phoneNumber')}
+              />
+            )}
+          />
+        </Stack>
         <Stack direction="row" spacing={2}>
           <Controller
             name="password"
             control={control}
             render={({ field }) => (
               <TextField
+                {...field}
                 fullWidth
                 type="text"
                 label={t('info.password')}
-                {...field}
               />
             )}
           />

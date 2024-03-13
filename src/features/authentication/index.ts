@@ -1,14 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { Permission } from 'types';
+import { Account, Permission } from 'types';
 import {
   saveToLocalStorage,
   getFromLocalStorage,
   removeFromLocalStorage,
 } from 'utils/local-storage';
-import { logAccount } from './reducers';
+import { logAccount, getAllAccounts } from './reducers';
 
 interface InitialState {
+  allAcounts: Account[];
   isAuthneticated: boolean;
   username: string;
   permission: Permission | '';
@@ -22,6 +23,7 @@ const defaultUsername = auth?.username || '';
 const defaultPermission = auth?.permission || '';
 
 const initialState: InitialState = {
+  allAcounts: [],
   isAuthneticated: !!defaultUsername,
   username: defaultUsername,
   permission: defaultPermission,
@@ -30,7 +32,7 @@ const initialState: InitialState = {
 };
 
 const authenticationSlice = createSlice({
-  name: 'settings',
+  name: 'authentication',
   initialState,
   reducers: {
     logout: (state) => {
@@ -69,6 +71,18 @@ const authenticationSlice = createSlice({
     });
     builder.addCase(logAccount.rejected, (state) => {
       state.loading = false;
+    });
+
+    builder.addCase(getAllAccounts.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getAllAccounts.fulfilled, (state, action) => {
+      state.allAcounts = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getAllAccounts.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     });
   },
 });

@@ -71,7 +71,7 @@ export default function UsersTable() {
 
   const handleSearch = async (e: any) => {
     setSearchQuery(e.target.value);
-    const query = e.target.value.toLowerCase().replace(/^0+/, '').trim();
+    const query = e.target.value.toLowerCase();
 
     try {
       const result = await window.electron.searchUsers(query);
@@ -191,6 +191,16 @@ export default function UsersTable() {
               <MenuItem value={0}>{t('subscriptions.expired')}</MenuItem>
             </Select>
           </FormControl>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setFilterOption('all');
+              setSearchQuery('');
+              dispatch(fetchUsers(permission));
+            }}
+          >
+            {t('info.clearFilters')}
+          </Button>
         </Stack>
 
         <TableContainer>
@@ -259,17 +269,21 @@ export default function UsersTable() {
                       )}
                     </TableCell>
                     <TableCell align="right">
-                      <Button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          manualEntry(row.id);
-                        }}
-                      >
-                        {t('actions.manualEntry')}
-                      </Button>
-                      <IconButton onClick={(e) => handleEdit(e, row)}>
-                        <EditIcon />
-                      </IconButton>
+                      <Stack direction="row" spacing={1} justifyContent="end">
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            manualEntry(row.id);
+                          }}
+                          variant="outlined"
+                          size="small"
+                        >
+                          {t('actions.manualEntry')}
+                        </Button>
+                        <IconButton onClick={(e) => handleEdit(e, row)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 );

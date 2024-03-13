@@ -140,6 +140,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
           name="id"
           control={control}
           rules={{
+            min: 4,
             pattern: {
               value: /^[A-Za-z0-9]*$/,
               message: 'Only letters and numbers are allowed.',
@@ -152,9 +153,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
               type="text"
               fullWidth
               {...field}
-              onChange={(e) =>
-                field.onChange(e.target.value.replace(/^0+/, '').trim())
-              }
+              onChange={(e) => field.onChange(e.target.value.trim())}
               label="id"
               error={!!errors.id}
               helperText={<> {errors.id?.message || ''} </>}

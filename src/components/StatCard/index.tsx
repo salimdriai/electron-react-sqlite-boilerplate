@@ -20,7 +20,7 @@ export default function StatCard(
     icon,
     color,
     img,
-    maxWidth = '300px',
+    maxWidth = '350px',
     valueTag = 'h3',
   } = props;
 
@@ -42,8 +42,17 @@ export default function StatCard(
           spacing={3}
         >
           <Stack spacing={1}>
-            <Typography variant="overline">{label}</Typography>
-            <Typography variant={valueTag as any} fontWeight={800}>
+            <Typography
+              variant="overline"
+              color={img ? '#ffffff' : 'text.primary'}
+            >
+              {label}
+            </Typography>
+            <Typography
+              variant={valueTag as any}
+              fontWeight={800}
+              color={img ? '#ffffff' : 'text.primary'}
+            >
               {value}
             </Typography>
           </Stack>

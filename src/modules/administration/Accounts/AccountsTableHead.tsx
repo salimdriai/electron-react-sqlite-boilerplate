@@ -6,10 +6,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 interface Data {
-  fullName: string;
   id: string;
+  username: string;
+  permission: string;
+  role: string;
   phoneNumber: number;
-  enteredAt: any;
+  createdAt: any;
   actions: any;
 }
 
@@ -22,28 +24,34 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'fullName',
+    id: 'username',
     numeric: false,
     disablePadding: true,
-    label: 'name',
-  },
-  {
-    id: 'id',
-    numeric: false,
-    disablePadding: false,
-    label: 'id',
+    label: 'username',
   },
   {
     id: 'phoneNumber',
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: 'phoneNumber',
   },
   {
-    id: 'enteredAt',
+    id: 'createdAt',
     numeric: true,
     disablePadding: false,
-    label: 'enteredAt',
+    label: 'createdAt',
+  },
+  {
+    id: 'permission',
+    numeric: true,
+    disablePadding: false,
+    label: 'permission',
+  },
+  {
+    id: 'role',
+    numeric: true,
+    disablePadding: false,
+    label: 'role',
   },
   {
     id: 'actions',

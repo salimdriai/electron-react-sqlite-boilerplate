@@ -51,7 +51,7 @@ const PaymentDetails = ({
         </Typography>
         <Divider />
         <Stack direction="row" justifyContent="space-between">
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {t('payments.lastMonth')}
           </Typography>
           <Typography variant="h6">
@@ -59,7 +59,7 @@ const PaymentDetails = ({
           </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {t('payments.currentMonth')}
           </Typography>
           <Typography variant="h6">
@@ -67,7 +67,7 @@ const PaymentDetails = ({
           </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {t('payments.lastYear')}
           </Typography>
           <Typography variant="h6">
@@ -75,7 +75,7 @@ const PaymentDetails = ({
           </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {t('payments.currentYear')}
           </Typography>
           <Typography variant="h6">
@@ -87,7 +87,7 @@ const PaymentDetails = ({
         <Typography color="secondary">{t('common.freeSession')}</Typography>
         <Divider />
         <Stack direction="row" justifyContent="space-between">
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {t('payments.lastMonth')}
           </Typography>
           <Typography variant="h6">
@@ -95,7 +95,7 @@ const PaymentDetails = ({
           </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {t('payments.currentMonth')}
           </Typography>
           <Typography variant="h6">
@@ -103,7 +103,7 @@ const PaymentDetails = ({
           </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {t('payments.lastYear')}
           </Typography>
           <Typography variant="h6">
@@ -111,7 +111,7 @@ const PaymentDetails = ({
           </Typography>
         </Stack>
         <Stack direction="row" justifyContent="space-between">
-          <Typography color="text.secondary">
+          <Typography variant="body2" color="text.secondary">
             {t('payments.currentYear')}
           </Typography>
           <Typography variant="h6">

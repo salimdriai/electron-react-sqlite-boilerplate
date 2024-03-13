@@ -6,11 +6,11 @@ export const getOneQuery = 'SELECT * FROM Accounts WHERE username = @username';
 export const removeQuery = 'DELETE FROM Accounts WHERE username = @username';
 
 export const createQuery = `INSERT INTO Accounts
-  (username, password, permission, role, status, createdAt)
-  VALUES (@username, @password, @permission, @role, @status, @createdAt)`;
+  (username, phoneNumber, password, permission, role, status, createdAt)
+  VALUES (@username, @phoneNumber, @password, @permission, @role, @status, @createdAt)`;
 
 export const updateQuery = `UPDATE Accounts SET
-  username = @username, password = @password,
+  username = @username, phoneNumber = @phoneNumber, password = @password,
   permission = @permission, role = @role, status = @status, createdAt = @createdAt
   WHERE username = @username`;
 
@@ -20,6 +20,7 @@ export const createAccountsTable = `
 CREATE TABLE IF NOT EXISTS Accounts (
   username TEXT NOT NULL UNIQUE,
   password TEXT,
+  phoneNumber TEXT,
   permission TEXT,
   role TEXT,
   status TEXT,

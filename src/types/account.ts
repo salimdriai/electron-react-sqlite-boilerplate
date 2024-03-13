@@ -19,6 +19,8 @@ export enum AccountStatus {
 export interface Account {
   username: string;
   password: string;
+  phoneNumber: string;
+  photo?: string;
   permission: Permission;
   role: string;
   status: string;

@@ -1,4 +1,5 @@
-import dotenv from 'dotenv';
+// import fs from 'fs';
+// import path from 'path';
 import { Account, AccountStatus, Permission, Role } from '../../../types';
 import { encryptData, decryptData } from '../../utils/Encription';
 import DB from '../../db';
@@ -12,8 +13,19 @@ import {
   accountsCountQuery,
   createAccountsTable,
 } from './queries';
+// import webpackPaths from '../../../../.erb/configs/webpack.paths';
 
-dotenv.config();
+// const filePath = path.join(webpackPaths.srcMainPath, 'activationKey.txt');
+
+// let activationKey = '';
+// // Read the file asynchronously
+// fs.readFile(filePath, 'utf8', (err, data) => {
+//   if (err) {
+//     console.error('Error reading file:', err);
+//     return;
+//   }
+//   activationKey = data;
+// });
 
 export default class AccountModel extends DB {
   private db: any;
@@ -21,13 +33,14 @@ export default class AccountModel extends DB {
   private account: Account = {
     username: 'admin',
     password: 'admin',
+    phoneNumber: '',
     permission: Permission.Admin,
     role: Role.Owner,
     createdAt: new Date().toDateString(),
     status: AccountStatus.Active,
   };
 
-  private activationKey = 'salim123';
+  // private activationKey = 'salim123';
 
   constructor() {
     super();
@@ -35,18 +48,15 @@ export default class AccountModel extends DB {
     this.db.exec(createAccountsTable);
   }
 
-  activateApp(key: string) {
-    const { account, activationKey } = this;
+  activateApp() {
+    const { account } = this;
 
-    if (key === activationKey) {
-      const stm = this.db.prepare(createQuery);
-      account.password = encryptData(account.password);
-      stm.run(account);
-      account.password = decryptData(account.password);
+    const stm = this.db.prepare(createQuery);
+    account.password = encryptData(account.password);
+    stm.run(account);
+    account.password = decryptData(account.password);
 
-      return account;
-    }
-    return undefined;
+    return account;
   }
 
   isAppActivated() {

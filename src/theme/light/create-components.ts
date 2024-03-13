@@ -268,7 +268,7 @@ export default function createComponents(config: any) {
           borderBottom: 'none',
           [`& .${tableCellClasses.root}`]: {
             borderBottom: 'none',
-            //  backgroundColor: palette.neutral[50],
+            backgroundColor: '#dddddd',
             //  color: palette.neutral[700],
             fontSize: 12,
             fontWeight: 600,

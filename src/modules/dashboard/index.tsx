@@ -29,7 +29,7 @@ export default function Dashbaors() {
     {
       id: 'entries',
       value: '0',
-      label: t('common.entries'),
+      label: t('stats.today.entries'),
       icon: <LoginIcon />,
       color: 'primary.main',
       img: img1,
@@ -37,7 +37,7 @@ export default function Dashbaors() {
     {
       id: 'free_sessions',
       value: '0',
-      label: t('common.freeSession'),
+      label: t('stats.today.freeSession'),
       icon: <AccessAlarmIcon />,
       color: 'secondary.main',
       img: img2,
@@ -45,7 +45,7 @@ export default function Dashbaors() {
     {
       id: 'new_users',
       value: '0',
-      label: t('user.newUsers'),
+      label: t('stats.today.newUsers'),
       icon: <PersonAddIcon />,
       color: 'info.dark',
       img: img3,
@@ -80,8 +80,11 @@ export default function Dashbaors() {
         }
 
         if (isEnteredToday) {
-          setLatestEnteredUsers((prev) => [...prev, user]);
-          todayEntries += 1;
+          const isUserExist = latestEnteredUsers.find((u) => u.id === user.id);
+          if (!isUserExist) {
+            setLatestEnteredUsers((prev) => [...prev, user]);
+            todayEntries += 1;
+          }
         }
       });
 
@@ -118,13 +121,16 @@ export default function Dashbaors() {
       return null;
     };
 
-    getDayNewUsers();
+    if (!isLoading) {
+      getDayNewUsers();
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   useEffect(() => {
     dispatch(fetchUsers(permission));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -142,15 +148,16 @@ export default function Dashbaors() {
         ))}
         <Clock />
       </Stack>
-      <AccessTimeChart latestEnteredUsers={latestEnteredUsers} />
-      <Stack direction="row" spacing={2}>
+
+      <Stack direction="row" spacing={4}>
         <Box flex={4}>
-          <UsersTable latestEnteredUsers={latestEnteredUsers} />
+          <AccessTimeChart latestEnteredUsers={latestEnteredUsers} />
         </Box>
         <Box flex={2}>
           <SessionsTable />
         </Box>
       </Stack>
+      <UsersTable latestEnteredUsers={latestEnteredUsers} />
     </Stack>
   );
 }

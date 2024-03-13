@@ -28,8 +28,8 @@ export default function ActivationPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const activate = async (data: { key: string }) => {
-    const res = await window.electron.activateApp(data.key);
+  const activate = async () => {
+    const res = await window.electron.activateApp();
     if (res === undefined) {
       toast.error('Please insert a correct key !');
       setError('key', { type: 'custom', message: 'wrong key provided !' });

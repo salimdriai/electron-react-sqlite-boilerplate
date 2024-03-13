@@ -49,13 +49,9 @@ export default function Report() {
   return (
     <Stack spacing={4}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
+        <Tabs value={value} onChange={handleChange}>
           <Tab label={t('payments.payments')} {...a11yProps(0)} />
-          <Tab label={t('report.analytics')} {...a11yProps(1)} />
+          <Tab label={t('common.users')} {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

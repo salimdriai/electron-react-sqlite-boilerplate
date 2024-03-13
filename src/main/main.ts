@@ -277,8 +277,8 @@ app
       return decryptedData;
     });
 
-    ipcMain.handle('app:activate', async (_, key: string) => {
-      const res = await Account.activateApp(key);
+    ipcMain.handle('app:activate', async () => {
+      const res = await Account.activateApp();
       return res;
     });
     ipcMain.handle('app:isActivated', async () => {

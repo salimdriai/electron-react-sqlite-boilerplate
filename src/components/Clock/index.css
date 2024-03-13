@@ -6,7 +6,7 @@
 #clock {
   font-family: 'Orbitron', sans-serif;
   color: #5ceea7;
-  font-size: 64px;
+  font-size: 38px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -15,4 +15,5 @@
 
 #date {
   text-align: center;
+  color: #5ceea7;
 }

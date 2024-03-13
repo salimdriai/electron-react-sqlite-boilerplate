@@ -23,6 +23,7 @@ export const removeQuery = `DELETE FROM Subscriptions WHERE id = @id`;
 export const updateQuery = `
 UPDATE Subscriptions
 SET startedAt = @startedAt,
+    userId = @userId,
     endsAt = @endsAt,
     paid = @paid,
     sessionsAvailable = @sessionsAvailable,

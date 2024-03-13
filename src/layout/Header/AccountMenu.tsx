@@ -10,6 +10,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
@@ -143,13 +144,25 @@ function AccountMenu() {
               <ListItemIcon>
                 <PersonAdd fontSize="small" />
               </ListItemIcon>
-              <ListItemText primary={t('common.administration')} />
+              <ListItemText
+                primary={
+                  <Typography variant="body2">
+                    {t('common.administration')}{' '}
+                  </Typography>
+                }
+              />
             </MenuItem>
             <MenuItem onClick={() => navigate('/settings')}>
               <ListItemIcon>
                 <Settings fontSize="small" />
               </ListItemIcon>
-              <ListItemText primary={t('common.settings')} />
+              <ListItemText
+                primary={
+                  <Typography variant="body2">
+                    {t('common.settings')}{' '}
+                  </Typography>
+                }
+              />
             </MenuItem>
           </>
         )}
@@ -157,7 +170,11 @@ function AccountMenu() {
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary={t('actions.logout')} />
+          <ListItemText
+            primary={
+              <Typography variant="body2">{t('actions.logout')} </Typography>
+            }
+          />
         </MenuItem>
       </Menu>
     </>

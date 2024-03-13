@@ -16,3 +16,8 @@ export const updateAccount = createAsyncThunk(
     return account;
   }
 );
+
+export const getAllAccounts = createAsyncThunk('getAllAccounts', async () => {
+  const accounts = await window.electron.getAllAccounts();
+  return accounts;
+});

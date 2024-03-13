@@ -101,6 +101,7 @@ export default function UsersTable({
           justifyContent="space-between"
           alignItems="center"
           p={2}
+          sx={{ height: 60 }}
         >
           <Typography color="primary" variant="h6">
             {' '}

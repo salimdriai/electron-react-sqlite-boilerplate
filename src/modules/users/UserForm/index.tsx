@@ -26,6 +26,7 @@ export interface IForm extends User {
 const UserForm = () => {
   const [openAddSubscription, setOpenAddSubscription] = useState(false);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [isUserCreated, setIsUserCreated] = useState(false);
   const [deletedSubscriptions, setDeletedSubscriptions] = useState<string[]>(
     []
   );
@@ -110,14 +111,27 @@ const UserForm = () => {
     cancelAddsubscription();
   };
 
+  const updateSubs = async (newId: string) => {
+    const promises = subscriptions.map((sub) => {
+      return window.electron.updateSubscription({ ...sub, userId: newId });
+    });
+    console.log('userId', newId);
+    const res = await Promise.all(promises);
+    console.log('res', res);
+  };
+
   const saveUser = async (data: User) => {
     if (isEditMode) {
       await window.electron.updateUser(data, state.id);
+      if (data.id !== state.id) {
+        updateSubs(data.id);
+      }
     } else {
       await window.electron.createUser({
         ...data,
         registeredAt: new Date().toDateString(),
       });
+      setIsUserCreated(true);
     }
   };
 
@@ -125,6 +139,7 @@ const UserForm = () => {
     try {
       const ids = users.map(({ id }) => id);
       const userId = formMethods.watch('id');
+
       if (ids.includes(userId) && !isEditMode) {
         toast.error('ID Exist !');
         return;
@@ -160,7 +175,14 @@ const UserForm = () => {
       <Stack direction="row" spacing={4} mb={2}>
         <Info isEditMode={isEditMode} formMethods={formMethods} />
 
-        <Stack flex={3} spacing={2} component={Card} variant="outlined" p={2}>
+        <Stack
+          sx={{ opacity: !isUserCreated && !isEditMode ? 0.4 : 1 }}
+          flex={3}
+          spacing={2}
+          component={Card}
+          variant="outlined"
+          p={2}
+        >
           <Typography variant="h6" gutterBottom>
             {t('subscriptions.subscriptions')}
           </Typography>
@@ -187,6 +209,7 @@ const UserForm = () => {
             variant="outlined"
             color="secondary"
             startIcon={subscriptions.length ? <EditIcon /> : <AddIcon />}
+            disabled={!isUserCreated && !isEditMode}
           >
             {subscriptions.length
               ? t('subscriptions.edit')

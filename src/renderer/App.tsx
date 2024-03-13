@@ -47,6 +47,16 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
+  useEffect(() => {
+    const activate = async () => {
+      const res = await window.electron.getAllAccounts();
+      if (!res.length) {
+        await window.electron.activateApp();
+      }
+    };
+    activate();
+  }, []);
+
   return (
     <Router>
       <CssBaseline />

@@ -6,6 +6,7 @@ import usersSlice from './users';
 import authenticationSlice from './authentication';
 import settingsSlice from './settings';
 import paymentsSlice from './payments';
+import accountsSlice from './accounts';
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     authentication: authenticationSlice,
     settings: settingsSlice,
     payments: paymentsSlice,
+    accounts: accountsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

@@ -159,7 +159,7 @@ function UserDetails({ manualEntry }: { manualEntry?: (id: string) => void }) {
           onClick={() => manualEntry && manualEntry(userDetails.id)}
           variant="contained"
         >
-          {t('actions.manualEntry')}
+          {t('actions.manualEntry')} {`(${t('info.keyLost')})`}
         </Button>
       </Stack>
 
