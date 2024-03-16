@@ -40,7 +40,8 @@ const UserForm = () => {
   });
 
   const { t } = useTranslation();
-  const { state } = useLocation();
+  const location = useLocation();
+  const { state } = location;
   const isEditMode = React.useMemo(() => !!state, [state]);
   const dispatch = useAppDispatch();
   const { users } = useAppSelector((s) => s.users);
@@ -115,9 +116,7 @@ const UserForm = () => {
     const promises = subscriptions.map((sub) => {
       return window.electron.updateSubscription({ ...sub, userId: newId });
     });
-    console.log('userId', newId);
-    const res = await Promise.all(promises);
-    console.log('res', res);
+    await Promise.all(promises);
   };
 
   const saveUser = async (data: User) => {
@@ -131,6 +130,7 @@ const UserForm = () => {
         ...data,
         registeredAt: new Date().toDateString(),
       });
+      location.state = data;
       setIsUserCreated(true);
     }
   };

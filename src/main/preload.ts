@@ -9,6 +9,7 @@ import {
   Subscription,
   SubscriptionPlan,
   User,
+  Notification,
 } from 'types';
 
 export type Channels = 'ipc-example';
@@ -93,6 +94,15 @@ const electronHandler = {
     ipcRenderer.invoke('payments:create', payment),
   updatePayment: (payment: Payment) =>
     ipcRenderer.invoke('payments:update', payment),
+
+  // notifications
+  getNotifications: () => ipcRenderer.invoke('notifications:getAll'),
+  createNotification: (notification: Notification) =>
+    ipcRenderer.invoke('notifications:create', notification),
+  updateNotification: (notification: Notification) =>
+    ipcRenderer.invoke('notifications:update', notification),
+  deleteNotification: (id: string) =>
+    ipcRenderer.invoke('notifications:delete', id),
 
   // other -----------------------
   decryptData: (data: string) => ipcRenderer.invoke('data:decrypt', data),

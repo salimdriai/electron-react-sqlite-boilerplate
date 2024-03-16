@@ -324,8 +324,8 @@ export default function UsersTable() {
         }}
         open={!!userDetails && openUserDetails}
         onClose={() => {
-          dispatch(setUser(null));
           setOpenUserDetails(false);
+          dispatch(setUser(null));
         }}
       >
         {userDetails && <UserDetails manualEntry={manualEntry} />}

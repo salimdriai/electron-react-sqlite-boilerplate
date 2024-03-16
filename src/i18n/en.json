@@ -54,7 +54,9 @@
       "confirmPayment": "Confirm payment",
       "accountInUse": "Account in use !",
       "keyLost": "Key lost",
-      "clearFilters": "Clear filters"
+      "clearFilters": "Clear filters",
+      "mark.as.read": "mark as read",
+      "mark.as.unread": "mark as unread"
     },
     "common": {
       "freeSession": "Free session",
@@ -149,7 +151,8 @@
       "expiredAt": "Expired at",
       "all": "All",
       "startFromNow": "Start from now",
-      "startFromExpiration": "Start from expiration date"
+      "startFromExpiration": "Start from expiration date",
+      "subscription.expired": "Subscription expired"
     },
     "settings": {
       "genaral": "Generale settings",

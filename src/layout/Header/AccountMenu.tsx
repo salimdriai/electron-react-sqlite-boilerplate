@@ -116,7 +116,7 @@ function AccountMenu() {
             >
               <Avatar
                 sx={{
-                  backgroundColor: 'primary.main',
+                  backgroundColor: 'background.paper',
                   width: 40,
                   height: 40,
                   color: '#fff',

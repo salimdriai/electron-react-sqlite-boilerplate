@@ -208,11 +208,12 @@ const UserSubscription = ({
         key={subscription.id}
         sx={{
           mb: 1,
+          p: 1,
           ...(isExpired(subscription.endsAt) && { borderColor: 'error.main' }),
         }}
       >
         <Stack
-          p={2}
+          p={1}
           direction="row"
           justifyContent="space-between"
           alignItems="center"

@@ -14,12 +14,13 @@ import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import {
-  User as UserType,
-  Account as AccountType,
-  FreeSession as FreeSessionType,
-  SubscriptionPlan as SubscriptionPlanType,
-  Payment as PaymentType,
+  User as IUser,
+  Account as IAccount,
+  FreeSession as IFreeSession,
+  SubscriptionPlan as ISubscriptionPlan,
+  Payment as IPayment,
   Subscription,
+  Notification as INotifcations,
 } from 'types';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -32,6 +33,7 @@ import FreeSessionModel from './models/FreeSession';
 import SubscriptionPlanModel from './models/SubscriptionPlans';
 import SubscriptionsModel from './models/Subscription';
 import PaymentsModel from './models/Payments';
+import NotifcationsModel from './models/Notification';
 
 class AppUpdater {
   constructor() {
@@ -160,6 +162,7 @@ app
     const SubscriptionPlan = new SubscriptionPlanModel();
     const Subscriptions = new SubscriptionsModel();
     const Payments = new PaymentsModel();
+    const Notifcations = new NotifcationsModel();
 
     // users ----------------------
     ipcMain.handle('user:getAll', async (_, permission: string) => {
@@ -174,11 +177,11 @@ app
       const users = await User.search(query);
       return users;
     });
-    ipcMain.handle('user:create', async (_, user: UserType) => {
+    ipcMain.handle('user:create', async (_, user: IUser) => {
       await User.create(user);
       return user;
     });
-    ipcMain.handle('user:update', async (_, user: UserType, id: string) => {
+    ipcMain.handle('user:update', async (_, user: IUser, id: string) => {
       await User.update(user, id);
       return user;
     });
@@ -197,14 +200,14 @@ app
 
     ipcMain.handle(
       'subscriptionPlan:create',
-      async (_, plan: SubscriptionPlanType) => {
+      async (_, plan: ISubscriptionPlan) => {
         await SubscriptionPlan.create(plan);
         return plan;
       }
     );
     ipcMain.handle(
       'subscriptionPlan:update',
-      async (_, plan: SubscriptionPlanType) => {
+      async (_, plan: ISubscriptionPlan) => {
         await SubscriptionPlan.update(plan);
         return plan;
       }
@@ -260,11 +263,11 @@ app
       const account = await Account.getOne(username);
       return account;
     });
-    ipcMain.handle('account:insert', async (_, account: AccountType) => {
+    ipcMain.handle('account:insert', async (_, account: IAccount) => {
       await Account.create(account);
       return account;
     });
-    ipcMain.handle('account:update', async (_, account: AccountType) => {
+    ipcMain.handle('account:update', async (_, account: IAccount) => {
       await Account.update(account);
       return account;
     });
@@ -293,20 +296,14 @@ app
       return freeSessions;
     });
 
-    ipcMain.handle(
-      'freeSession:create',
-      async (_, session: FreeSessionType) => {
-        await FreeSession.create(session);
-        return session;
-      }
-    );
-    ipcMain.handle(
-      'freeSession:update',
-      async (_, session: FreeSessionType) => {
-        await FreeSession.update(session);
-        return session;
-      }
-    );
+    ipcMain.handle('freeSession:create', async (_, session: IFreeSession) => {
+      await FreeSession.create(session);
+      return session;
+    });
+    ipcMain.handle('freeSession:update', async (_, session: IFreeSession) => {
+      await FreeSession.update(session);
+      return session;
+    });
     ipcMain.handle('freeSession:delete', async (_, id: string) => {
       await FreeSession.remove(id);
     });
@@ -321,13 +318,37 @@ app
       const payments = await Payments.get(userId);
       return payments;
     });
-    ipcMain.handle('payments:create', async (_, payment: PaymentType) => {
+    ipcMain.handle('payments:create', async (_, payment: IPayment) => {
       await Payments.create(payment);
       return payment;
     });
-    ipcMain.handle('payments:update', async (_, payment: PaymentType) => {
+    ipcMain.handle('payments:update', async (_, payment: IPayment) => {
       await Payments.update(payment);
       return payment;
+    });
+
+    // notifications
+
+    ipcMain.handle('notifications:getAll', async () => {
+      const notifications = await Notifcations.getAll();
+      return notifications;
+    });
+    ipcMain.handle(
+      'notifications:create',
+      async (_, notification: INotifcations) => {
+        await Notifcations.create(notification);
+        return notification;
+      }
+    );
+    ipcMain.handle(
+      'notifications:update',
+      async (_, notification: INotifcations) => {
+        await Notifcations.update(notification);
+        return notification;
+      }
+    );
+    ipcMain.handle('notifications:delete', async (_, id: string) => {
+      await Notifcations.delete(id);
     });
 
     // store

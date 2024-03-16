@@ -12,6 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
 import SyncIcon from '@mui/icons-material/Sync';
 
+import Notifications from 'modules/notifications';
 import AccountMenu from './AccountMenu';
 
 const drawerWidth = 240;
@@ -87,6 +88,7 @@ export default function Header({
           <IconButton onClick={() => window.location.reload()}>
             <SyncIcon />
           </IconButton>
+          <Notifications />
           <AccountMenu />
         </Stack>
       </Toolbar>

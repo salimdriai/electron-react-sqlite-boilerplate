@@ -5,3 +5,4 @@ export * from './settings';
 export * from './freeSession';
 export * from './subscriptions';
 export * from './payments';
+export * from './notification';

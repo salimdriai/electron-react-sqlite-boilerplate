@@ -54,7 +54,9 @@
       "confirmPayment": "Confirmer payment",
       "accountInUse": "Compte en cours d'utilisation !",
       "keyLost": "Puce perdu",
-      "clearFilters": "Supprimer les filtres"
+      "clearFilters": "Supprimer les filtres",
+      "mark.as.read": "Marquer comme lu",
+      "mark.as.unread": "Marquer comme non lu"
     },
     "common": {
       "freeSession": "Séance libre",
@@ -148,7 +150,8 @@
       "expiredAt": "Expiré le",
       "all": "Tous",
       "startFromNow": "Démarrer à partir de maintenant",
-      "startFromExpiration": "Démarrer à partir de la date d'expiration"
+      "startFromExpiration": "Démarrer à partir de la date d'expiration",
+      "subscription.expired": "Abonnement expiré"
     },
     "settings": {
       "genaral": "Paramètres généraux",

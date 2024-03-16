@@ -7,6 +7,7 @@ import authenticationSlice from './authentication';
 import settingsSlice from './settings';
 import paymentsSlice from './payments';
 import accountsSlice from './accounts';
+import notificationsSlice from './notifications';
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     settings: settingsSlice,
     payments: paymentsSlice,
     accounts: accountsSlice,
+    notifications: notificationsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
