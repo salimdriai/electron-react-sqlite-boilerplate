@@ -2,9 +2,21 @@ import React from 'react';
 import QRCode from 'react-qr-code';
 import Card from '@mui/material/Card';
 
-const QrCode = ({ value }: { value: any }) => {
+const QrCode = ({
+  value,
+  blurQrCode,
+}: {
+  value: string;
+  blurQrCode: boolean;
+}) => {
   return (
-    <Card sx={{ p: 1, backgroundColor: 'white' }}>
+    <Card
+      sx={{
+        p: 1,
+        backgroundColor: 'white',
+        filter: !blurQrCode ? 'blur(0px)' : 'blur(4px)',
+      }}
+    >
       <div
         style={{
           height: 116,

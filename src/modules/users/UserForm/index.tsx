@@ -96,6 +96,13 @@ const UserForm = () => {
       return;
     }
 
+    const allSubs = await window.electron.getAllSubscriptions();
+    if (allSubs.length > 9) {
+      toast.warning(t('info.trial.version.limit'));
+      toast.info(t('info.contact.us'));
+      return;
+    }
+
     const promises = subscriptions.map((sub) => {
       if (sub.id) {
         return window.electron.updateSubscription({ ...sub, userId });
@@ -136,6 +143,12 @@ const UserForm = () => {
   };
 
   const onSubmit = async (data: IForm) => {
+    const allUsers = await window.electron.getAllUsers(Permission.Admin);
+    if (allUsers.length > 4 && !isEditMode) {
+      toast.warning(t('info.trial.version.limit'));
+      toast.info(t('info.contact.us'));
+      return;
+    }
     try {
       const ids = users.map(({ id }) => id);
       const userId = formMethods.watch('id');
@@ -173,7 +186,11 @@ const UserForm = () => {
   return (
     <Stack component="form" onSubmit={formMethods.handleSubmit(onSubmit)}>
       <Stack direction="row" spacing={4} mb={2}>
-        <Info isEditMode={isEditMode} formMethods={formMethods} />
+        <Info
+          isEditMode={isEditMode}
+          formMethods={formMethods}
+          blurQrCode={!isUserCreated && !isEditMode}
+        />
 
         <Stack
           sx={{ opacity: !isUserCreated && !isEditMode ? 0.4 : 1 }}
@@ -190,7 +207,7 @@ const UserForm = () => {
           {subscriptions.length === 0 ? (
             <Card variant="outlined">
               <Typography align="center" sx={{ py: 4 }}>
-                user have no subscriptions
+                {t('user.no.subscriptions')}
               </Typography>
             </Card>
           ) : (

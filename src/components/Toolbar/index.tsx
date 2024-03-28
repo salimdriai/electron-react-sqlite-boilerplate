@@ -30,7 +30,7 @@ export default function PageToolbar({
       {buttonLabel && (
         <Button
           variant="outlined"
-          color="secondary"
+          color="primary"
           onClick={buttonOnClick}
           startIcon={buttonIcon}
         >

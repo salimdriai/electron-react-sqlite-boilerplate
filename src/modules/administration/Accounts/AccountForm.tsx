@@ -33,6 +33,13 @@ function AccountForm({
   const { handleSubmit, control, watch, reset, setValue } = formMethods;
 
   const createAccount = async (account: Account) => {
+    const allAccounts = await window.electron.getAllAccounts();
+    if (allAccounts.length > 2) {
+      toast.warning(t('info.trial.version.limit'));
+      toast.info(t('info.contact.us'));
+      return;
+    }
+
     account.createdAt = new Date().toLocaleString();
     try {
       await window.electron.createAccount(account);

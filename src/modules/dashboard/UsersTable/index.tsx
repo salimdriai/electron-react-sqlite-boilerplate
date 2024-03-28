@@ -103,10 +103,7 @@ export default function UsersTable({
           p={2}
           sx={{ height: 60 }}
         >
-          <Typography color="primary" variant="h6">
-            {' '}
-            {t('user.latestEntries')}
-          </Typography>
+          <Typography variant="h6"> {t('user.latestEntries')}</Typography>
           <TextField
             onChange={handleSearch}
             value={seachQuery}

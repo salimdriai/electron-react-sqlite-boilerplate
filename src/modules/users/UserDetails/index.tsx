@@ -157,7 +157,7 @@ function UserDetails({ manualEntry }: { manualEntry?: (id: string) => void }) {
       <Stack pb={2}>
         <Button
           onClick={() => manualEntry && manualEntry(userDetails.id)}
-          variant="contained"
+          variant="outlined"
         >
           {t('actions.manualEntry')} {`(${t('info.keyLost')})`}
         </Button>

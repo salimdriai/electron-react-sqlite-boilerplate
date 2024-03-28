@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   setCamera: (args: {
@@ -10,6 +11,8 @@ interface Props {
 }
 
 function TakePhoto({ setCamera }: Props) {
+  const { t } = useTranslation();
+
   const takePhoto = async () => {
     const canvas = document.createElement('canvas');
     const video = document.getElementById('video');
@@ -46,7 +49,7 @@ function TakePhoto({ setCamera }: Props) {
         startIcon={<PhotoCameraIcon />}
         variant="contained"
       >
-        Take photo
+        {t('actions.take.photo')}
       </Button>
     </>
   );

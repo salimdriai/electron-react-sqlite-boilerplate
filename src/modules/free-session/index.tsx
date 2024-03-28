@@ -60,6 +60,13 @@ function FreeSession({
   };
 
   const handleAddSession = async () => {
+    const allFreeSessions = await window.electron.getFreeSessions();
+    if (allFreeSessions.length > 4) {
+      toast.warning(t('info.trial.version.limit'));
+      toast.info(t('info.contact.us'));
+      return;
+    }
+
     await window.electron.createFreeSessions(session as FreeSessionType);
     dispatch(fetchUsers(permission));
     toast.success('Success !');

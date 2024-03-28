@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
 import SyncIcon from '@mui/icons-material/Sync';
-
+import UserAccess from 'modules/users/UserEntry';
 import Notifications from 'modules/notifications';
 import AccountMenu from './AccountMenu';
 
@@ -64,7 +64,7 @@ export default function Header({
           <Button
             onClick={() => navigate('/users/add')}
             variant="contained"
-            color="secondary"
+            color="primary"
             startIcon={<AddIcon />}
           >
             {t('user.add')}
@@ -73,7 +73,7 @@ export default function Header({
           <Button
             onClick={openFreeSessionModal}
             variant="contained"
-            color="success"
+            color="secondary"
             startIcon={<LoginIcon />}
           >
             {t('common.freeSession')}
@@ -85,6 +85,7 @@ export default function Header({
           alignItems="center"
           spacing={2}
         >
+          <UserAccess />
           <IconButton onClick={() => window.location.reload()}>
             <SyncIcon />
           </IconButton>

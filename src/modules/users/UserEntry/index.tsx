@@ -3,29 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import Drawer from '@mui/material/Drawer';
+import TextField from '@mui/material/TextField';
 import { sessionsEntry } from 'features/users/reducers';
 import { useAppDispatch, useAppSelector } from 'features/store';
 import { setUser } from 'features/users';
 import UserDetails from '../UserDetails';
-
-// const getTypingDiffs = (timestamps: number[]): number[] => {
-//   const diffs: number[] = [];
-//   timestamps.forEach((time, i) => {
-//     if (timestamps[i + 1]) {
-//       const diff = timestamps[i + 1] - time;
-//       diffs.push(diff);
-//     }
-//   });
-
-//   return diffs;
-// };
 
 function UserEntry() {
   const [isUserAccessed, setIsUserAccessed] = useState(false);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { user: accessedUser } = useAppSelector((state) => state.users);
-
+  const {
+    settings: { accessInput },
+  } = useAppSelector((state) => state.settings);
   const handleclose = () => {
     dispatch(setUser(null));
     setIsUserAccessed(false);
@@ -43,6 +34,7 @@ function UserEntry() {
           isSubscriptionExpired,
           message,
         }) => {
+          if (!user) return null;
           if (
             isEnteredThreeHoursAgo ||
             isMaxSessionsSpent ||
@@ -81,6 +73,7 @@ function UserEntry() {
       if (pressedKey === 'Enter' && scannedValue.length > 3) {
         setTimeout(() => {
           handleAccess(scannedValue);
+
           scannedValue = '';
           typingTimstamps = [];
         }, 500);
@@ -92,22 +85,40 @@ function UserEntry() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [userId, setUserId] = useState('');
+
+  const handleChange = (e: any) => {
+    setUserId(e.target.value);
+  };
+
   return (
-    <Drawer
-      anchor="right"
-      sx={{
-        '& > .MuiPaper-root': {
-          width: '70%',
-          p: 5,
-          backgroundColor: 'background.default',
-          overflowY: 'auto',
-        },
-      }}
-      open={!!accessedUser && isUserAccessed}
-      onClose={handleclose}
-    >
-      {accessedUser && <UserDetails />}
-    </Drawer>
+    <>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleAccess(userId);
+          setUserId('');
+        }}
+        style={{ display: accessInput ? 'block' : 'none' }}
+      >
+        <TextField onChange={handleChange} value={userId} size="small" />
+      </form>
+      <Drawer
+        anchor="right"
+        sx={{
+          '& > .MuiPaper-root': {
+            width: '70%',
+            p: 5,
+            backgroundColor: 'background.default',
+            overflowY: 'auto',
+          },
+        }}
+        open={!!accessedUser && isUserAccessed}
+        onClose={handleclose}
+      >
+        {accessedUser && <UserDetails />}
+      </Drawer>
+    </>
   );
 }
 

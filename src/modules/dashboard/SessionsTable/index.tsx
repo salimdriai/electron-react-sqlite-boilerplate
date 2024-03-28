@@ -62,7 +62,7 @@ export default function SessionsTable() {
           p={2}
           sx={{ height: 60 }}
         >
-          <Typography color="primary" variant="h6">
+          <Typography variant="h6">
             {' '}
             {t('common.freeSessionsLatest')}
           </Typography>

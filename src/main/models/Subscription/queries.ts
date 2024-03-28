@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Subscriptions(
   sessionsSpent INTEGER
 )`;
 
-export const getQuery = `SELECT * FROM Subscriptions`;
+export const getQuery = `SELECT * FROM Subscriptions LIMIT 10`;
 export const getUserSubscriptionsQuery = `SELECT * FROM Subscriptions WHERE userId = @userId`;
 
 export const createQuery = `INSERT INTO Subscriptions

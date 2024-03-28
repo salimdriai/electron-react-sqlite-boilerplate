@@ -37,8 +37,8 @@ const useChartOptions = () => {
       height: 350,
     },
     colors: [
-      theme.palette.primary.main,
-      alpha(theme.palette.primary.main, 0.25),
+      theme.palette.success.light,
+      alpha(theme.palette.success.light, 0.25),
     ],
 
     dataLabels: {
@@ -130,7 +130,6 @@ function AccessTimeChart({
       sx={{
         height: '100%',
         flex: 2,
-        '& .MuiTypography-root': { color: 'primary.main' },
       }}
     >
       <CardHeader title={t('user.entranceTime')} />

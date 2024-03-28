@@ -275,7 +275,8 @@ export default function UsersTable() {
                             e.stopPropagation();
                             manualEntry(row.id);
                           }}
-                          variant="outlined"
+                          // variant="outlined"
+                          color="info"
                           size="small"
                         >
                           {t('actions.manualEntry')}

@@ -34,9 +34,7 @@ function PlanCard(props: Props) {
     <Card variant="outlined" sx={{ p: 2 }}>
       <CardHeader
         sx={{ p: 0, mb: 1 }}
-        title={
-          <Typography color="secondary">{subscriptionPlan.name}</Typography>
-        }
+        title={<Typography>{subscriptionPlan.name}</Typography>}
         action={
           <Stack direction="row" spacing={2}>
             {editPlan && editPlan.id === subscriptionPlan.id && (

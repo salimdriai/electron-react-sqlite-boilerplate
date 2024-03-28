@@ -25,10 +25,15 @@ function Language() {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Stack direction="row" alignItems="center" spacing={1}>
-        <LanguageIcon color="secondary" />
+        <LanguageIcon color="info" />
         <Typography variant="h6">{t('common.language')}</Typography>
       </Stack>
-      <Select sx={{ width: 200 }} value={settings.lang} onChange={onChange}>
+      <Select
+        size="small"
+        sx={{ width: 200 }}
+        value={settings.lang}
+        onChange={onChange}
+      >
         {Object.entries(Lang).map(([key, value]) => (
           <MenuItem key={key} value={value}>
             {t(`settings.language.${value}`)}

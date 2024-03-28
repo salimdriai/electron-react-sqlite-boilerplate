@@ -5,40 +5,31 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-
-import { Themes } from 'types';
-import { switchTheme } from 'features/settings';
+import KeyboardIcon from '@mui/icons-material/Keyboard';
+import { showAccessInput } from 'features/settings';
 import { useAppDispatch, useAppSelector } from 'features/store';
 
-function Theme() {
+function AccessInput() {
   const { t } = useTranslation();
   const { settings } = useAppSelector((state) => state.settings);
   const dispatch = useAppDispatch();
 
   const onChange = async (e: any) => {
-    const isDark = e.target.checked;
-    dispatch(switchTheme(isDark ? Themes.Dark : Themes.Light));
+    const show = e.target.checked;
+    dispatch(showAccessInput(show));
   };
 
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Stack direction="row" alignItems="center" spacing={1}>
-        <DarkModeIcon color="info" />
-        <Typography variant="h6">
-          {t(`settings.theme.${settings.theme}`)}
-        </Typography>
+        <KeyboardIcon color="info" />
+        <Typography variant="h6">{t(`settings.accessInput.show`)}</Typography>
       </Stack>
       <FormControlLabel
-        control={
-          <Switch
-            onChange={onChange}
-            checked={settings.theme === Themes.Dark}
-          />
-        }
         label=""
+        control={<Switch onChange={onChange} checked={settings.accessInput} />}
       />
     </Stack>
   );
 }
-export default Theme;
+export default AccessInput;

@@ -52,10 +52,7 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
           alignItems="center"
           p={2}
         >
-          <Typography variant="h6" color="primary">
-            {' '}
-            {t('payments.history')}
-          </Typography>
+          <Typography variant="h6"> {t('payments.history')}</Typography>
         </Stack>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">

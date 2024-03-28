@@ -14,6 +14,7 @@ const initialState: InitialState = {
     lang: Lang.English,
     theme: Themes.Dark,
     gymName: 'Gym Boss',
+    accessInput: false,
   },
   loading: false,
   error: null,
@@ -31,9 +32,14 @@ const settingsSlice = createSlice({
       window.electron.setStoreData('settings.language', action.payload);
       state.settings.lang = action.payload;
     },
+    showAccessInput: (state, action) => {
+      window.electron.setStoreData('settings.accessInput', action.payload);
+      state.settings.accessInput = action.payload;
+    },
   },
 });
 
-export const { switchTheme, switchLanguage } = settingsSlice.actions;
+export const { switchTheme, switchLanguage, showAccessInput } =
+  settingsSlice.actions;
 
 export default settingsSlice.reducer;

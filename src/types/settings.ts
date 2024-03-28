@@ -20,4 +20,5 @@ export interface Settings {
   theme: Themes;
   lang: Lang;
   gymName: string;
+  accessInput: boolean;
 }

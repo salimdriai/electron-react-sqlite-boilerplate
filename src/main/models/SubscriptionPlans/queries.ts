@@ -6,7 +6,7 @@ export const createSubscriptionPlansTable = `CREATE TABLE IF NOT EXISTS Subscrip
   sessionsPerMonth INTEGER
 )`;
 
-export const getQuery = `SELECT * FROM SubscriptionPlans`;
+export const getQuery = `SELECT * FROM SubscriptionPlans LIMIT 3`;
 
 export const createQuery = `INSERT INTO SubscriptionPlans
 (id, name, monthPrice, sessionPrice, sessionsPerMonth)

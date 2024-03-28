@@ -46,7 +46,7 @@ const PaymentStats = ({
         value: `${revenueLastMonth} DA`,
         label: t('payments.lastMonth'),
         icon: <AttachMoneyIcon />,
-        color: 'primary.main',
+        color: 'info.dark',
         maxWidth: 'unset',
       },
       {
@@ -54,7 +54,7 @@ const PaymentStats = ({
         value: `${revenueThisMonth} DA`,
         label: t('payments.currentMonth'),
         icon: <AttachMoneyIcon />,
-        color: 'primary.main',
+        color: 'info.dark',
         maxWidth: 'unset',
       },
       {
@@ -62,7 +62,7 @@ const PaymentStats = ({
         value: `${revenueLastYear} DA`,
         label: `${t('payments.lastYear')}  ( ${new Date().getFullYear() - 1} )`,
         icon: <AttachMoneyIcon />,
-        color: 'secondary.main',
+        color: 'secondary.light',
         maxWidth: 'unset',
       },
       {
@@ -70,7 +70,7 @@ const PaymentStats = ({
         value: `${revenueThisYear} DA`,
         label: `${t('payments.currentYear')}  ( ${new Date().getFullYear()} )`,
         icon: <AttachMoneyIcon />,
-        color: 'secondary.main',
+        color: 'secondary.light',
         maxWidth: 'unset',
       },
     ];

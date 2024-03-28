@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 import Language from './Language';
 import Theme from './Theme';
 import Currency from './Currency';
+import AccessInput from './AccessInput';
 
 const AppSettings = () => {
   return (
@@ -11,6 +12,7 @@ const AppSettings = () => {
       <Language />
       <Currency />
       <Theme />
+      <AccessInput />
     </Card>
   );
 };

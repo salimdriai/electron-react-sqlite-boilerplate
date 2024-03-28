@@ -24,10 +24,16 @@ function Currency() {
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Stack direction="row" alignItems="center" spacing={1}>
-        <AttachMoneyIcon color="secondary" />
+        <AttachMoneyIcon color="info" />
         <Typography variant="h6">{t('common.currency')}</Typography>
       </Stack>
-      <Select disabled sx={{ width: 200 }} value="DZ" onChange={onChange}>
+      <Select
+        size="small"
+        disabled
+        sx={{ width: 200 }}
+        value="DZ"
+        onChange={onChange}
+      >
         <MenuItem value="DZ">DZ</MenuItem>
       </Select>
     </Stack>

@@ -113,7 +113,7 @@ export default function Notifications() {
               {unreadCount}
             </Typography>
           </Box>
-          <NotificationsActiveIcon />
+          <NotificationsActiveIcon color="primary" />
         </IconButton>
       </Tooltip>
       <Menu

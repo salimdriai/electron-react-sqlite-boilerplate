@@ -33,9 +33,10 @@ interface IForm extends User {
 interface IInfo {
   formMethods: UseFormReturn<IForm>;
   isEditMode: boolean;
+  blurQrCode: boolean;
 }
 
-const Info = ({ formMethods, isEditMode }: IInfo) => {
+const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
   const { state } = useLocation();
   const [isKeyLost, setIsKeyLost] = useState(false);
 
@@ -71,6 +72,19 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
 
   const removePhoto = () => {
     setCamera({ ...camera, photo: undefined });
+  };
+
+  const getQrCodeData = (): string => {
+    const { id, firstName, lastName, registeredAt, notes, subscriptions } =
+      watch();
+    return JSON.stringify({
+      id,
+      firstName,
+      lastName,
+      registeredAt,
+      notes,
+      subscriptions,
+    });
   };
 
   useEffect(() => {
@@ -109,7 +123,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
             <PhotoCameraIcon />
           )}
         </Card>
-        <QrCode value={watch('id')} />
+        <QrCode value={getQrCodeData()} blurQrCode={blurQrCode} />
       </Stack>
       <Box height={30}>
         {camera.photo && (
@@ -140,7 +154,7 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
           name="id"
           control={control}
           rules={{
-            min: 4,
+            minLength: 4,
             pattern: {
               value: /^[A-Za-z0-9]*$/,
               message: 'Only letters and numbers are allowed.',
@@ -168,6 +182,9 @@ const Info = ({ formMethods, isEditMode }: IInfo) => {
                     </Button>
                   ),
                 }),
+                inputProps: {
+                  min: 4,
+                },
               }}
             />
           )}

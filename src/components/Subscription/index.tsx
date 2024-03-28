@@ -386,9 +386,15 @@ const UserSubscription = ({
                   type="number"
                   value={payment.paid}
                   InputProps={{ endAdornment: <>DA</> }}
-                  onChange={(e) =>
-                    setPayment({ ...payment, paid: Number(e.target.value) })
-                  }
+                  onChange={(e) => {
+                    setPayment({
+                      ...payment,
+                      paid: Number(e.target.value),
+                      remaining:
+                        (getPlan(subscription.planId) as any).monthPrice -
+                        Number(e.target.value),
+                    });
+                  }}
                 />
                 <TextField
                   label={t('payments.remaining')}

@@ -46,9 +46,7 @@ const PaymentDetails = ({
       spacing={4}
     >
       <Stack spacing={1}>
-        <Typography color="secondary">
-          {t('subscriptions.subscriptions')}
-        </Typography>
+        <Typography>{t('subscriptions.subscriptions')}</Typography>
         <Divider />
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="body2" color="text.secondary">
@@ -84,7 +82,7 @@ const PaymentDetails = ({
         </Stack>
       </Stack>
       <Stack spacing={1}>
-        <Typography color="secondary">{t('common.freeSession')}</Typography>
+        <Typography>{t('common.freeSession')}</Typography>
         <Divider />
         <Stack direction="row" justifyContent="space-between">
           <Typography variant="body2" color="text.secondary">

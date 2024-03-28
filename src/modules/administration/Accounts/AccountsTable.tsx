@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import IconButton from '@mui/material/IconButton';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -95,14 +96,11 @@ export default function AccountsTable({
           alignItems="center"
           p={2}
         >
-          <Typography color="primary" variant="h6">
-            {' '}
-            {t('administration.accounts')}
-          </Typography>
+          <Typography variant="h6"> {t('administration.accounts')}</Typography>
           <Button
             startIcon={<AddIcon />}
             onClick={() => setOpenCreateAccount(true)}
-            variant="contained"
+            variant="outlined"
           >
             {t('account.add')}
           </Button>
@@ -125,7 +123,7 @@ export default function AccountsTable({
                     sx={{ cursor: 'pointer' }}
                   >
                     <TableCell>
-                      <Avatar sx={{ backgroundColor: 'secondary.main' }}>
+                      <Avatar sx={{ backgroundColor: 'info.light' }}>
                         {row.photo ? (
                           <img
                             // @ts-ignore
@@ -159,20 +157,14 @@ export default function AccountsTable({
                           startIcon={<DeleteIcon />}
                           onClick={handleClickDelete(row)}
                           color="error"
-                          variant="outlined"
                           disabled={row.username === 'admin'}
                         >
                           {t('actions.delete')}
                         </Button>
 
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          startIcon={<EditIcon />}
-                          onClick={handleClickEdit(row)}
-                        >
-                          {t('actions.edit')}
-                        </Button>
+                        <IconButton onClick={handleClickEdit(row)}>
+                          <EditIcon />
+                        </IconButton>
                       </Stack>
                     </TableCell>
                   </TableRow>

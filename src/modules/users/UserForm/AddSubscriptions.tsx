@@ -245,7 +245,13 @@ const AddSubscriptions = ({
                 value={payment.paid}
                 InputProps={{ endAdornment: <>DA</> }}
                 onChange={(e) =>
-                  setPayment({ ...payment, paid: Number(e.target.value) })
+                  setPayment({
+                    ...payment,
+                    paid: Number(e.target.value),
+                    remaining:
+                      getPlan(subscription.planId)?.monthPrice -
+                      Number(e.target.value),
+                  })
                 }
               />
               <TextField

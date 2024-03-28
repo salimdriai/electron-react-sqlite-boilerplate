@@ -43,13 +43,13 @@ export default class UserModel extends DB {
     return users;
   }
 
-  getOne(id: string): User {
+  getOne(id: string): User | undefined {
     const userStm = this.db.prepare(getOneQuery);
     const subStm = this.db.prepare(getUserSubscriptionsQuery);
     const user = userStm.get({ id });
-    const subscriptions = subStm.all({ userId: id });
-    user.subscriptions = subscriptions;
-    return user;
+    if (!user) return undefined;
+    const subscriptions = subStm.all({ userId: id }) || [];
+    return { ...user, subscriptions };
   }
 
   search(query: string): User[] {

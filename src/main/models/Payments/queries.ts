@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Payments(
   endsAt TEXT
 )`;
 
-export const getQuery = `SELECT * FROM Payments`;
+export const getQuery = `SELECT * FROM Payments LIMIT 5`;
 export const getUserPaymentsQuery = `SELECT * FROM Payments WHERE userId = @userId`;
 
 export const createQuery = `INSERT INTO Payments

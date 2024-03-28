@@ -19,7 +19,8 @@
       "goToUserInfo": "Aller aux informations utilisateur",
       "goToLogin": "Aller à la connexion",
       "manualEntry": "Entré manuel",
-      "renew": "Renouveler"
+      "renew": "Renouveler",
+      "take.photo": "Prendre une photo"
     },
     "info": {
       "id": "Identifiant",
@@ -56,7 +57,9 @@
       "keyLost": "Puce perdu",
       "clearFilters": "Supprimer les filtres",
       "mark.as.read": "Marquer comme lu",
-      "mark.as.unread": "Marquer comme non lu"
+      "mark.as.unread": "Marquer comme non lu",
+      "trial.version.limit": "Limite de la version d'essai atteinte !",
+      "contact.us": "Veuillez nous contacter pour obtenir la version complète."
     },
     "common": {
       "freeSession": "Séance libre",
@@ -122,7 +125,8 @@
       "username": "Nom",
       "createdAt": "Creé le",
       "permission": "Autorisation",
-      "role": "Rôle"
+      "role": "Rôle",
+      "no.subscriptions": "L'utilisateur n'a pas d'abonnements."
     },
     "account": {
       "add": "Ajouter un compte",
@@ -155,6 +159,9 @@
     },
     "settings": {
       "genaral": "Paramètres généraux",
+      "accessInput": {
+        "show": "afficher le champ d'accès"
+      },
       "plans": {
         "plans": "Plans d'abonnement",
         "add": "Ajouter un plan d'abonnement",

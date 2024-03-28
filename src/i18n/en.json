@@ -19,7 +19,8 @@
       "goToUserInfo": "Go to user info",
       "goToLogin": "Go to login",
       "manualEntry": "Manual entry",
-      "renew": "Renew"
+      "renew": "Renew",
+      "take.photo": "Take photo"
     },
     "info": {
       "id": "Id",
@@ -56,7 +57,9 @@
       "keyLost": "Key lost",
       "clearFilters": "Clear filters",
       "mark.as.read": "mark as read",
-      "mark.as.unread": "mark as unread"
+      "mark.as.unread": "mark as unread",
+      "trial.version.limit": "You reached the trial version limit !",
+      "contact.us": "Please contact us to get your full version"
     },
     "common": {
       "freeSession": "Free session",
@@ -123,7 +126,8 @@
       "username": "Name",
       "createdAt": "Created at",
       "permission": "Permission",
-      "role": "Role"
+      "role": "Role",
+      "no.subscriptions": "User have no subscriptions"
     },
     "account": {
       "add": "Add account",
@@ -156,6 +160,9 @@
     },
     "settings": {
       "genaral": "Generale settings",
+      "accessInput": {
+        "show": "show access input"
+      },
       "plans": {
         "plans": "Subscription plans",
         "add": "Add subscription plan",

@@ -19,8 +19,8 @@ const useChartOptions = () => {
       stacked: false,
     },
     colors: [
-      theme.palette.primary.main,
-      alpha(theme.palette.primary.main, 0.25),
+      theme.palette.secondary.main,
+      alpha(theme.palette.secondary.main, 0.25),
     ],
     dataLabels: {
       enabled: false,
