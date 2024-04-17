@@ -43,8 +43,9 @@ const UserForm = () => {
   const location = useLocation();
   const { state } = location;
   const isEditMode = React.useMemo(() => !!state, [state]);
-  const dispatch = useAppDispatch();
   const { users } = useAppSelector((s) => s.users);
+  const { activation } = useAppSelector((s) => s.settings);
+  const dispatch = useAppDispatch();
 
   const formMethods = useForm<IForm>({
     defaultValues: { ...userDefaultValues },
@@ -97,7 +98,7 @@ const UserForm = () => {
     }
 
     const allSubs = await window.electron.getAllSubscriptions();
-    if (allSubs.length > 9) {
+    if (allSubs.length > 9 && !activation.isActive) {
       toast.warning(t('info.trial.version.limit'));
       toast.info(t('info.contact.us'));
       return;
@@ -144,7 +145,7 @@ const UserForm = () => {
 
   const onSubmit = async (data: IForm) => {
     const allUsers = await window.electron.getAllUsers(Permission.Admin);
-    if (allUsers.length > 4 && !isEditMode) {
+    if (allUsers.length > 4 && !isEditMode && !activation.isActive) {
       toast.warning(t('info.trial.version.limit'));
       toast.info(t('info.contact.us'));
       return;

@@ -93,7 +93,10 @@
       "latestEntry": "Dernière entée",
       "latestPayment": "Dernière payment",
       "history": "Historique",
-      "currency": "Devise"
+      "currency": "Devise",
+      "activationKey": "Clé d'activation",
+      "keyRequired": "Clé Requis",
+      "empty": "vide"
     },
     "user": {
       "users": "Membres",

@@ -1,4 +1,4 @@
-export const getAllQuery = 'SELECT * FROM Users LIMIT 5';
+export const getAllQuery = 'SELECT * FROM Users';
 
 export const getByPermission = `SELECT * FROM Users WHERE sex = @sex`;
 

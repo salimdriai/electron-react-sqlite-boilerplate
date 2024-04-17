@@ -4,7 +4,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { styled } from '@mui/material/styles';
 import { Sex, User, BloodType } from 'types/user';
 
-export const userDefaultValues: User = {
+export const userDefaultValues: Omit<User, 'subscriptions'> = {
   id: '',
   firstName: '',
   lastName: '',

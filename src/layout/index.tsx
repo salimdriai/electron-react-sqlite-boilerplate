@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import Marquee from 'react-fast-marquee';
 import Box from '@mui/material/Box';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
@@ -11,9 +12,9 @@ import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import FreeSession from 'modules/free-session';
+import { useAppSelector } from 'features/store';
 import SideNavigation from './SideNavigation';
 import Header from './Header';
-
 import logo from '../../assets/icon.png';
 
 const drawerWidth = 240;
@@ -70,10 +71,11 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function SidebarLayout({ page }: Props) {
+  const [open, setOpen] = React.useState(false);
   const [freeSessionsModalOpen, setFreeSessionModalOpen] =
     React.useState(false);
 
-  const [open, setOpen] = React.useState(false);
+  const { activation } = useAppSelector((state) => state.settings);
 
   const onFreeSessionModalClose = () => {
     setFreeSessionModalOpen(false);
@@ -85,6 +87,7 @@ function SidebarLayout({ page }: Props) {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <CssBaseline />
+
       <Header openFreeSessionModal={openFreeSessionModal} open={open} />
 
       <Drawer open={open} variant="permanent" anchor="left">
@@ -115,6 +118,29 @@ function SidebarLayout({ page }: Props) {
         }}
       >
         <Toolbar />
+        {!activation.isActive && (
+          <Marquee
+            style={{
+              backgroundColor: 'yellow',
+              color: 'black',
+              display: 'flex',
+              gap: 30,
+            }}
+            pauseOnHover
+            speed={80}
+          >
+            <Typography>
+              Version d&apos;essai, contactez-nous pour obtenir la version
+              complète
+            </Typography>
+            {' ------> '}
+            <Typography> 0555 22 00 08</Typography>
+            {' <------ '}
+            <Typography>
+              هذه نسخة تجريبية، اتصل بنا للحصول على النسخة الكاملة
+            </Typography>
+          </Marquee>
+        )}
         <Box flex={1}>{page}</Box>
         <Box>
           <Typography variant="body2" color="text.secondary" align="right">

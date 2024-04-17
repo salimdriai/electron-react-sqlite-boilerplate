@@ -37,6 +37,7 @@ function FreeSession({
 
   const dispatch = useAppDispatch();
   const { permission } = useAppSelector((state) => state.authentication);
+  const { activation } = useAppSelector((state) => state.settings);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelected(event.target.value);
@@ -61,7 +62,7 @@ function FreeSession({
 
   const handleAddSession = async () => {
     const allFreeSessions = await window.electron.getFreeSessions();
-    if (allFreeSessions.length > 4) {
+    if (allFreeSessions.length > 4 && !activation.isActive) {
       toast.warning(t('info.trial.version.limit'));
       toast.info(t('info.contact.us'));
       return;

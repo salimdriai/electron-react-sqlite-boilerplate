@@ -107,6 +107,12 @@ function UserDetails({ manualEntry }: { manualEntry?: (id: string) => void }) {
             {t('actions.delete')}
           </Button>
           <Button
+            onClick={() => manualEntry && manualEntry(userDetails.id)}
+            variant="outlined"
+          >
+            {t('actions.manualEntry')} {`(${t('info.keyLost')})`}
+          </Button>
+          <Button
             variant="contained"
             size="small"
             startIcon={<EditIcon />}
@@ -154,14 +160,6 @@ function UserDetails({ manualEntry }: { manualEntry?: (id: string) => void }) {
       </Box>
 
       <Box flex={1} />
-      <Stack pb={2}>
-        <Button
-          onClick={() => manualEntry && manualEntry(userDetails.id)}
-          variant="outlined"
-        >
-          {t('actions.manualEntry')} {`(${t('info.keyLost')})`}
-        </Button>
-      </Stack>
 
       <Dialog open={!!deleteUser} onClose={() => setDeleteUser(null)}>
         <DialogTitle>{t('user.delete')}</DialogTitle>

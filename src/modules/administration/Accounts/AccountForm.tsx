@@ -13,6 +13,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { toast } from 'react-toastify';
 import { Role, Permission, Account } from 'types';
+import { useAppSelector } from 'features/store';
 
 function AccountForm({
   closeDialog,
@@ -25,16 +26,17 @@ function AccountForm({
   editAccount: Account | null;
   formMethods: UseFormReturn<any>;
 }) {
-  const { t } = useTranslation();
-
   const isEditMode = useMemo(() => !!editAccount, [editAccount]);
 
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
   const { handleSubmit, control, watch, reset, setValue } = formMethods;
+  const { activation } = useAppSelector((state) => state.settings);
+  const { t } = useTranslation();
 
   const createAccount = async (account: Account) => {
     const allAccounts = await window.electron.getAllAccounts();
-    if (allAccounts.length > 2) {
+    if (allAccounts.length > 2 && !activation.isActive) {
       toast.warning(t('info.trial.version.limit'));
       toast.info(t('info.contact.us'));
       return;

@@ -7,7 +7,7 @@ const QrCode = ({
   blurQrCode,
 }: {
   value: string;
-  blurQrCode: boolean;
+  blurQrCode?: boolean;
 }) => {
   return (
     <Card

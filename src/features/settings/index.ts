@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
-import { Lang, Settings, Themes } from 'types';
+import { ActivationData, Lang, Settings, Themes } from 'types';
+import activation from '../../../activation.json';
 
 interface InitialState {
   settings: Settings;
+  activation: ActivationData;
   loading: boolean;
   error: any;
 }
@@ -13,9 +15,10 @@ const initialState: InitialState = {
   settings: {
     lang: Lang.English,
     theme: Themes.Dark,
-    gymName: 'Gym Boss',
+    gymName: 'FlexFit',
     accessInput: false,
   },
+  activation: { ...activation },
   loading: false,
   error: null,
 };
@@ -36,10 +39,17 @@ const settingsSlice = createSlice({
       window.electron.setStoreData('settings.accessInput', action.payload);
       state.settings.accessInput = action.payload;
     },
+    updateActivationData: (state, action) => {
+      state.activation = action.payload;
+    },
   },
 });
 
-export const { switchTheme, switchLanguage, showAccessInput } =
-  settingsSlice.actions;
+export const {
+  switchTheme,
+  switchLanguage,
+  showAccessInput,
+  updateActivationData,
+} = settingsSlice.actions;
 
 export default settingsSlice.reducer;

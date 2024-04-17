@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,6 +13,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import SyncIcon from '@mui/icons-material/Sync';
 import UserAccess from 'modules/users/UserEntry';
 import Notifications from 'modules/notifications';
+import { useAppSelector } from 'features/store';
 import AccountMenu from './AccountMenu';
 
 const drawerWidth = 240;
@@ -48,6 +49,8 @@ export default function Header({
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { activation } = useAppSelector((state) => state.settings);
+
   return (
     <AppBar
       open={open}
@@ -85,6 +88,11 @@ export default function Header({
           alignItems="center"
           spacing={2}
         >
+          {!activation.isActive && (
+            <Link style={{ color: 'lightgreen' }} to="/activation">
+              {t('actions.activate')}
+            </Link>
+          )}
           <UserAccess />
           <IconButton onClick={() => window.location.reload()}>
             <SyncIcon />

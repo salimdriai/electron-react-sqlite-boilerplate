@@ -99,20 +99,22 @@ export default function Notifications() {
             backgroundColor: 'background.paper',
           }}
         >
-          <Box
-            sx={{
-              width: 24,
-              borderRadius: '50%',
-              position: 'absolute',
-              top: -6,
-              right: -8,
-              bgcolor: 'red',
-            }}
-          >
-            <Typography color="white" fontSize={14} fontWeight={700}>
-              {unreadCount}
-            </Typography>
-          </Box>
+          {unreadCount > 0 && (
+            <Box
+              sx={{
+                width: 24,
+                borderRadius: '50%',
+                position: 'absolute',
+                top: -6,
+                right: -8,
+                bgcolor: 'red',
+              }}
+            >
+              <Typography color="white" fontSize={14} fontWeight={700}>
+                {unreadCount}
+              </Typography>
+            </Box>
+          )}
           <NotificationsActiveIcon color="primary" />
         </IconButton>
       </Tooltip>
@@ -137,7 +139,7 @@ export default function Notifications() {
               justifyContent: 'center',
             }}
           >
-            empty
+            {t('common:empty')}
           </MenuItem>
         ) : (
           notifications.map((notif) => (
@@ -162,7 +164,13 @@ export default function Notifications() {
                     notif.username.charAt(0).toUpperCase()
                   )}
                 </Avatar>
-                <Stack spacing={0.5} sx={{ opacity: notif.isRead ? 0.5 : 1 }}>
+                <Stack
+                  spacing={0.5}
+                  sx={{
+                    opacity: notif.isRead ? 0.5 : 1,
+                    '&:hover': { opacity: 1 },
+                  }}
+                >
                   <Typography variant="body2" sx={{ lineHeight: 1 }}>
                     <b>{notif.username}</b> -{' '}
                     <span style={{ fontSize: 12 }}>{notif.createdAt}</span>
@@ -202,12 +210,6 @@ export default function Notifications() {
                     )}
                   </IconButton>
                 </Tooltip>
-                {/* <IconButton
-                  onClick={removeNotification(notif.id as string)}
-                  edge="end"
-                >
-                  <DeleteOutlineIcon color="error" />
-                </IconButton> */}
               </Stack>
             </MenuItem>
           ))

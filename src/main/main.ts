@@ -9,10 +9,12 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+import fs from 'fs';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import getMac from 'getmac';
 import {
   User as IUser,
   Account as IAccount,
@@ -34,6 +36,8 @@ import SubscriptionPlanModel from './models/SubscriptionPlans';
 import SubscriptionsModel from './models/Subscription';
 import PaymentsModel from './models/Payments';
 import NotifcationsModel from './models/Notification';
+import activation from '../../activation.json';
+import webpackPaths from '../../.erb/configs/webpack.paths';
 
 class AppUpdater {
   constructor() {
@@ -95,6 +99,7 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      webSecurity: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
@@ -153,8 +158,22 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    /* const db = new DB();
-    db.connect(); */
+    const mac = getMac();
+    const savedMac = activation.mac;
+
+    console.log('mac', mac);
+    console.log('savedMac', savedMac);
+
+    // if (mac) {
+    //   dialog.showMessageBoxSync({
+    //     type: 'error',
+    //     title: 'Address',
+    //     message: `your address is : ${mac}`,
+    //   });
+
+    //   app.quit();
+    //   return;
+    // }
 
     const User = new UserModel();
     const Account = new AccountModel();
@@ -163,6 +182,34 @@ app
     const Subscriptions = new SubscriptionsModel();
     const Payments = new PaymentsModel();
     const Notifcations = new NotifcationsModel();
+
+    // machine address
+    ipcMain.handle('getMac', async () => mac);
+
+    // app activation
+    ipcMain.handle('activate', async (_, data: any) => {
+      console.log('DATA---', data);
+      const saveActivation = () => {
+        const json = JSON.stringify(data);
+        console.log('json----', json);
+        const filePath = path.join(webpackPaths.rootPath, 'activation.json');
+
+        return new Promise((resolve, reject) => {
+          console.log('JSON', json);
+          fs.writeFile(filePath, json, 'utf8', (err) => {
+            if (err) {
+              console.log('ERROR');
+              reject(err);
+            } else {
+              resolve({ success: true });
+            }
+          });
+        });
+      };
+
+      const result = await saveActivation();
+      return result;
+    });
 
     // users ----------------------
     ipcMain.handle('user:getAll', async (_, permission: string) => {
@@ -372,9 +419,5 @@ app
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
     });
-
-    /* nfc.on('error', (err) => {
-      console.log('an error occurred', err);
-    }); */
   })
   .catch(console.log);

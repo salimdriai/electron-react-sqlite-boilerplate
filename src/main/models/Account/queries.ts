@@ -1,7 +1,7 @@
 export const logAccountQuery =
   'SELECT * FROM Accounts WHERE username = @username AND password = @password';
 
-export const getAllQuery = 'SELECT * FROM Accounts LIMIT 3';
+export const getAllQuery = 'SELECT * FROM Accounts';
 export const getOneQuery = 'SELECT * FROM Accounts WHERE username = @username';
 export const removeQuery = 'DELETE FROM Accounts WHERE username = @username';
 

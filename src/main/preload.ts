@@ -10,6 +10,7 @@ import {
   SubscriptionPlan,
   User,
   Notification,
+  ActivationData,
 } from 'types';
 
 export type Channels = 'ipc-example';
@@ -32,6 +33,12 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
+
+  // machine address
+  getMac: () => ipcRenderer.invoke('getMac'),
+
+  // activation
+  activateApp: (data: ActivationData) => ipcRenderer.invoke('activate', data),
 
   // users ----------------------
   getAllUsers: (permission: string) =>
@@ -56,8 +63,6 @@ const electronHandler = {
     ipcRenderer.invoke('account:update', account),
   removeAccount: (username: string) =>
     ipcRenderer.invoke('account:remove', username),
-  activateApp: () => ipcRenderer.invoke('app:activate'),
-  isAppActivated: () => ipcRenderer.invoke('app:isActivated'),
 
   // free session ----------------
   getFreeSessions: () => ipcRenderer.invoke('freeSession:getAll'),

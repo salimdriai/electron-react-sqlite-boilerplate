@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { Permission } from 'types';
-
 import SidebarLayout from '../layout';
 import LoginPage from './login';
 import DashboardPage from './dashboard';
@@ -71,7 +70,7 @@ const privateRoutes = [
   {
     path: '/activation',
     element: <ActivationPage />,
-    adminOnly: false,
+    adminOnly: true,
     isFullScreen: true,
   },
 ];

@@ -1,4 +1,4 @@
-export const getQuery = `SELECT * FROM FreeSessions LIMIT 5`;
+export const getQuery = `SELECT * FROM FreeSessions`;
 export const createQuery = `INSERT INTO FreeSessions
 (firstName, lastName, plansIds, enteredAt, totalPaid)
 VALUES (@firstName, @lastName, @plansIds, @enteredAt, @totalPaid)

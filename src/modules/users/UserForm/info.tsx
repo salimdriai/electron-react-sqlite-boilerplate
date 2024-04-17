@@ -77,6 +77,7 @@ const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
   const getQrCodeData = (): string => {
     const { id, firstName, lastName, registeredAt, notes, subscriptions } =
       watch();
+
     return JSON.stringify({
       id,
       firstName,

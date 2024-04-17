@@ -44,7 +44,7 @@ import UserDetails from '../UserDetails';
 export default function UsersTable() {
   const [page, setPage] = React.useState(0);
   const [seachQuery, setSearchQuery] = React.useState('');
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [openUserDetails, setOpenUserDetails] = React.useState(false);
 
   const { t } = useTranslation();
@@ -72,13 +72,8 @@ export default function UsersTable() {
   const handleSearch = async (e: any) => {
     setSearchQuery(e.target.value);
     const query = e.target.value.toLowerCase();
-
-    try {
-      const result = await window.electron.searchUsers(query);
-      dispatch(setUsers(result));
-    } catch (error) {
-      console.error('ERRR', error);
-    }
+    const result = await window.electron.searchUsers(query);
+    dispatch(setUsers(result));
   };
 
   const handleClearSearch = async () => {

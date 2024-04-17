@@ -50,6 +50,7 @@ const onMonthFromDate = (date: Date | string) => {
 
 const getSubscriptionInitial = (plan: SubscriptionPlan) => ({
   planId: plan.id as string,
+  planName: plan.name,
   startedAt: new Date().toDateString(),
   endsAt: onMonthFromDate(new Date()),
   paid: plan.monthPrice,
@@ -249,7 +250,7 @@ const AddSubscriptions = ({
                     ...payment,
                     paid: Number(e.target.value),
                     remaining:
-                      getPlan(subscription.planId)?.monthPrice -
+                      (getPlan(subscription.planId) as any).monthPrice -
                       Number(e.target.value),
                   })
                 }

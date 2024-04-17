@@ -9,16 +9,17 @@ export enum Lang {
   French = 'fr',
 }
 
-// export interface Subscription {
-//   name: string;
-//   monthPrice: number;
-//   sessionPrice: number;
-//   sessionsPerMonth: number;
-// }
-
 export interface Settings {
   theme: Themes;
   lang: Lang;
   gymName: string;
   accessInput: boolean;
+}
+
+export interface ActivationData {
+  key: string;
+  mac: string;
+  clientName: string;
+  phoneNumber: string;
+  isActive: boolean;
 }

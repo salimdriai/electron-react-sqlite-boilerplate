@@ -93,7 +93,10 @@
       "latestEntry": "Last entry",
       "latestPayment": "Last payment",
       "history": "History",
-      "currency": "Currency"
+      "currency": "Currency",
+      "activationKey": "Activation key",
+      "keyRequired": "Key is required",
+      "empty": "empty"
     },
     "user": {
       "users": "Users",

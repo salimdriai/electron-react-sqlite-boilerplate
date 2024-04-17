@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Payment } from 'types';
+import activation from '../../../activation.json';
 
 export const createPayment = createAsyncThunk(
   'createPayment',
@@ -11,6 +12,9 @@ export const createPayment = createAsyncThunk(
 
 export const getAllPayments = createAsyncThunk('getPayments', async () => {
   const payments = await window.electron.getAllPayments();
+  if (!activation.isActive && payments.length > 5) {
+    return payments.slice(0, 5);
+  }
   return payments as Payment[];
 });
 

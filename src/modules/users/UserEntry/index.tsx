@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { sessionsEntry } from 'features/users/reducers';
 import { useAppDispatch, useAppSelector } from 'features/store';
 import { setUser } from 'features/users';
@@ -47,6 +50,7 @@ function UserEntry() {
 
           setIsUserAccessed(true);
           dispatch(setUser(user));
+          setTimeout(() => handleclose(), 10000);
           return null;
         }
       )
@@ -81,7 +85,10 @@ function UserEntry() {
     };
     document.addEventListener('keydown', accessListener);
 
-    return () => document.removeEventListener('keydown', accessListener);
+    return () => {
+      setIsUserAccessed(false);
+      document.removeEventListener('keydown', accessListener);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -104,10 +111,10 @@ function UserEntry() {
         <TextField onChange={handleChange} value={userId} size="small" />
       </form>
       <Drawer
-        anchor="right"
+        anchor="top"
         sx={{
           '& > .MuiPaper-root': {
-            width: '70%',
+            width: '100%',
             p: 5,
             backgroundColor: 'background.default',
             overflowY: 'auto',
@@ -117,6 +124,11 @@ function UserEntry() {
         onClose={handleclose}
       >
         {accessedUser && <UserDetails />}
+        <Stack alignItems="center">
+          <IconButton>
+            <KeyboardArrowUpIcon color="primary" />
+          </IconButton>
+        </Stack>
       </Drawer>
     </>
   );

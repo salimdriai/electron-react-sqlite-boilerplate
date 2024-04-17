@@ -45,6 +45,11 @@ export default function App() {
     dispatch(showAccessInput(settings.accessInput || false));
   };
 
+  const getMac = async () => {
+    const mac = await window.electron.getMac();
+    console.log('MAC', mac);
+  };
+
   useEffect(() => {
     dispatch(currentUser());
     initSettings();
@@ -59,6 +64,7 @@ export default function App() {
       }
     };
     activate();
+    getMac();
   }, []);
 
   return (

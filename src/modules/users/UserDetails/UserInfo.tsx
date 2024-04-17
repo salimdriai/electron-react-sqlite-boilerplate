@@ -27,6 +27,20 @@ function UserInfo({ user }: { user: User }) {
     return res;
   }, [userPayments]);
 
+  const getQrCodeData = (): string => {
+    const { id, firstName, lastName, registeredAt, notes, subscriptions } =
+      user;
+
+    return JSON.stringify({
+      id,
+      firstName,
+      lastName,
+      registeredAt,
+      notes,
+      subscriptions,
+    });
+  };
+
   useEffect(() => {
     dispatch(getUserPayments(user.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +79,7 @@ function UserInfo({ user }: { user: User }) {
               </Typography>
             </Box>
             <Box>
-              <QrCode value={user.id} />
+              <QrCode value={getQrCodeData()} />
             </Box>
           </Stack>
         </CardContent>

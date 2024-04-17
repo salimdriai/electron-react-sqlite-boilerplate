@@ -10,6 +10,7 @@ export interface Subscription {
   id?: string;
   userId: string;
   planId: string;
+  planName: string;
   startedAt: string;
   endsAt: string;
   paid: number;
