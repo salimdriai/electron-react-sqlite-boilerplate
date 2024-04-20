@@ -9,43 +9,33 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import fs from 'fs';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import Store from 'electron-store';
-import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
+// import { autoUpdater } from 'electron-updater';
+// import log from 'electron-log';
 import getMac from 'getmac';
-import {
-  User as IUser,
-  Account as IAccount,
-  FreeSession as IFreeSession,
-  SubscriptionPlan as ISubscriptionPlan,
-  Payment as IPayment,
-  Subscription,
-  Notification as INotifcations,
-} from 'types';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { decryptData } from './utils/Encription';
-
 import DB from './db';
-import UserModel from './models/User';
 import AccountModel from './models/Account';
-import FreeSessionModel from './models/FreeSession';
-import SubscriptionPlanModel from './models/SubscriptionPlans';
-import SubscriptionsModel from './models/Subscription';
-import PaymentsModel from './models/Payments';
-import NotifcationsModel from './models/Notification';
-import activation from '../../activation.json';
-import webpackPaths from '../../.erb/configs/webpack.paths';
+import { SECRET_KEY, SECRET_IV } from '../config/keys';
+import * as UsersIPC from './ipc/usersIpc';
+import * as SubscriptionPlansIPC from './ipc/subscriptionPlansIpc';
+import * as SubscriptionsIPC from './ipc/subscriptionsIpc';
+import * as AccountsIPC from './ipc/accountsIpc';
+import * as PaymentsIPC from './ipc/paymentsIpc';
+import * as NotificationsIPC from './ipc/notificationsIpc';
+import * as FreeSessionsIPC from './ipc/freeSessionsIpc';
+import * as StoreIPC from './ipc/storeIpc';
 
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
+// class AppUpdater {
+//   constructor() {
+//     log.transports.file.level = 'info';
+//     autoUpdater.logger = log;
+//     // autoUpdater.checkForUpdatesAndNotify();
+//     autoUpdater.autoDownload = false;
+//   }
+// }
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -134,7 +124,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 };
 
 /**
@@ -142,9 +132,10 @@ const createWindow = async () => {
  */
 
 app.on('before-quit', () => {
-  // Close the database connection
   const db = new DB();
   db.close();
+
+  window.localStorage.clear();
 });
 
 app.on('window-all-closed', () => {
@@ -157,259 +148,97 @@ app.on('window-all-closed', () => {
 
 app
   .whenReady()
-  .then(() => {
+  .then(async () => {
     const mac = getMac();
-    const savedMac = activation.mac;
 
-    console.log('mac', mac);
-    console.log('savedMac', savedMac);
-
-    // if (mac) {
-    //   dialog.showMessageBoxSync({
-    //     type: 'error',
-    //     title: 'Address',
-    //     message: `your address is : ${mac}`,
-    //   });
-
-    //   app.quit();
-    //   return;
-    // }
-
-    const User = new UserModel();
     const Account = new AccountModel();
-    const FreeSession = new FreeSessionModel();
-    const SubscriptionPlan = new SubscriptionPlanModel();
-    const Subscriptions = new SubscriptionsModel();
-    const Payments = new PaymentsModel();
-    const Notifcations = new NotifcationsModel();
+    const licenseData = await Account.getLicenseData();
+    const savedMac = licenseData.mac;
+    const isActivated = licenseData.isActive;
+
+    if (isActivated && mac !== savedMac) {
+      dialog.showMessageBoxSync({
+        type: 'error',
+        title: 'Cannot use the app on this PC!',
+        message: `The app can be used only on the pc where it is first activated.`,
+      });
+
+      app.quit();
+      return;
+    }
 
     // machine address
     ipcMain.handle('getMac', async () => mac);
 
     // app activation
     ipcMain.handle('activate', async (_, data: any) => {
-      console.log('DATA---', data);
-      const saveActivation = () => {
-        const json = JSON.stringify(data);
-        console.log('json----', json);
-        const filePath = path.join(webpackPaths.rootPath, 'activation.json');
-
-        return new Promise((resolve, reject) => {
-          console.log('JSON', json);
-          fs.writeFile(filePath, json, 'utf8', (err) => {
-            if (err) {
-              console.log('ERROR');
-              reject(err);
-            } else {
-              resolve({ success: true });
-            }
-          });
-        });
-      };
-
-      const result = await saveActivation();
+      const result = await Account.setLicenseData(data);
       return result;
     });
 
+    ipcMain.handle('getLicenseData', () => {
+      return licenseData;
+    });
+
     // users ----------------------
-    ipcMain.handle('user:getAll', async (_, permission: string) => {
-      const users = await User.getAll(permission);
-      return users;
-    });
-    ipcMain.handle('user:getOne', async (_, id: string) => {
-      const user = await User.getOne(id);
-      return user;
-    });
-    ipcMain.handle('user:search', async (_, query: string) => {
-      const users = await User.search(query);
-      return users;
-    });
-    ipcMain.handle('user:create', async (_, user: IUser) => {
-      await User.create(user);
-      return user;
-    });
-    ipcMain.handle('user:update', async (_, user: IUser, id: string) => {
-      await User.update(user, id);
-      return user;
-    });
-    ipcMain.handle('user:remove', async (_, id: string) => {
-      await User.remove(id);
-    });
-    ipcMain.handle('user:removeAll', async () => {
-      await User.removeAll();
-    });
+    ipcMain.handle('user:getAll', UsersIPC.getAll);
+    ipcMain.handle('user:getOne', UsersIPC.getOne);
+    ipcMain.handle('user:create', UsersIPC.create);
+    ipcMain.handle('user:search', UsersIPC.search);
+    ipcMain.handle('user:update', UsersIPC.update);
+    ipcMain.handle('user:remove', UsersIPC.remove);
+    ipcMain.handle('user:removeAll', UsersIPC.removeAll);
 
     // subscription plans -------------
-    ipcMain.handle('subscriptionPlan:getAll', async () => {
-      const users = await SubscriptionPlan.getAll();
-      return users;
-    });
-
-    ipcMain.handle(
-      'subscriptionPlan:create',
-      async (_, plan: ISubscriptionPlan) => {
-        await SubscriptionPlan.create(plan);
-        return plan;
-      }
-    );
-    ipcMain.handle(
-      'subscriptionPlan:update',
-      async (_, plan: ISubscriptionPlan) => {
-        await SubscriptionPlan.update(plan);
-        return plan;
-      }
-    );
+    ipcMain.handle('subscriptionPlan:getAll', SubscriptionPlansIPC.getAll);
+    ipcMain.handle('subscriptionPlan:create', SubscriptionPlansIPC.create);
+    ipcMain.handle('subscriptionPlan:update', SubscriptionPlansIPC.update);
 
     // subscriptions -------------------
-    ipcMain.handle('subscriptions:getAll', async () => {
-      const subscriptions = Subscriptions.getAll();
-      return subscriptions;
-    });
-
+    ipcMain.handle('subscriptions:getAll', SubscriptionsIPC.getAll);
+    ipcMain.handle('subscriptions:create', SubscriptionsIPC.create);
+    ipcMain.handle('subscriptions:update', SubscriptionsIPC.update);
+    ipcMain.handle('subscriptions:delete', SubscriptionsIPC.remove);
     ipcMain.handle(
       'subscriptions:getUserSubscriptions',
-      async (_, userId: string) => {
-        const subscriptions = Subscriptions.get(userId);
-        return subscriptions;
-      }
+      SubscriptionsIPC.getUserSubscriptions
     );
-
-    ipcMain.handle(
-      'subscriptions:create',
-      async (_, subscription: Subscription) => {
-        const res = await Subscriptions.create(subscription);
-        return res;
-      }
-    );
-
-    ipcMain.handle(
-      'subscriptions:update',
-      async (_, subscription: Subscription) => {
-        await Subscriptions.update(subscription);
-        return subscription;
-      }
-    );
-
-    ipcMain.handle('subscriptions:delete', async (_, id: string) => {
-      await Subscriptions.delete(id);
-    });
 
     // account ---------------------
-    ipcMain.handle('account:getAll', async () => {
-      const users = await Account.getAll();
-      return users;
-    });
-    ipcMain.handle(
-      'account:logAccount',
-      async (_, username: string, password: string) => {
-        const account = await Account.logAccount(username, password);
-        return account;
-      }
-    );
-    ipcMain.handle('account:getOne', async (_, username: string) => {
-      const account = await Account.getOne(username);
-      return account;
-    });
-    ipcMain.handle('account:insert', async (_, account: IAccount) => {
-      await Account.create(account);
-      return account;
-    });
-    ipcMain.handle('account:update', async (_, account: IAccount) => {
-      await Account.update(account);
-      return account;
-    });
-    ipcMain.handle('account:remove', async (_, username: string) => {
-      await Account.remove(username);
-    });
-
-    ipcMain.handle('data:decrypt', async (_, data: string) => {
-      const decryptedData = decryptData(data);
-      return decryptedData;
-    });
-
-    ipcMain.handle('app:activate', async () => {
-      const res = await Account.activateApp();
-      return res;
-    });
-    ipcMain.handle('app:isActivated', async () => {
-      const res = await Account.isAppActivated();
-      return res;
-    });
+    ipcMain.handle('account:getAll', AccountsIPC.getAll);
+    ipcMain.handle('account:logAccount', AccountsIPC.logAccount);
+    ipcMain.handle('account:getOne', AccountsIPC.getOne);
+    ipcMain.handle('account:insert', AccountsIPC.create);
+    ipcMain.handle('account:update', AccountsIPC.update);
+    ipcMain.handle('account:remove', AccountsIPC.remove);
+    ipcMain.handle('account:initAdmin', AccountsIPC.initAdmin);
 
     // free session
-
-    ipcMain.handle('freeSession:getAll', async () => {
-      const freeSessions = await FreeSession.get();
-      return freeSessions;
-    });
-
-    ipcMain.handle('freeSession:create', async (_, session: IFreeSession) => {
-      await FreeSession.create(session);
-      return session;
-    });
-    ipcMain.handle('freeSession:update', async (_, session: IFreeSession) => {
-      await FreeSession.update(session);
-      return session;
-    });
-    ipcMain.handle('freeSession:delete', async (_, id: string) => {
-      await FreeSession.remove(id);
-    });
+    ipcMain.handle('freeSession:getAll', FreeSessionsIPC.getAll);
+    ipcMain.handle('freeSession:create', FreeSessionsIPC.create);
+    ipcMain.handle('freeSession:update', FreeSessionsIPC.update);
+    ipcMain.handle('freeSession:delete', FreeSessionsIPC.remove);
 
     // payments
-
-    ipcMain.handle('payments:getAll', async () => {
-      const payments = await Payments.getAll();
-      return payments;
-    });
-    ipcMain.handle('payments:getUserPayments', async (_, userId) => {
-      const payments = await Payments.get(userId);
-      return payments;
-    });
-    ipcMain.handle('payments:create', async (_, payment: IPayment) => {
-      await Payments.create(payment);
-      return payment;
-    });
-    ipcMain.handle('payments:update', async (_, payment: IPayment) => {
-      await Payments.update(payment);
-      return payment;
-    });
+    ipcMain.handle('payments:getAll', PaymentsIPC.getAll);
+    ipcMain.handle('payments:getUserPayments', PaymentsIPC.getOne);
+    ipcMain.handle('payments:create', PaymentsIPC.create);
+    ipcMain.handle('payments:update', PaymentsIPC.update);
 
     // notifications
-
-    ipcMain.handle('notifications:getAll', async () => {
-      const notifications = await Notifcations.getAll();
-      return notifications;
-    });
-    ipcMain.handle(
-      'notifications:create',
-      async (_, notification: INotifcations) => {
-        await Notifcations.create(notification);
-        return notification;
-      }
-    );
-    ipcMain.handle(
-      'notifications:update',
-      async (_, notification: INotifcations) => {
-        await Notifcations.update(notification);
-        return notification;
-      }
-    );
-    ipcMain.handle('notifications:delete', async (_, id: string) => {
-      await Notifcations.delete(id);
-    });
+    ipcMain.handle('notifications:getAll', NotificationsIPC.getAll);
+    ipcMain.handle('notifications:create', NotificationsIPC.create);
+    ipcMain.handle('notifications:update', NotificationsIPC.update);
+    ipcMain.handle('notifications:delete', NotificationsIPC.remove);
 
     // store
+    ipcMain.handle('store:get', StoreIPC.getData);
+    ipcMain.handle('store:set', StoreIPC.setData);
 
-    ipcMain.handle('store:get', async (_, key) => {
-      const store = new Store();
-      const data = store.get(key);
-      return data;
-    });
-
-    ipcMain.handle('store:set', async (_, key, data) => {
-      const store = new Store();
-      await store.set(key, data);
-      return data;
+    // other
+    ipcMain.handle('data:decrypt', async (_, data: string) => {
+      const decryptedData = decryptData(data, SECRET_KEY, SECRET_IV);
+      return decryptedData;
     });
 
     createWindow();

@@ -39,6 +39,7 @@ const electronHandler = {
 
   // activation
   activateApp: (data: ActivationData) => ipcRenderer.invoke('activate', data),
+  getLicenseData: () => ipcRenderer.invoke('getLicenseData'),
 
   // users ----------------------
   getAllUsers: (permission: string) =>
@@ -52,6 +53,7 @@ const electronHandler = {
   removeAllUsers: () => ipcRenderer.invoke('user:removeAll'),
 
   // account ---------------------
+  initAdminAcount: () => ipcRenderer.invoke('account:initAdmin'),
   getAllAccounts: () => ipcRenderer.invoke('account:getAll'),
   logAccount: (username: string, password: string) =>
     ipcRenderer.invoke('account:logAccount', username, password),

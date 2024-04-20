@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Subscription, User } from 'types';
-import activation from '../../../activation.json';
 
 export const sessionsEntry = createAsyncThunk(
   'sessionsEntry',
@@ -83,7 +82,8 @@ export const fetchUsers = createAsyncThunk(
   'fetchUsers',
   async (permission: string) => {
     const users = await window.electron.getAllUsers(permission);
-    if (!activation.isActive && users.length > 5) {
+    const licenseData = await window.electron.getLicenseData();
+    if (!licenseData.isActive && users.length > 5) {
       return users.slice(0, 5);
     }
     return users as User[];

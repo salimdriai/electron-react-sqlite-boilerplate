@@ -117,14 +117,6 @@ export default function Login() {
               {t('actions.login')}
             </Button>
           </Stack>
-          {/* <Stack mt={2}>
-            <Typography>
-              {t('common.notActivated')}{' '}
-              <Link component="button" onClick={navigateToActivation}>
-                {t('actions.activate')}
-              </Link>
-            </Typography>
-          </Stack> */}
         </Card>
       </Stack>
     </Stack>

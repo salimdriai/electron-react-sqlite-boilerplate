@@ -2,7 +2,6 @@
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
 import { ActivationData, Lang, Settings, Themes } from 'types';
-import activation from '../../../activation.json';
 
 interface InitialState {
   settings: Settings;
@@ -18,7 +17,13 @@ const initialState: InitialState = {
     gymName: 'FlexFit',
     accessInput: false,
   },
-  activation: { ...activation },
+  activation: {
+    key: '',
+    mac: '',
+    clientName: '',
+    phoneNumber: '',
+    isActive: false,
+  },
   loading: false,
   error: null,
 };
@@ -42,6 +47,9 @@ const settingsSlice = createSlice({
     updateActivationData: (state, action) => {
       state.activation = action.payload;
     },
+    initActivationData: (state, action) => {
+      state.activation = action.payload;
+    },
   },
 });
 
@@ -50,6 +58,7 @@ export const {
   switchLanguage,
   showAccessInput,
   updateActivationData,
+  initActivationData,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

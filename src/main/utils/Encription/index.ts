@@ -1,29 +1,31 @@
 import crypto from 'crypto';
-import { secretKey, secretIv, ecnryptionMethod } from './config';
 
-const key = crypto
-  .createHash('sha512')
-  .update(secretKey)
-  .digest('hex')
-  .substring(0, 32);
-const encryptionIV = crypto
-  .createHash('sha512')
-  .update(secretIv)
-  .digest('hex')
-  .substring(0, 16);
+const getKey = (secretKey: string) =>
+  crypto.createHash('sha512').update(secretKey).digest('hex').substring(0, 32);
+
+const getEncryptionIV = (secretIv: string) =>
+  crypto.createHash('sha512').update(secretIv).digest('hex').substring(0, 16);
 
 // Encrypt data
-export function encryptData(data: string) {
-  const cipher = crypto.createCipheriv(ecnryptionMethod, key, encryptionIV);
+export function encryptData(data: string, secretKey: string, secretIv: string) {
+  const encryptionIV = getEncryptionIV(secretIv);
+  const key = getKey(secretKey);
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, encryptionIV);
   return Buffer.from(
     cipher.update(data, 'utf8', 'hex') + cipher.final('hex')
   ).toString('base64'); // Encrypts data and converts to hex and base64
 }
 
 // Decrypt data
-export function decryptData(encryptedData: string) {
+export function decryptData(
+  encryptedData: string,
+  secretKey: string,
+  secretIv: string
+) {
   const buff = Buffer.from(encryptedData, 'base64');
-  const decipher = crypto.createDecipheriv(ecnryptionMethod, key, encryptionIV);
+  const encryptionIV = getEncryptionIV(secretIv);
+  const key = getKey(secretKey);
+  const decipher = crypto.createDecipheriv('aes-256-cbc', key, encryptionIV);
   return (
     decipher.update(buff.toString('utf8'), 'hex', 'utf8') +
     decipher.final('utf8')

@@ -33,7 +33,7 @@ export const searchQuery = `SELECT * FROM Users
 
 export const createUsersTable = `
 CREATE TABLE IF NOT EXISTS Users(
-  id TEXT,
+  id TEXT PRIMARY KEY UNIQUE,
   firstName TEXT,
   lastName TEXT,
   phoneNumber TEXT,

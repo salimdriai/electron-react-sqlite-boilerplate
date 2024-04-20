@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+/* eslint-disable promise/always-return */
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
@@ -8,6 +9,7 @@ import {
   switchTheme,
   switchLanguage,
   showAccessInput,
+  initActivationData,
 } from 'features/settings';
 import { currentUser } from 'features/authentication';
 import { Themes } from 'types';
@@ -22,6 +24,7 @@ import './index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     settings: { theme },
     loading: settingsLoading,
@@ -39,39 +42,42 @@ export default function App() {
 
   const initSettings = async () => {
     const settings = await window.electron.getStoreData('settings');
-    i18n.changeLanguage(settings.language || 'en');
     dispatch(switchLanguage(settings.language || 'en'));
     dispatch(switchTheme(settings.theme || Themes.Dark));
     dispatch(showAccessInput(settings.accessInput || false));
   };
 
-  const getMac = async () => {
-    const mac = await window.electron.getMac();
-    console.log('MAC', mac);
+  const initAdminAcount = async () => {
+    const accounts = await window.electron.getAllAccounts();
+    if (!accounts.length) {
+      window.electron.initAdminAcount();
+    }
   };
 
   useEffect(() => {
     dispatch(currentUser());
+    initAdminAcount();
     initSettings();
+    setIsLoading(true);
+    window.electron
+      .getLicenseData()
+      .then((licenseData) => {
+        console.log('licenseData', licenseData);
+        dispatch(initActivationData(licenseData));
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log('ERRR', err);
+        setIsLoading(false);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
-
-  useEffect(() => {
-    const activate = async () => {
-      const res = await window.electron.getAllAccounts();
-      if (!res.length) {
-        await window.electron.activateApp();
-      }
-    };
-    activate();
-    getMac();
   }, []);
 
   return (
     <Router>
       <CssBaseline />
       <ThemeProvider theme={theme === Themes.Dark ? darkTheme : lightTheme}>
-        {settingsLoading || authLoading ? <Loading /> : <Pages />}
+        {settingsLoading || authLoading || isLoading ? <Loading /> : <Pages />}
         <Alert />
       </ThemeProvider>
     </Router>
