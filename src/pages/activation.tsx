@@ -77,8 +77,8 @@ export default function ActivationPage() {
 
   useEffect(() => {
     (async () => {
-      const mac = await window.electron.getMac();
-      setValue('mac', mac);
+      const hddSerialNumber = await window.electron.getHddSerialNumber();
+      setValue('mac', hddSerialNumber);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

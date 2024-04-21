@@ -9,10 +9,10 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+import { exec } from 'child_process';
 import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 // import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
-import getMac from 'getmac';
 import DB from './db';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
@@ -148,13 +148,27 @@ app
   .then(async () => {
     const App = new AppModel();
 
+    const getHddSerialNumber = () =>
+      new Promise((resolve, reject) => {
+        exec('wmic diskdrive get serialnumber', (err, stdout) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            reject(err);
+            return;
+          }
+          const serialNumber = stdout.split('\n')[1].trim();
+          resolve(serialNumber);
+        });
+      });
+
+    const hddSerialNumber = await getHddSerialNumber();
+
     const licenseData = await App.initLicense();
 
-    const mac = getMac();
-    const savedMac = licenseData.mac;
+    const savedHddSerialNumber = licenseData.mac;
     const isActivated = licenseData.isActive;
 
-    if (isActivated && mac !== savedMac) {
+    if (isActivated && hddSerialNumber !== savedHddSerialNumber) {
       dialog.showMessageBoxSync({
         type: 'error',
         title: 'Cannot use the app on this PC!',
@@ -166,7 +180,7 @@ app
     }
 
     // machine address
-    ipcMain.handle('getMac', async () => mac);
+    ipcMain.handle('getHddSerialNumber', async () => hddSerialNumber);
 
     // app activation
     ipcMain.handle('activate', async (_, data: any) => {

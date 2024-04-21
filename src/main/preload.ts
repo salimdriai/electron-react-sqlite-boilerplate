@@ -35,7 +35,7 @@ const electronHandler = {
   },
 
   // machine address
-  getMac: () => ipcRenderer.invoke('getMac'),
+  getHddSerialNumber: () => ipcRenderer.invoke('getHddSerialNumber'),
 
   // activation
   activateApp: (data: LicenseData) => ipcRenderer.invoke('activate', data),
