@@ -31,7 +31,7 @@ export default class AppModel extends DB {
 
     const data: LicenseData = {
       key: '',
-      mac: '',
+      hddsn: '',
       clientName: '',
       phoneNumber: '',
       isActive: false,

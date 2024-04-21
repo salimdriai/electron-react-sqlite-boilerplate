@@ -18,7 +18,7 @@ export interface Settings {
 
 export interface LicenseData {
   key: string;
-  mac: string;
+  hddsn: string;
   clientName: string;
   phoneNumber: string;
   isActive: boolean;

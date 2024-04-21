@@ -31,7 +31,7 @@ export default function ActivationPage() {
   } = useForm({
     defaultValues: {
       key: '',
-      mac: '',
+      hddsn: '',
       clientName: '',
       phoneNumber: '',
       isActive: false,
@@ -78,7 +78,7 @@ export default function ActivationPage() {
   useEffect(() => {
     (async () => {
       const hddSerialNumber = await window.electron.getHddSerialNumber();
-      setValue('mac', hddSerialNumber);
+      setValue('hddsn', hddSerialNumber);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

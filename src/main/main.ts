@@ -150,22 +150,26 @@ app
 
     const getHddSerialNumber = () =>
       new Promise((resolve, reject) => {
-        exec('wmic diskdrive get serialnumber', (err, stdout) => {
+        const isWindows = process.platform === 'win32';
+        const operation = isWindows
+          ? 'wmic diskdrive get serialnumber'
+          : 'smartctl -a /dev/sda | grep "Serial Number"';
+
+        exec(operation, (err, stdout) => {
           if (err) {
             console.error(`exec error: ${err}`);
             reject(err);
             return;
           }
-          const serialNumber = stdout.split('\n')[1].trim();
+          const serialNumber = stdout.split(isWindows ? '\n' : ':')[1].trim();
           resolve(serialNumber);
         });
       });
 
     const hddSerialNumber = await getHddSerialNumber();
-
     const licenseData = await App.initLicense();
 
-    const savedHddSerialNumber = licenseData.mac;
+    const savedHddSerialNumber = licenseData.hddsn;
     const isActivated = licenseData.isActive;
 
     if (isActivated && hddSerialNumber !== savedHddSerialNumber) {

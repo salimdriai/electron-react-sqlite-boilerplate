@@ -20,7 +20,7 @@ const initialState: InitialState = {
   },
   activation: {
     key: '',
-    mac: '',
+    hddsn: '',
     clientName: '',
     phoneNumber: '',
     isActive: false,
