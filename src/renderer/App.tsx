@@ -9,9 +9,9 @@ import {
   switchTheme,
   switchLanguage,
   showAccessInput,
-  initActivationData,
 } from 'features/settings';
 import { currentUser } from 'features/authentication';
+import { initActivationData } from 'features/settings/reducers';
 import { Themes } from 'types';
 import Loading from 'components/Loading';
 import Alert from 'components/Alert';
@@ -25,6 +25,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
+
   const {
     settings: { theme },
     loading: settingsLoading,
@@ -42,6 +43,7 @@ export default function App() {
 
   const initSettings = async () => {
     const settings = await window.electron.getStoreData('settings');
+    i18n.changeLanguage(settings.language || 'en');
     dispatch(switchLanguage(settings.language || 'en'));
     dispatch(switchTheme(settings.theme || Themes.Dark));
     dispatch(showAccessInput(settings.accessInput || false));
@@ -54,22 +56,17 @@ export default function App() {
     }
   };
 
+  const licensing = async () => {
+    setIsLoading(true);
+    await dispatch(initActivationData());
+    setIsLoading(false);
+  };
+
   useEffect(() => {
+    licensing();
     dispatch(currentUser());
     initAdminAcount();
     initSettings();
-    setIsLoading(true);
-    window.electron
-      .getLicenseData()
-      .then((licenseData) => {
-        console.log('licenseData', licenseData);
-        dispatch(initActivationData(licenseData));
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log('ERRR', err);
-        setIsLoading(false);
-      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

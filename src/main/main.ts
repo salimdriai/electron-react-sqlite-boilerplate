@@ -13,12 +13,13 @@ import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 // import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 import getMac from 'getmac';
+import DB from './db';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { decryptData } from './utils/Encription';
-import DB from './db';
-import AccountModel from './models/Account';
-import { SECRET_KEY, SECRET_IV } from '../config/keys';
+import { SECRET_KEY, SECRET_IV } from './config/keys';
+import AppModel from './models/App';
+
 import * as UsersIPC from './ipc/usersIpc';
 import * as SubscriptionPlansIPC from './ipc/subscriptionPlansIpc';
 import * as SubscriptionsIPC from './ipc/subscriptionsIpc';
@@ -102,11 +103,7 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
-      mainWindow.show();
-    }
+    mainWindow.show();
   });
 
   mainWindow.on('closed', () => {
@@ -149,10 +146,11 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(async () => {
-    const mac = getMac();
+    const App = new AppModel();
 
-    const Account = new AccountModel();
-    const licenseData = await Account.getLicenseData();
+    const licenseData = await App.initLicense();
+
+    const mac = getMac();
     const savedMac = licenseData.mac;
     const isActivated = licenseData.isActive;
 
@@ -172,12 +170,15 @@ app
 
     // app activation
     ipcMain.handle('activate', async (_, data: any) => {
-      const result = await Account.setLicenseData(data);
+      // const result = await Account.setLicenseData(data);
+      const result = await App.updateLicense(data);
       return result;
     });
 
-    ipcMain.handle('getLicenseData', () => {
-      return licenseData;
+    ipcMain.handle('getLicenseData', async () => {
+      const result = await App.getLicense();
+      console.log('getLicense---------------', result);
+      return result;
     });
 
     // users ----------------------

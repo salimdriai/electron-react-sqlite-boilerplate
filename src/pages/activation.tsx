@@ -13,13 +13,12 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import KeyIcon from '@mui/icons-material/Key';
-import { ActivationData } from 'types';
+import { LicenseData } from 'types';
 import { useAppDispatch } from 'features/store';
 import { updateActivationData } from 'features/settings';
 import logo from '../../assets/icon.png';
 
 const BASE_URL = 'https://keyguard.vercel.app/api/verify';
-// const BASE_URL = 'http://localhost:3000/api/verify';
 
 export default function ActivationPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,23 +42,25 @@ export default function ActivationPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const activate = async (activationData: ActivationData) => {
+  const activate = async (licenseData: LicenseData) => {
     setIsLoading(true);
     try {
       const res: any = await fetch(BASE_URL, {
         method: 'POST',
-        body: JSON.stringify(activationData),
+        body: JSON.stringify(licenseData),
       });
 
       const data = await res.json();
       if (res.status === 200) {
         setValue('isActive', true);
+
         const isActivated = await window.electron.activateApp({
-          ...activationData,
+          ...licenseData,
           isActive: true,
         });
+
         if (isActivated.success) {
-          dispatch(updateActivationData({ ...activationData, isActive: true }));
+          dispatch(updateActivationData({ ...licenseData, isActive: true }));
           toast.success(data.message);
           navigate('/');
         }

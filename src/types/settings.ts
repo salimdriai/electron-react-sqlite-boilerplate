@@ -16,7 +16,7 @@ export interface Settings {
   accessInput: boolean;
 }
 
-export interface ActivationData {
+export interface LicenseData {
   key: string;
   mac: string;
   clientName: string;

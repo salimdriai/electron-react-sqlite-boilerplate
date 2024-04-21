@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-console */
 import { createSlice } from '@reduxjs/toolkit';
-import { ActivationData, Lang, Settings, Themes } from 'types';
+import { LicenseData, Lang, Settings, Themes } from 'types';
+import { initActivationData } from './reducers';
 
 interface InitialState {
   settings: Settings;
-  activation: ActivationData;
+  activation: LicenseData;
   loading: boolean;
   error: any;
 }
@@ -47,9 +48,19 @@ const settingsSlice = createSlice({
     updateActivationData: (state, action) => {
       state.activation = action.payload;
     },
-    initActivationData: (state, action) => {
+  },
+  extraReducers: (buider) => {
+    buider.addCase(initActivationData.pending, (state) => {
+      state.loading = true;
+    });
+    buider.addCase(initActivationData.fulfilled, (state, action) => {
       state.activation = action.payload;
-    },
+      state.loading = false;
+    });
+    buider.addCase(initActivationData.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
   },
 });
 
@@ -58,7 +69,6 @@ export const {
   switchLanguage,
   showAccessInput,
   updateActivationData,
-  initActivationData,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

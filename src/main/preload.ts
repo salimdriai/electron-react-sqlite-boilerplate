@@ -10,7 +10,7 @@ import {
   SubscriptionPlan,
   User,
   Notification,
-  ActivationData,
+  LicenseData,
 } from 'types';
 
 export type Channels = 'ipc-example';
@@ -38,7 +38,7 @@ const electronHandler = {
   getMac: () => ipcRenderer.invoke('getMac'),
 
   // activation
-  activateApp: (data: ActivationData) => ipcRenderer.invoke('activate', data),
+  activateApp: (data: LicenseData) => ipcRenderer.invoke('activate', data),
   getLicenseData: () => ipcRenderer.invoke('getLicenseData'),
 
   // users ----------------------
