@@ -5,14 +5,16 @@ import Language from './Language';
 import Theme from './Theme';
 import Currency from './Currency';
 import AccessInput from './AccessInput';
+import AccessType from './AccessType';
 
 const AppSettings = () => {
   return (
-    <Card component={Stack} variant="outlined" spacing={3} p={2}>
+    <Card component={Stack} variant="outlined" spacing={4} p={2}>
       <Language />
       <Currency />
       <Theme />
       <AccessInput />
+      <AccessType />
     </Card>
   );
 };

@@ -17,6 +17,7 @@ function UserInfo({ user }: { user: User }) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { userPayments = [] } = useAppSelector((state) => state.payments);
+  const { settings } = useAppSelector((state) => state.settings);
 
   const latestPayment = useMemo(() => {
     const sortedPayments = [...userPayments]?.sort(
@@ -32,7 +33,7 @@ function UserInfo({ user }: { user: User }) {
       user;
 
     return JSON.stringify({
-      id,
+      id: `${settings.appId}:${id}`,
       firstName,
       lastName,
       registeredAt,

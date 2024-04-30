@@ -20,6 +20,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DatePicker from 'react-datepicker';
+import { useAppSelector } from 'features/store';
 
 import QrCode from 'components/Qrcode';
 import { Sex, BloodType, Subscription, User } from 'types';
@@ -55,6 +56,7 @@ const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
   } = formMethods;
 
   const { t } = useTranslation();
+  const { settings } = useAppSelector((s) => s.settings);
 
   const handleOpenCamera = () => {
     setCamera({ ...camera, open: true });
@@ -74,12 +76,13 @@ const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
     setCamera({ ...camera, photo: undefined });
   };
 
+  console.log('settings', settings);
   const getQrCodeData = (): string => {
     const { id, firstName, lastName, registeredAt, notes, subscriptions } =
       watch();
 
     return JSON.stringify({
-      id,
+      id: `${settings.appId}:${id}`,
       firstName,
       lastName,
       registeredAt,

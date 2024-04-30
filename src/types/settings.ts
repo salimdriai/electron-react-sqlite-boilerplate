@@ -14,6 +14,7 @@ export interface Settings {
   lang: Lang;
   gymName: string;
   accessInput: boolean;
+  appId: string;
 }
 
 export interface LicenseData {

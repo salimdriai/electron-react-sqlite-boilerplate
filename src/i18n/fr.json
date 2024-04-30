@@ -20,7 +20,8 @@
       "goToLogin": "Aller à la connexion",
       "manualEntry": "Entré manuel",
       "renew": "Renouveler",
-      "take.photo": "Prendre une photo"
+      "take.photo": "Prendre une photo",
+      "refresh": "Actualiser"
     },
     "info": {
       "id": "Identifiant",
@@ -59,7 +60,9 @@
       "mark.as.read": "Marquer comme lu",
       "mark.as.unread": "Marquer comme non lu",
       "trial.version.limit": "Limite de la version d'essai atteinte !",
-      "contact.us": "Veuillez nous contacter pour obtenir la version complète."
+      "contact.us": "Veuillez nous contacter pour obtenir la version complète.",
+      "available.soon": "Bientôt disponible",
+      "selected": "Selectioné"
     },
     "common": {
       "freeSession": "Séance libre",
@@ -180,7 +183,8 @@
       "language": {
         "fr": "Français",
         "en": "Anglais"
-      }
+      },
+      "accessType": "Type d'accés"
     },
     "administration": {
       "accounts": "Comptes",

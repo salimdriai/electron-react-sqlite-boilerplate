@@ -8,6 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
 import SyncIcon from '@mui/icons-material/Sync';
@@ -94,9 +95,11 @@ export default function Header({
             </Link>
           )}
           <UserAccess />
-          <IconButton onClick={() => window.location.reload()}>
-            <SyncIcon />
-          </IconButton>
+          <Tooltip title={t('actions.refresh')}>
+            <IconButton onClick={() => window.location.reload()}>
+              <SyncIcon />
+            </IconButton>
+          </Tooltip>
           <Notifications />
           <AccountMenu />
         </Stack>

@@ -9,6 +9,7 @@ import {
   switchTheme,
   switchLanguage,
   showAccessInput,
+  setAppId,
 } from 'features/settings';
 import { currentUser } from 'features/authentication';
 import { initActivationData } from 'features/settings/reducers';
@@ -47,6 +48,7 @@ export default function App() {
     dispatch(switchLanguage(settings.language || 'en'));
     dispatch(switchTheme(settings.theme || Themes.Dark));
     dispatch(showAccessInput(settings.accessInput || false));
+    dispatch(setAppId(settings.appId));
   };
 
   const initAdminAcount = async () => {

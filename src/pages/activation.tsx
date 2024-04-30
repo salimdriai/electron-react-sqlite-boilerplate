@@ -15,13 +15,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import KeyIcon from '@mui/icons-material/Key';
 import { LicenseData } from 'types';
 import { useAppDispatch } from 'features/store';
-import { updateActivationData } from 'features/settings';
+import { setAppId, updateActivationData } from 'features/settings';
 import logo from '../../assets/icon.png';
-
-const BASE_URL = 'https://keyguard.vercel.app/api/verify';
 
 export default function ActivationPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [url, setUrl] = useState('');
 
   const {
     control,
@@ -45,9 +44,15 @@ export default function ActivationPage() {
   const activate = async (licenseData: LicenseData) => {
     setIsLoading(true);
     try {
-      const res: any = await fetch(BASE_URL, {
+      if (!url) throw new Error('API URL NOT FOUND! ');
+
+      const res: any = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(licenseData),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
 
       const data = await res.json();
@@ -60,7 +65,13 @@ export default function ActivationPage() {
         });
 
         if (isActivated.success) {
+          const appId = `${licenseData.clientName
+            .replace(' ', '-')
+            .toLocaleLowerCase()}-${licenseData.phoneNumber}`;
+
+          dispatch(setAppId(appId));
           dispatch(updateActivationData({ ...licenseData, isActive: true }));
+
           toast.success(data.message);
           navigate('/');
         }
@@ -79,6 +90,13 @@ export default function ActivationPage() {
     (async () => {
       const hddSerialNumber = await window.electron.getHddSerialNumber();
       setValue('hddsn', hddSerialNumber);
+
+      const BASE_URL = await window.electron.getStoreData('apiUrl');
+      if (BASE_URL) {
+        console.log('BASE_URL', BASE_URL);
+
+        setUrl(`${BASE_URL}/api/v1/activate`);
+      }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

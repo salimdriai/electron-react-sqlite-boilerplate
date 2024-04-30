@@ -20,7 +20,8 @@
       "goToLogin": "Go to login",
       "manualEntry": "Manual entry",
       "renew": "Renew",
-      "take.photo": "Take photo"
+      "take.photo": "Take photo",
+      "refresh": "Refresh"
     },
     "info": {
       "id": "Id",
@@ -59,7 +60,9 @@
       "mark.as.read": "mark as read",
       "mark.as.unread": "mark as unread",
       "trial.version.limit": "You reached the trial version limit !",
-      "contact.us": "Please contact us to get your full version"
+      "contact.us": "Please contact us to get your full version",
+      "available.soon": "Available soon",
+      "selected": "Selected"
     },
     "common": {
       "freeSession": "Free session",
@@ -181,7 +184,8 @@
       "language": {
         "fr": "French",
         "en": "English"
-      }
+      },
+      "accessType": "Access type"
     },
     "administration": {
       "accounts": "Accounts",

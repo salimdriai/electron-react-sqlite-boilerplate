@@ -7,6 +7,6 @@ export const getData = async (_: any, key: string) => {
 };
 export const setData = async (_: any, key: string, data: any) => {
   const store = new Store();
-  await store.set(key, data);
+  store.set(key, data);
   return data;
 };

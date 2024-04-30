@@ -15,7 +15,7 @@ import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 // import log from 'electron-log';
 import DB from './db';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
+import { resolveHtmlPath, initBaseApiUrl } from './util';
 import { decryptData } from './utils/Encription';
 import { SECRET_KEY, SECRET_IV } from './config/keys';
 import AppModel from './models/App';
@@ -146,6 +146,8 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(async () => {
+    initBaseApiUrl('https://flexfit-421917.oa.r.appspot.com');
+
     const App = new AppModel();
 
     const getHddSerialNumber = () =>
@@ -172,7 +174,11 @@ app
     const savedHddSerialNumber = licenseData.hddsn;
     const isActivated = licenseData.isActive;
 
-    if (isActivated && hddSerialNumber !== savedHddSerialNumber) {
+    if (
+      isActivated &&
+      savedHddSerialNumber !== '' &&
+      hddSerialNumber !== savedHddSerialNumber
+    ) {
       dialog.showMessageBoxSync({
         type: 'error',
         title: 'Cannot use the app on this PC!',

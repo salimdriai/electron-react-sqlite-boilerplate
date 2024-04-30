@@ -17,6 +17,7 @@ const initialState: InitialState = {
     theme: Themes.Dark,
     gymName: 'FlexFit',
     accessInput: false,
+    appId: '',
   },
   activation: {
     key: '',
@@ -45,6 +46,11 @@ const settingsSlice = createSlice({
       window.electron.setStoreData('settings.accessInput', action.payload);
       state.settings.accessInput = action.payload;
     },
+    setAppId: (state, action) => {
+      window.electron.setStoreData('settings.appId', action.payload);
+      state.settings.appId = action.payload;
+    },
+
     updateActivationData: (state, action) => {
       state.activation = action.payload;
     },
@@ -69,6 +75,7 @@ export const {
   switchLanguage,
   showAccessInput,
   updateActivationData,
+  setAppId,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
