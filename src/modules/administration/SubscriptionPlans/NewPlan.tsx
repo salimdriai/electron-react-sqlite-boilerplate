@@ -11,9 +11,9 @@ import { SubscriptionPlan } from 'types';
 
 const newSubInitialState: SubscriptionPlan = {
   name: 'new subscription',
-  monthPrice: 0,
-  sessionPrice: 0,
-  sessionsPerMonth: 0,
+  monthPrice: undefined as any,
+  sessionPrice: undefined as any,
+  sessionsPerMonth: undefined as any,
 };
 
 function NewPlan({
@@ -34,7 +34,7 @@ function NewPlan({
 
   const savePlan = async () => {
     const isValidData = !Object.values(newPlan).some(
-      (v) => v === '' || v === 0
+      (v) => v === '' || v === undefined
     );
 
     if (!isValidData) {
@@ -65,7 +65,7 @@ function NewPlan({
                   label={t(`settings.plans.${key}`)}
                   value={value}
                   InputProps={{
-                    ...(key !== 'name' && { endAdornment: <p>DA</p> }),
+                    ...(key !== 'name' && { endAdornment: <span>DA</span> }),
                   }}
                 />
               )

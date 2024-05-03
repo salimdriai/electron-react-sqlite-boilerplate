@@ -6,6 +6,7 @@ import PageSection from '../../layout/PageSection';
 
 export default function ReportPage() {
   const { t } = useTranslation();
+
   return (
     <>
       <PageToolbar title={t('report.report')} />

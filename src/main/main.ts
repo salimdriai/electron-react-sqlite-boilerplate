@@ -146,7 +146,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(async () => {
-    initBaseApiUrl('https://flexfit-421917.oa.r.appspot.com');
+    initBaseApiUrl('https://flexfit-421917.oa.r.appspot.com/api/v1');
 
     const App = new AppModel();
 
@@ -188,6 +188,13 @@ app
       app.quit();
       return;
     }
+
+    // backup db
+
+    ipcMain.handle('backupDB', async () => {
+      const db = new DB();
+      db.backup();
+    });
 
     // machine address
     ipcMain.handle('getHddSerialNumber', async () => hddSerialNumber);

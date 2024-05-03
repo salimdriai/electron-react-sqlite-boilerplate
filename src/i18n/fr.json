@@ -62,7 +62,8 @@
       "trial.version.limit": "Limite de la version d'essai atteinte !",
       "contact.us": "Veuillez nous contacter pour obtenir la version complète.",
       "available.soon": "Bientôt disponible",
-      "selected": "Selectioné"
+      "selected": "Selectioné",
+      "userMustScan": "Non trouvé ! Le membre doit scanner son code QR pour recevoir des notifications !"
     },
     "common": {
       "freeSession": "Séance libre",
@@ -99,7 +100,8 @@
       "currency": "Devise",
       "activationKey": "Clé d'activation",
       "keyRequired": "Clé Requis",
-      "empty": "vide"
+      "empty": "vide",
+      "lastNotified": "Dernière notification"
     },
     "user": {
       "users": "Membres",
@@ -174,7 +176,8 @@
         "edit": "Modifier le plan d'abonnement",
         "sessionPrice": "Prix par séance",
         "monthPrice": "Prix par mois",
-        "sessionsPerMonth": "Séances par mois"
+        "sessionsPerMonth": "Séances par mois",
+        "name": "Nom"
       },
       "theme": {
         "dark": "Sombre",
@@ -215,6 +218,16 @@
         "entries": "Entrées aujourd'hui",
         "freeSession": "Séance libres aujourd'hui"
       }
+    },
+    "notifications": {
+      "sendMessage": "Envoyer un message",
+      "title": "Titre",
+      "content": "Contenu",
+      "max": "200 caractères max",
+      "send": "envoyer",
+      "message": "Message",
+      "subscriptionExpired": "Abonnement expiré",
+      "aboutToExpire": "Abonnement sur le point d'expirer"
     }
   }
 }

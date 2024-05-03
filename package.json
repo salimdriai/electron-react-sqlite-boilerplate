@@ -170,7 +170,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "FlexFit",
+    "productName": "Sprint Fit",
     "appId": "org.erb.ElectronReact",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
@@ -231,8 +231,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "flexfit",
-      "repo": "flexfit"
+      "owner": "techsprintlabs",
+      "repo": "techsprintlabs"
     }
   },
   "devEngines": {

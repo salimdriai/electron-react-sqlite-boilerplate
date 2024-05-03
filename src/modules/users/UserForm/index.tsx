@@ -13,7 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Permission, Subscription, User, Payment } from 'types';
 import UserSubscription from 'components/Subscription';
 import { useAppDispatch, useAppSelector } from 'features/store';
-import { fetchUsers } from 'features/users/reducers';
+import { fetchUsers, updateUser } from 'features/users/reducers';
 import { createPayment } from 'features/payments/reducers';
 import AddSubscriptions from './AddSubscriptions';
 import { userDefaultValues } from './helpers';
@@ -129,7 +129,7 @@ const UserForm = () => {
 
   const saveUser = async (data: User) => {
     if (isEditMode) {
-      await window.electron.updateUser(data, state.id);
+      await dispatch(updateUser({ user: data, id: state.id }));
       if (data.id !== state.id) {
         updateSubs(data.id);
       }

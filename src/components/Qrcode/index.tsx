@@ -9,6 +9,8 @@ const QrCode = ({
   value: string;
   blurQrCode?: boolean;
 }) => {
+  console.log('va', JSON.parse(value));
+
   return (
     <Card
       sx={{

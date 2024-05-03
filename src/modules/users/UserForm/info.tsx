@@ -76,18 +76,19 @@ const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
     setCamera({ ...camera, photo: undefined });
   };
 
-  console.log('settings', settings);
   const getQrCodeData = (): string => {
-    const { id, firstName, lastName, registeredAt, notes, subscriptions } =
-      watch();
+    const { id, firstName, lastName, registeredAt, subscriptions } = watch();
+
+    const formattedSubs = subscriptions?.map(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ({ id: ID, userId, planId, ...rest }) => rest
+    );
 
     return JSON.stringify({
       id: `${settings.appId}:${id}`,
-      firstName,
-      lastName,
+      name: `${firstName} ${lastName}`,
       registeredAt,
-      notes,
-      subscriptions,
+      subscriptions: formattedSubs,
     });
   };
 

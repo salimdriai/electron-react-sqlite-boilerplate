@@ -38,4 +38,5 @@ export interface User {
   allTimeEntries?: number;
   notes?: string;
   subscriptions: Subscription[];
+  lastNotified?: string;
 }

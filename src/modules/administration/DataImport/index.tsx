@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { importSubscriptions, importUsers, importPlans } from 'utils';
+import { useTranslation } from 'react-i18next';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -106,9 +107,21 @@ function ImportUsers() {
     }
   };
 
+  const { t } = useTranslation();
+
+  const backup = async () => {
+    await window.electron
+      .backupDB()
+      .then((res) => console.log('res', res))
+      .catch((err) => console.log('err', err));
+  };
+
   return (
-    <Card variant="outlined" sx={{ p: 2, borderColor: 'red' }}>
-      <Typography variant="h6" gutterBottom>
+    <Card variant="outlined" sx={{ p: 2 }}>
+      <Button onClick={backup} variant="contained">
+        Data Backup
+      </Button>
+      {/* <Typography variant="h6" gutterBottom>
         Data import{' '}
         <Typography color="error" component="span">
           {' '}
@@ -183,7 +196,7 @@ function ImportUsers() {
       </Stack>
       <Button disabled={isLoading} variant="contained" onClick={onImport}>
         {isLoading ? 'processing...' : 'import'}
-      </Button>
+      </Button> */}
     </Card>
   );
 }

@@ -19,6 +19,7 @@ export const userDefaultValues: Omit<User, 'subscriptions'> = {
   lastEntryTimestamp: 0,
   allTimeEntries: 0,
   notes: '',
+  lastNotified: '',
 };
 
 export const subscriptionOptions = [

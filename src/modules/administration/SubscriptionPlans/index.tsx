@@ -52,7 +52,6 @@ const SubscriptionPlans = () => {
             <Button
               onClick={() => setShowNewPlanForm(!showNewPlanForm)}
               variant="outlined"
-              size="small"
               endIcon={!showNewPlanForm && <AddIcon />}
             >
               {showNewPlanForm ? t('actions.cancel') : t('settings.plans.add')}

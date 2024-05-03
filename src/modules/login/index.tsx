@@ -3,14 +3,12 @@ import * as React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import Stack from '@mui/material/Stack';
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
@@ -30,16 +28,11 @@ export default function Login() {
     },
   });
 
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const onSubmit = ({ username, password }: any) => {
     dispatch(logAccount({ username, password }));
-  };
-
-  const navigateToActivation = () => {
-    navigate('/activation');
   };
 
   return (
@@ -52,6 +45,9 @@ export default function Login() {
         sx={{ backgroundColor: 'background.default' }}
       >
         <img src={logo} width={250} alt="logo" />
+        <Typography variant="h1" fontWeight={900} color="white">
+          SPRINT FIT
+        </Typography>
       </Stack>
       <Stack
         height="100%"

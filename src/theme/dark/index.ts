@@ -24,7 +24,7 @@ export default function createTheme() {
     palette,
     shadows,
     shape: {
-      borderRadius: 16,
+      borderRadius: 8,
     },
     typography,
   });

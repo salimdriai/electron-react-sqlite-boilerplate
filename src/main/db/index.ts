@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable class-methods-use-this */
 // @ts-nocheck
 
@@ -22,6 +23,22 @@ export default class DB {
     return new Database(dbPath, {
       verbose: console.log,
     });
+  }
+
+  backup() {
+    const dbPath = !isDevelopment
+      ? path.join(app.getPath('userData'), `backup-${Date.now()}.db`)
+      : path.join(app.getAppPath(), `backup-${Date.now()}.db`);
+
+    const db = this.connect();
+
+    db.backup(dbPath)
+      .then(() => {
+        console.log('backup complete!');
+      })
+      .catch((err: any) => {
+        console.log('backup failed:', err);
+      });
   }
 
   close() {

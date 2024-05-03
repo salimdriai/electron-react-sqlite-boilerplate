@@ -17,6 +17,7 @@ import { LicenseData } from 'types';
 import { useAppDispatch } from 'features/store';
 import { setAppId, updateActivationData } from 'features/settings';
 import logo from '../../assets/icon.png';
+import backgroundImg from '../../assets/bg5.jpg';
 
 export default function ActivationPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -93,9 +94,7 @@ export default function ActivationPage() {
 
       const BASE_URL = await window.electron.getStoreData('apiUrl');
       if (BASE_URL) {
-        console.log('BASE_URL', BASE_URL);
-
-        setUrl(`${BASE_URL}/api/v1/activate`);
+        setUrl(`${BASE_URL}/activate`);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,8 +110,24 @@ export default function ActivationPage() {
         sx={{ backgroundColor: 'background.default' }}
       >
         <img src={logo} width={250} alt="logo" />
+        <Typography variant="h1" fontWeight={900} color="white">
+          SPRINT FIT
+        </Typography>
       </Stack>
-      <Stack height="100%" flex={2} justifyContent="center" alignItems="center">
+      <Stack
+        height="100%"
+        flex={2}
+        justifyContent="center"
+        alignItems="center"
+        position="relative"
+      >
+        <img
+          src={backgroundImg}
+          width="100%"
+          height="100%"
+          style={{ position: 'absolute', right: 0, bottom: 0, zIndex: -1 }}
+          alt="bg"
+        />
         <Card variant="outlined" sx={{ p: 5 }}>
           <Stack spacing={2} component="form" onSubmit={handleSubmit(activate)}>
             <Typography gutterBottom variant="h5">

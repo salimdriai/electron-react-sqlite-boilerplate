@@ -21,8 +21,8 @@ function UserEntry() {
     settings: { accessInput },
   } = useAppSelector((state) => state.settings);
   const handleclose = () => {
-    dispatch(setUser(null));
     setIsUserAccessed(false);
+    dispatch(setUser(null));
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -125,7 +125,7 @@ function UserEntry() {
       >
         {accessedUser && <UserDetails />}
         <Stack alignItems="center">
-          <IconButton>
+          <IconButton onClick={handleclose}>
             <KeyboardArrowUpIcon color="primary" />
           </IconButton>
         </Stack>

@@ -12,6 +12,13 @@ export default function createComponents(config: any) {
   const { palette } = config;
 
   return {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          background: '#171d24',
+        },
+      },
+    },
     MuiAvatar: {
       styleOverrides: {
         root: {
@@ -216,7 +223,7 @@ export default function createComponents(config: any) {
           borderBottom: 'none',
           [`& .${tableCellClasses.root}`]: {
             borderBottom: 'none',
-            backgroundColor: '#1A1A1B',
+            backgroundColor: '#20262e',
             fontSize: 12,
             fontWeight: 600,
             lineHeight: 1,

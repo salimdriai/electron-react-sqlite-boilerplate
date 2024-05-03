@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab';
 
 import SubscriptionPlans from './SubscriptionPlans';
 import Accounts from './Accounts';
+import DataImport from './DataImport';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -54,13 +55,16 @@ function Administration() {
       >
         <Tab label={t('settings.plans.plans')} {...a11yProps(0)} />
         <Tab label={t('administration.accounts')} {...a11yProps(1)} />
-        {/*    <Tab label={t('administration.dataImport')} {...a11yProps(2)} /> */}
+        <Tab label={t('administration.dataImport')} {...a11yProps(2)} />
       </Tabs>
       <CustomTabPanel value={value} index={0}>
         <SubscriptionPlans />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <Accounts />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <DataImport />
       </CustomTabPanel>
     </Stack>
   );

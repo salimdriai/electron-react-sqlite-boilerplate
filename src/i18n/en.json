@@ -62,7 +62,8 @@
       "trial.version.limit": "You reached the trial version limit !",
       "contact.us": "Please contact us to get your full version",
       "available.soon": "Available soon",
-      "selected": "Selected"
+      "selected": "Selected",
+      "userMustScan": "Not Found ! Member must scan his QR code to receive notifications !"
     },
     "common": {
       "freeSession": "Free session",
@@ -99,7 +100,8 @@
       "currency": "Currency",
       "activationKey": "Activation key",
       "keyRequired": "Key is required",
-      "empty": "empty"
+      "empty": "empty",
+      "lastNotified": "Last notified"
     },
     "user": {
       "users": "Users",
@@ -138,13 +140,13 @@
     "account": {
       "add": "Add account",
       "myAccount": "My account",
-      "Admin": "Admin",
-      "Male": "Men",
-      "Female": "Women",
-      "All": "All",
-      "Coach": "Coach",
-      "Employee": "Employee",
-      "Owner": "Owner"
+      "admin": "Admin",
+      "male": "Men",
+      "female": "Women",
+      "all": "All",
+      "coach": "Coach",
+      "employee": "Employee",
+      "owner": "Owner"
     },
     "subscriptions": {
       "subscriptions": "Subscriptions",
@@ -175,7 +177,8 @@
         "edit": "Edit subscription plan",
         "sessionPrice": "Session price",
         "monthPrice": "Month price",
-        "sessionsPerMonth": "Sessions per month"
+        "sessionsPerMonth": "Sessions per month",
+        "name": "Name"
       },
       "theme": {
         "dark": "Dark",
@@ -216,6 +219,16 @@
         "entries": "Todays entries",
         "freeSession": "Todays free sessions"
       }
+    },
+    "notifications": {
+      "sendMessage": "Send message",
+      "title": "Title",
+      "content": "Content",
+      "max": "200 characters max",
+      "send": "send",
+      "message": "Message",
+      "subscriptionExpired": "Subscription expired",
+      "aboutToExpire": "Subscription about to expire"
     }
   }
 }

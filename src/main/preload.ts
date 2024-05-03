@@ -34,6 +34,9 @@ const electronHandler = {
     },
   },
 
+  // db backup
+
+  backupDB: () => ipcRenderer.invoke('backupDB'),
   // machine address
   getHddSerialNumber: () => ipcRenderer.invoke('getHddSerialNumber'),
 

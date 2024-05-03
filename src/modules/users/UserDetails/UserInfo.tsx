@@ -29,16 +29,18 @@ function UserInfo({ user }: { user: User }) {
   }, [userPayments]);
 
   const getQrCodeData = (): string => {
-    const { id, firstName, lastName, registeredAt, notes, subscriptions } =
-      user;
+    const { id, firstName, lastName, registeredAt, subscriptions } = user;
+
+    const formattedSubs = subscriptions?.map(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ({ id: ID, userId, planId, ...rest }) => rest
+    );
 
     return JSON.stringify({
       id: `${settings.appId}:${id}`,
-      firstName,
-      lastName,
+      name: `${firstName} ${lastName}`,
       registeredAt,
-      notes,
-      subscriptions,
+      subscriptions: formattedSubs,
     });
   };
 
@@ -91,7 +93,7 @@ function UserInfo({ user }: { user: User }) {
           title={<Typography variant="h6">{t('common.history')}</Typography>}
         />
         <CardContent>
-          <Stack spacing={2}>
+          <Stack spacing={1}>
             {user.lastEntryTimestamp !== 0 && (
               <Box>
                 <Typography variant="body2">
@@ -107,12 +109,36 @@ function UserInfo({ user }: { user: User }) {
                 {t('common.latestPayment')}
               </Typography>
               {latestPayment && (
-                <span>
+                <Typography fontSize={14}>
                   {`${formatDate(latestPayment.paidAt)} | ${
                     latestPayment.amount
                   } DA`}{' '}
                   <br />
-                </span>
+                </Typography>
+              )}
+            </Box>
+            <Box>
+              <Typography variant="body2">{t('common.latestEntry')}</Typography>
+              {user.lastEntryTimestamp ? (
+                <Typography fontSize={14}>
+                  {formatDate(user.lastEntryTimestamp)}
+                  <br />
+                </Typography>
+              ) : (
+                <Typography fontSize={14}>{t('common.empty')}</Typography>
+              )}
+            </Box>
+            <Box>
+              <Typography variant="body2">
+                {t('common.lastNotified')}
+              </Typography>
+              {user?.lastNotified ? (
+                <Typography fontSize={14}>
+                  {formatDate(user.lastNotified)}
+                  <br />
+                </Typography>
+              ) : (
+                <Typography fontSize={14}>{t('common.empty')}</Typography>
               )}
             </Box>
           </Stack>

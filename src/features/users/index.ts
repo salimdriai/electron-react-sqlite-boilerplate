@@ -6,6 +6,7 @@ import {
   sessionsEntry,
   fetchUsers,
   getOneUser,
+  updateUser,
   filterByExpirationDate,
 } from './reducers';
 
@@ -36,8 +37,9 @@ const usersSlice = createSlice({
     builder.addCase(sessionsEntry.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(sessionsEntry.fulfilled, (state) => {
+    builder.addCase(sessionsEntry.fulfilled, (state, action) => {
       state.isLoading = false;
+      state.user = action.payload.user;
     });
     builder.addCase(sessionsEntry.rejected, (state) => {
       state.isLoading = false;
@@ -66,6 +68,19 @@ const usersSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(getOneUser.rejected, (state) => {
+      state.isLoading = false;
+    });
+
+    // update user
+
+    builder.addCase(updateUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.isLoading = false;
+    });
+    builder.addCase(updateUser.rejected, (state) => {
       state.isLoading = false;
     });
 

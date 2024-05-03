@@ -22,6 +22,7 @@ import CardContent from '@mui/material/CardContent';
 import { User } from 'types';
 
 import Subscription from 'components/Subscription';
+import Notify from 'components/Notify';
 import { useAppSelector, useAppDispatch } from 'features/store';
 import { fetchUsers, getOneUser } from 'features/users/reducers';
 import { setUser } from 'features/users';
@@ -110,8 +111,9 @@ function UserDetails({ manualEntry }: { manualEntry?: (id: string) => void }) {
             onClick={() => manualEntry && manualEntry(userDetails.id)}
             variant="outlined"
           >
-            {t('actions.manualEntry')} {`(${t('info.keyLost')})`}
+            {t('actions.manualEntry')}
           </Button>
+          <Notify user={userDetails} />
           <Button
             variant="contained"
             size="small"

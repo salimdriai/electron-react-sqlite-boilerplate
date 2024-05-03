@@ -15,7 +15,7 @@ const initialState: InitialState = {
   settings: {
     lang: Lang.English,
     theme: Themes.Dark,
-    gymName: 'FlexFit',
+    gymName: 'SprintFit',
     accessInput: false,
     appId: '',
   },

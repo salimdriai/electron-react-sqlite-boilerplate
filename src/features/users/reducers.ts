@@ -94,8 +94,15 @@ export const getOneUser = createAsyncThunk(
   'getOneUser',
   async (userId: string) => {
     const user = await window.electron.getOneUser(userId);
-
     return user as User;
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  'updateUser',
+  async ({ user, id }: any) => {
+    await window.electron.updateUser(user, id);
+    return user;
   }
 );
 

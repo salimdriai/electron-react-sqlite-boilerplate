@@ -28,7 +28,7 @@ export default function Dashbaors() {
   const [statistics, setStatistics] = useState<StatCardProps[]>([
     {
       id: 'entries',
-      value: '0',
+      value: latestEnteredUsers.length.toString(),
       label: t('stats.today.entries'),
       icon: <LoginIcon />,
       color: 'primary.main',
@@ -58,7 +58,6 @@ export default function Dashbaors() {
   useEffect(() => {
     const getDayNewUsers = async () => {
       let newUsersCount = 0;
-      let todayEntries = 0;
       let todayFreeSessions = 0;
 
       const dayStart = new Date();
@@ -81,9 +80,9 @@ export default function Dashbaors() {
 
         if (isEnteredToday) {
           const isUserExist = latestEnteredUsers.find((u) => u.id === user.id);
+
           if (!isUserExist) {
             setLatestEnteredUsers((prev) => [...prev, user]);
-            todayEntries += 1;
           }
         }
       });
@@ -105,13 +104,7 @@ export default function Dashbaors() {
           : stat
       );
 
-      const updatedTodayEntries = updatedNewUser.map((stat) =>
-        stat.id === 'entries'
-          ? { ...stat, value: todayEntries.toString() }
-          : stat
-      );
-
-      const updatedStatistics = updatedTodayEntries.map((stat) =>
+      const updatedStatistics = updatedNewUser.map((stat) =>
         stat.id === 'free_sessions'
           ? { ...stat, value: todayFreeSessions.toString() }
           : stat
@@ -136,10 +129,12 @@ export default function Dashbaors() {
   return (
     <Stack spacing={5}>
       <Stack direction="row" spacing={5}>
-        {statistics.map(({ value, label, icon, color, img }) => (
+        {statistics.map(({ value, label, icon, color, img, id }) => (
           <StatCard
             key={label}
-            value={value}
+            value={
+              id === 'entries' ? latestEnteredUsers.length.toString() : value
+            }
             label={t(label)}
             icon={icon}
             color={color}
