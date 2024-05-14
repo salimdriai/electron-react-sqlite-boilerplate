@@ -5,7 +5,7 @@ import Language from './Language';
 import Theme from './Theme';
 import Currency from './Currency';
 import AccessInput from './AccessInput';
-import AccessType from './AccessType';
+// import AccessType from './AccessType';
 
 const AppSettings = () => {
   return (
@@ -14,7 +14,7 @@ const AppSettings = () => {
       <Currency />
       <Theme />
       <AccessInput />
-      <AccessType />
+      {/* <AccessType /> */}
     </Card>
   );
 };

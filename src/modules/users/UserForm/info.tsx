@@ -172,7 +172,9 @@ const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
               type="text"
               fullWidth
               {...field}
-              onChange={(e) => field.onChange(e.target.value.trim())}
+              onChange={(e) =>
+                field.onChange(e.target.value.trim().toLowerCase())
+              }
               label="id"
               error={!!errors.id}
               helperText={<> {errors.id?.message || ''} </>}

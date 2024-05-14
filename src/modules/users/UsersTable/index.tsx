@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable promise/catch-or-return */
 /* eslint-disable promise/always-return */
 import * as React from 'react';
 
+import csvDownload from 'json-to-csv-export';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -99,7 +101,7 @@ export default function UsersTable() {
   };
 
   const manualEntry = (id: string) => {
-    dispatch(sessionsEntry(id))
+    dispatch(sessionsEntry(id.toLowerCase()))
       .unwrap()
       .then(
         ({
@@ -137,6 +139,24 @@ export default function UsersTable() {
   const handleEdit = (e: any, row: any) => {
     e.stopPropagation();
     navigate('/users/add', { state: row });
+  };
+
+  const exportCsv = () => {
+    const data = users?.map(
+      ({
+        subscriptions,
+        photo,
+        lastEntryTimestamp,
+        allTimeEntries,
+        lastNotified,
+        ...rest
+      }) => rest
+    );
+    csvDownload({
+      data,
+      filename: 'members',
+      delimiter: ',',
+    });
   };
 
   React.useEffect(() => {
@@ -195,6 +215,10 @@ export default function UsersTable() {
             }}
           >
             {t('info.clearFilters')}
+          </Button>
+          <Stack flex={1} />
+          <Button onClick={exportCsv} color="info" variant="outlined">
+            {t('actions.export')}
           </Button>
         </Stack>
 

@@ -21,7 +21,8 @@
       "manualEntry": "Entré manuel",
       "renew": "Renouveler",
       "take.photo": "Prendre une photo",
-      "refresh": "Actualiser"
+      "refresh": "Actualiser",
+      "export": "Exporter"
     },
     "info": {
       "id": "Identifiant",

@@ -21,7 +21,8 @@
       "manualEntry": "Manual entry",
       "renew": "Renew",
       "take.photo": "Take photo",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "export": "Export"
     },
     "info": {
       "id": "Id",

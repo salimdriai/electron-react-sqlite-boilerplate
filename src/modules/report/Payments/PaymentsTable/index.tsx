@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 
+import csvDownload from 'json-to-csv-export';
 import { useTranslation } from 'react-i18next';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -40,6 +43,17 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
     [page, rowsPerPage, payments]
   );
 
+  const exportCsv = () => {
+    const data = payments?.map(({ id, userId, ...rest }) => rest);
+
+    console.log('data', data);
+    csvDownload({
+      data,
+      filename: 'payments',
+      delimiter: ',',
+    });
+  };
+
   return (
     <Card
       variant="outlined"
@@ -53,6 +67,9 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
           p={2}
         >
           <Typography variant="h6"> {t('payments.history')}</Typography>
+          <Button onClick={exportCsv} color="info" variant="outlined">
+            {t('actions.export')}
+          </Button>
         </Stack>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">

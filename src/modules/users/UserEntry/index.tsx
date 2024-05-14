@@ -27,7 +27,7 @@ function UserEntry() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAccess = (id: any) => {
-    dispatch(sessionsEntry(id))
+    dispatch(sessionsEntry(id.toLowerCase()))
       .unwrap()
       .then(
         ({

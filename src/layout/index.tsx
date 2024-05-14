@@ -134,7 +134,7 @@ function SidebarLayout({ page }: Props) {
               complète
             </Typography>
             {' ------> '}
-            <Typography> 0555 22 00 08</Typography>
+            <Typography> 0559 80 38 57</Typography>
             {' <------ '}
             <Typography>
               هذه نسخة تجريبية، اتصل بنا للحصول على النسخة الكاملة
