@@ -46,7 +46,6 @@ const PaymentsTable = ({ payments }: { payments: Payment[] }) => {
   const exportCsv = () => {
     const data = payments?.map(({ id, userId, ...rest }) => rest);
 
-    console.log('data', data);
     csvDownload({
       data,
       filename: 'payments',
