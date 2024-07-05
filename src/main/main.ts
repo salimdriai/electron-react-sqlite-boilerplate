@@ -169,25 +169,25 @@ app
       });
 
     const hddSerialNumber = await getHddSerialNumber();
-    const licenseData = await App.initLicense();
+    // const licenseData = await App.initLicense();
 
-    const savedHddSerialNumber = licenseData.hddsn;
-    const isActivated = licenseData.isActive;
+    // const savedHddSerialNumber = licenseData.hddsn;
+    // const isActivated = licenseData.isActive;
 
-    if (
-      isActivated &&
-      savedHddSerialNumber !== '' &&
-      hddSerialNumber !== savedHddSerialNumber
-    ) {
-      dialog.showMessageBoxSync({
-        type: 'error',
-        title: 'Cannot use the app on this PC!',
-        message: `The app can be used only on the pc where it is first activated.`,
-      });
+    // if (
+    //   isActivated &&
+    //   savedHddSerialNumber !== '' &&
+    //   hddSerialNumber !== savedHddSerialNumber
+    // ) {
+    //   dialog.showMessageBoxSync({
+    //     type: 'error',
+    //     title: 'Cannot use the app on this PC!',
+    //     message: `The app can be used only on the pc where it is first activated.`,
+    //   });
 
-      app.quit();
-      return;
-    }
+    //   app.quit();
+    //   return;
+    // }
 
     // backup db
 

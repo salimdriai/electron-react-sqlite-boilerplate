@@ -40,7 +40,7 @@
       "startsAt": "Commence à",
       "endsAt": "Se termine à",
       "registeredAt": "Enregistré le",
-      "sessionsSpent": "Sessions utilisées",
+      "sessionsRemaining": "Séances restantes",
       "allTimeSessions": "Sessions totales",
       "username": "Nom d'utilisateur",
       "password": "Mot de passe",
@@ -164,7 +164,8 @@
       "all": "Tous",
       "startFromNow": "Démarrer à partir de maintenant",
       "startFromExpiration": "Démarrer à partir de la date d'expiration",
-      "subscription.expired": "Abonnement expiré"
+      "subscription.expired": "Abonnement expiré",
+      "sessionsRemaining": "Séances restantes"
     },
     "settings": {
       "genaral": "Paramètres généraux",

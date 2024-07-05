@@ -58,14 +58,14 @@ export default function App() {
     }
   };
 
-  const licensing = async () => {
-    setIsLoading(true);
-    await dispatch(initActivationData());
-    setIsLoading(false);
-  };
+  // const licensing = async () => {
+  //   setIsLoading(true);
+  //   await dispatch(initActivationData());
+  //   setIsLoading(false);
+  // };
 
   useEffect(() => {
-    licensing();
+    // licensing();
     dispatch(currentUser());
     initAdminAcount();
     initSettings();

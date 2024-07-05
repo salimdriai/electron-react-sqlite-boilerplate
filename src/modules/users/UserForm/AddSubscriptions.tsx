@@ -241,9 +241,21 @@ const AddSubscriptions = ({
                 onChange={onDateChange('endsAt', subscription.planId)}
               />
               <TextField
+                label={t('subscriptions.sessionsRemaining')}
+                type="number"
+                name="sessionsAvailable"
+                value={subscription.sessionsAvailable}
+                onChange={(e) =>
+                  setSubscriptions((prev: any) => ({
+                    ...prev,
+                    sessionsAvailable: Number(e.target.value),
+                  }))
+                }
+              />
+              <TextField
                 label={t('payments.amount')}
                 type="number"
-                value={payment.paid}
+                value={payment.paid || getPlan(subscription.planId)?.monthPrice}
                 InputProps={{ endAdornment: <>DA</> }}
                 onChange={(e) =>
                   setPayment({

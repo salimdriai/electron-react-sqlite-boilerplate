@@ -11,11 +11,11 @@ export const createPayment = createAsyncThunk(
 
 export const getAllPayments = createAsyncThunk('getPayments', async () => {
   const payments = await window.electron.getAllPayments();
-  const licenseData = await window.electron.getLicenseData();
+  // const licenseData = await window.electron.getLicenseData();
 
-  if (!licenseData.isActive && payments.length > 5) {
-    return payments.slice(0, 5);
-  }
+  // if (!licenseData.isActive && payments.length > 5) {
+  //   return payments.slice(0, 5);
+  // }
   return payments as Payment[];
 });
 

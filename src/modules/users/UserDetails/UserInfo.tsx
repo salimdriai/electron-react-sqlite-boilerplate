@@ -94,16 +94,6 @@ function UserInfo({ user }: { user: User }) {
         />
         <CardContent>
           <Stack spacing={1}>
-            {user.lastEntryTimestamp !== 0 && (
-              <Box>
-                <Typography variant="body2">
-                  {t('common.latestEntry')}
-                </Typography>
-                {formatDate(user.lastEntryTimestamp)}
-                {' - '}
-                {new Date(user.lastEntryTimestamp).toLocaleTimeString()}
-              </Box>
-            )}
             <Box>
               <Typography variant="body2">
                 {t('common.latestPayment')}
@@ -122,7 +112,8 @@ function UserInfo({ user }: { user: User }) {
               {user.lastEntryTimestamp ? (
                 <Typography fontSize={14}>
                   {formatDate(user.lastEntryTimestamp)}
-                  <br />
+                  {' - '}
+                  {new Date(user.lastEntryTimestamp).toLocaleTimeString()}
                 </Typography>
               ) : (
                 <Typography fontSize={14}>{t('common.empty')}</Typography>

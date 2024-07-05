@@ -34,7 +34,7 @@ export default class AppModel extends DB {
       hddsn: '',
       clientName: '',
       phoneNumber: '',
-      isActive: false,
+      isActive: true,
     };
 
     const encryptedData = encryptData(

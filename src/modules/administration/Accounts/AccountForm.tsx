@@ -71,6 +71,7 @@ function AccountForm({
   useEffect(() => {
     if (isEditMode) {
       const updateDefaultValues = async (data: Account) => {
+        console.log('DATA', data);
         const decryptedPass = await window.electron.decryptData(data.password);
         setValue('username', data.username);
         setValue('phoneNumber', data.phoneNumber);

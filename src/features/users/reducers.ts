@@ -30,7 +30,7 @@ export const sessionsEntry = createAsyncThunk(
     }
 
     user.subscriptions!.forEach(
-      ({ endsAt, sessionsAvailable, sessionsSpent }: Subscription) => {
+      ({ endsAt, sessionsAvailable }: Subscription) => {
         if (currentTimestamp - user.lastEntryTimestamp < threeHoursTimestamp) {
           result.isEnteredThreeHoursAgo = true;
           result.message = 'info.entredInThreeHours';
@@ -42,7 +42,7 @@ export const sessionsEntry = createAsyncThunk(
           result.message = 'info.subscriptionExpired';
         }
 
-        if (sessionsSpent >= sessionsAvailable) {
+        if (sessionsAvailable === 0) {
           result.isMaxSessionsSpent = true;
           result.message = 'info.maxSessionsSpent';
         }
@@ -55,7 +55,9 @@ export const sessionsEntry = createAsyncThunk(
 
     user.lastEntryTimestamp = new Date().getTime();
     user.subscriptions!.forEach((sub) => {
-      sub.sessionsSpent += 1;
+      if (sub.sessionsAvailable > 0) {
+        sub.sessionsAvailable -= 1;
+      }
     });
 
     if (typeof user?.allTimeEntries === 'number') {
@@ -82,10 +84,10 @@ export const fetchUsers = createAsyncThunk(
   'fetchUsers',
   async (permission: string) => {
     const users = await window.electron.getAllUsers(permission);
-    const licenseData = await window.electron.getLicenseData();
-    if (!licenseData.isActive && users.length > 5) {
-      return users.slice(0, 5);
-    }
+    // const licenseData = await window.electron.getLicenseData();
+    // if (!licenseData.isActive && users.length > 5) {
+    //   return users.slice(0, 5);
+    // }
     return users as User[];
   }
 );

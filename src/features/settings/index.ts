@@ -24,7 +24,7 @@ const initialState: InitialState = {
     hddsn: '',
     clientName: '',
     phoneNumber: '',
-    isActive: false,
+    isActive: true,
   },
   loading: false,
   error: null,

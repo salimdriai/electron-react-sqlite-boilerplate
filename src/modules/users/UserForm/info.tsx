@@ -311,12 +311,7 @@ const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
               value: /^[0-9]*$/,
               message: 'Only numbers are allowed.',
             },
-            validate: (value) => {
-              if (value?.length !== 10) {
-                return 'Phone number must be exactly 10 digits.';
-              }
-              return true;
-            },
+            required: false,
           }}
           render={({ field }) => (
             <TextField

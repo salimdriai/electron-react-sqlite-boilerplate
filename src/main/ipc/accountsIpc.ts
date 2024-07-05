@@ -41,12 +41,12 @@ export const initAdmin = async () => {
   return res;
 };
 
-export const setLicenseData = async (_: any, data: any) => {
-  const result = await Account.setLicenseData(data);
-  return result;
-};
+// export const setLicenseData = async (_: any, data: any) => {
+//   const result = await Account.setLicenseData(data);
+//   return result;
+// };
 
-export const getLicenseData = async () => {
-  const data = await Account.getLicenseData();
-  return data;
-};
+// export const getLicenseData = async () => {
+//   const data = await Account.getLicenseData();
+//   return data;
+// };

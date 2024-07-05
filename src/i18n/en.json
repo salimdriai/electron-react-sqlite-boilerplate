@@ -40,7 +40,7 @@
       "startsAt": "Starts At",
       "endsAt": "Ends At",
       "registeredAt": "Registered At",
-      "sessionsSpent": "Sessions spent",
+      "sessionsRemaining": "Remaining sessions",
       "allTimeSessions": "All time sessions",
       "username": "Username",
       "password": "Password",
@@ -165,7 +165,8 @@
       "all": "All",
       "startFromNow": "Start from now",
       "startFromExpiration": "Start from expiration date",
-      "subscription.expired": "Subscription expired"
+      "subscription.expired": "Subscription expired",
+      "sessionsRemaining": "Remaining sessions"
     },
     "settings": {
       "genaral": "Generale settings",

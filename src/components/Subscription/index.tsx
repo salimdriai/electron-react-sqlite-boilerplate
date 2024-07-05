@@ -65,8 +65,12 @@ const UserSubscription = ({
     amount: 0,
     payment: null,
   });
+
   const [plans, setPlans] = useState<SubscriptionPlan[]>([]);
+
   const [renewType, setRenewType] = useState<StartFrom>(StartFrom.Now);
+  const [sessionsAvailable, setSessionsAvailable] = useState(0);
+
   const [payment, setPayment] = useState<{
     paid: null | number;
     remaining: null | number;
@@ -90,12 +94,12 @@ const UserSubscription = ({
 
   const dispatch = useAppDispatch();
 
-  const calculateSessions = (spent: number, available: number) => {
-    if (spent > available) {
-      return spent - available;
-    }
-    return 0;
-  };
+  // const calculateSessions = (spent: number, available: number) => {
+  //   if (spent > available) {
+  //     return spent - available;
+  //   }
+  //   return 0;
+  // };
 
   const savePayment = async (sub: Subscription) => {
     const paymentData: Payment = {
@@ -126,10 +130,7 @@ const UserSubscription = ({
     } else {
       startedAt = sub.endsAt;
       endsAt = onMonthFromDate(sub.endsAt);
-      sessionsSpent = calculateSessions(
-        sub.sessionsSpent,
-        sub.sessionsAvailable
-      );
+      sessionsSpent = 0;
     }
 
     setRenewSubscription((prev: any) => ({
@@ -153,22 +154,19 @@ const UserSubscription = ({
     return new Date(date).getTime() < new Date().getTime();
   };
 
-  const getPlan = (planId: string) => {
-    return plans.find((plan) => plan.id === planId);
-  };
-
   const confirmRenew = async () => {
     setIsLoading(true);
+    const sub = { ...renewSubscription, sessionsAvailable };
     window.electron
-      .updateSubscription(renewSubscription as Subscription)
+      .updateSubscription(sub as Subscription)
       .then(() => {
         toast.success('success');
-        savePayment(renewSubscription as Subscription);
-        dispatch(getOneUser(renewSubscription?.userId as string));
+        savePayment(sub as Subscription);
+        dispatch(getOneUser(sub?.userId as string));
       })
       .then(() => {
         if (refetchData) {
-          refetchData(renewSubscription);
+          refetchData(sub);
         }
         setRenewSubscription(null);
         setIsLoading(false);
@@ -190,14 +188,25 @@ const UserSubscription = ({
     setPayRemaining({ amount: 0, open: false, payment: null });
   };
 
+  const getPlan = (planId: string) => {
+    return plans.find((plan) => plan.id === planId);
+  };
+
   useEffect(() => {
     (async () => {
       const res = await window.electron.getSubscriptionPlans();
       setPlans(res);
     })();
     dispatch(getUserPayments(user.id));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, subscription]);
+
+  useEffect(() => {
+    const sessionsNumber = getPlan(subscription.planId)?.sessionsPerMonth || 0;
+    setSessionsAvailable(sessionsNumber);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscription, plans]);
 
   if (isLoading) return <p>is Loading ...</p>;
 
@@ -255,8 +264,8 @@ const UserSubscription = ({
               <b>{formatDate(subscription.endsAt)}</b>
             </Typography>
             <Typography variant="body2">
-              {t('info.sessionsSpent')} :<br />
-              <b> {subscription.sessionsSpent} </b>
+              {t('info.sessionsRemaining')} :<br />
+              <b> {subscription.sessionsAvailable}</b>
             </Typography>
           </Stack>
           <Stack flex={2}>
@@ -380,6 +389,13 @@ const UserSubscription = ({
                   customInput={<TextField fullWidth label={t('info.endsAt')} />}
                   selected={new Date(renewSubscription?.endsAt ?? new Date())}
                   onChange={onDateChange('endsAt')}
+                />
+                <TextField
+                  label={t('subscriptions.sessionsRemaining')}
+                  type="number"
+                  name="sessionsAvailable"
+                  value={sessionsAvailable}
+                  onChange={(e) => setSessionsAvailable(Number(e.target.value))}
                 />
                 <TextField
                   label={t('payments.amount')}
