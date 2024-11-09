@@ -5,6 +5,8 @@ import {
   updateQuery,
   removeQuery,
   getQuery,
+  readAll,
+  deleteAll,
 } from './queries';
 import { Notification } from '../../../types';
 
@@ -36,5 +38,15 @@ export default class NotifcationsModel extends DB {
   delete(id: string) {
     const stm = this.db.prepare(removeQuery);
     stm.run({ id });
+  }
+
+  updateAll(action: 'read' | 'delete') {
+    if (action === 'read') {
+      const stm = this.db.prepare(readAll);
+      stm.run();
+    } else {
+      const stm = this.db.prepare(deleteAll);
+      stm.run();
+    }
   }
 }

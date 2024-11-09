@@ -30,7 +30,7 @@ export const updateQuery = `UPDATE Users SET
   WHERE id = @oldId`;
 
 export const searchQuery = `SELECT * FROM Users
-  WHERE id LIKE '%' || ? || '%' OR firstName LIKE '%' || ? || '%' OR lastName LIKE '%' || ? || '%'`;
+  WHERE id LIKE '%' || ? || '%' OR firstName LIKE '%' || ? || '%' OR lastName LIKE '%' || ? || '%' OR phoneNumber LIKE '%' || ? || '%'`;
 
 export const createUsersTable = `
 CREATE TABLE IF NOT EXISTS Users(

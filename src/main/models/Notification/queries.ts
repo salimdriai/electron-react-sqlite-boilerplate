@@ -32,3 +32,9 @@ SET userId = @userId,
     isRead = @isRead
 WHERE id = @id;
 `;
+
+export const readAll = `
+UPDATE Notifcation
+SET isRead = 1
+`;
+export const deleteAll = `DELETE FROM Notifcation`;

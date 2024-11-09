@@ -127,7 +127,7 @@ export default function UsersTable({
         </Stack>
 
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+          <Table aria-labelledby="tableTitle">
             <TableHead />
             <TableBody>
               {visibleRows.map((row, index) => {
@@ -164,9 +164,7 @@ export default function UsersTable({
                     >
                       {`${row.firstName} ${row.lastName}`}
                     </TableCell>
-                    <TableCell align="left">{row.id}</TableCell>
 
-                    <TableCell align="right">{row.phoneNumber}</TableCell>
                     <TableCell align="right">
                       {new Date(row.lastEntryTimestamp).toLocaleTimeString()}
                     </TableCell>

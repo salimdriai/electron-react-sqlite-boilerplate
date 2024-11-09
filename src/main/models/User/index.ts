@@ -57,7 +57,7 @@ export default class UserModel extends DB {
     const subsStm = this.db.prepare(getSubscriptions);
     const subs = subsStm.all();
 
-    const users = stm.all(query, query, query).map((user: User) => ({
+    const users = stm.all(query, query, query, query).map((user: User) => ({
       ...user,
       subscriptions: subs.filter((sub: Subscription) => sub.userId === user.id),
     }));

@@ -22,7 +22,9 @@
       "renew": "Renew",
       "take.photo": "Take photo",
       "refresh": "Refresh",
-      "export": "Export"
+      "export": "Export",
+      "markAllAsRead": "Mark all as read",
+      "deleteAll": "Delete all"
     },
     "info": {
       "id": "Id",

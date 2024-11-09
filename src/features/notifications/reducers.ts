@@ -26,6 +26,13 @@ export const toggleReadNotification = createAsyncThunk(
   }
 );
 
+export const updateAll = createAsyncThunk(
+  'updateAll',
+  async (action: 'read' | 'delete') => {
+    await window.electron.updateAllNotifications(action);
+  }
+);
+
 export const deleteNotification = createAsyncThunk(
   'deleteNotification',
   async (id: string) => {

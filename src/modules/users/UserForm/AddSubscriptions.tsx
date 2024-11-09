@@ -246,10 +246,13 @@ const AddSubscriptions = ({
                 name="sessionsAvailable"
                 value={subscription.sessionsAvailable}
                 onChange={(e) =>
-                  setSubscriptions((prev: any) => ({
-                    ...prev,
-                    sessionsAvailable: Number(e.target.value),
-                  }))
+                  setSubscriptions((prev: any) =>
+                    prev.map((sub) =>
+                      sub.id === subscription.id
+                        ? { ...sub, sessionsAvailable: Number(e.target.value) }
+                        : sub
+                    )
+                  )
                 }
               />
               <TextField

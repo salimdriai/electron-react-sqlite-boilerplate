@@ -10,7 +10,7 @@
  */
 import path from 'path';
 import { exec } from 'child_process';
-import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, shell, ipcMain } from 'electron';
 // import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 import DB from './db';
@@ -142,7 +142,8 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
+app.commandLine.appendSwitch('high-dpi-support', '1');
+app.commandLine.appendSwitch('force-device-scale-factor', '1');
 app
   .whenReady()
   .then(async () => {
@@ -262,6 +263,7 @@ app
     ipcMain.handle('notifications:create', NotificationsIPC.create);
     ipcMain.handle('notifications:update', NotificationsIPC.update);
     ipcMain.handle('notifications:delete', NotificationsIPC.remove);
+    ipcMain.handle('notifications:updateAll', NotificationsIPC.updateAll);
 
     // store
     ipcMain.handle('store:get', StoreIPC.getData);

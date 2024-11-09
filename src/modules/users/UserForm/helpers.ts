@@ -44,8 +44,8 @@ export const subscriptionOptions = [
 ];
 
 export const photoStyle = {
-  height: '132px',
-  width: '132px',
+  height: '200px',
+  width: '200px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',

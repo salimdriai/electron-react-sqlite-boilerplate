@@ -113,6 +113,8 @@ const electronHandler = {
     ipcRenderer.invoke('notifications:update', notification),
   deleteNotification: (id: string) =>
     ipcRenderer.invoke('notifications:delete', id),
+  updateAllNotifications: (action: 'read' | 'delete') =>
+    ipcRenderer.invoke('notifications:updateAll', action),
 
   // other -----------------------
   decryptData: (data: string) => ipcRenderer.invoke('data:decrypt', data),

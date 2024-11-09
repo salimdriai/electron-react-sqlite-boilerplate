@@ -22,7 +22,9 @@
       "renew": "Renouveler",
       "take.photo": "Prendre une photo",
       "refresh": "Actualiser",
-      "export": "Exporter"
+      "export": "Exporter",
+      "markAllAsRead": "Tous marquer comme lus",
+      "deleteAll": "Supprimer tous"
     },
     "info": {
       "id": "Identifiant",

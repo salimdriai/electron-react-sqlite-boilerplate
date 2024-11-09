@@ -33,7 +33,7 @@ const Notify = ({ user }: { user: User }) => {
   const dispatch = useAppDispatch();
 
   const send = async ({ title, content: body }: any) => {
-    const userId = `${settings.appId}:${user.id}`;
+    const userId = `${settings?.appId ?? 'b-gym'}:${user.id}`;
 
     if (!url) throw new Error('API URL NOT FOUND !');
     if (!userId) throw new Error('USER ID NOT FOUND !');

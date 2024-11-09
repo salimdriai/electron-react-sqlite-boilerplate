@@ -21,3 +21,11 @@ export const update = async (_: any, notification: INotifcations) => {
 export const remove = async (_: any, id: string) => {
   await Notifcations.delete(id);
 };
+
+export const updateAll = async (_: any, action: 'read' | 'delete') => {
+  if (action === 'read') {
+    await Notifcations.updateAll('read');
+  } else {
+    await Notifcations.updateAll('delete');
+  }
+};

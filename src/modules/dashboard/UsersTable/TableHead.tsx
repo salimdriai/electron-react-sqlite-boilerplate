@@ -28,18 +28,6 @@ const headCells: readonly HeadCell[] = [
     label: 'name',
   },
   {
-    id: 'id',
-    numeric: false,
-    disablePadding: false,
-    label: 'id',
-  },
-  {
-    id: 'phoneNumber',
-    numeric: true,
-    disablePadding: false,
-    label: 'phoneNumber',
-  },
-  {
     id: 'enteredAt',
     numeric: true,
     disablePadding: false,

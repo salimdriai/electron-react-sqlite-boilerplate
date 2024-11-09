@@ -19,8 +19,8 @@ const QrCode = ({
     >
       <div
         style={{
-          height: 116,
-          maxWidth: 116,
+          height: 180,
+          maxWidth: 180,
           width: '100%',
         }}
       >

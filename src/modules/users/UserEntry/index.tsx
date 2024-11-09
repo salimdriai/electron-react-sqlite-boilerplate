@@ -27,7 +27,8 @@ function UserEntry() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAccess = (id: any) => {
-    dispatch(sessionsEntry(id.toLowerCase()))
+    const idWithoutZeros = Number(id).toString().toLowerCase() || id;
+    dispatch(sessionsEntry(idWithoutZeros))
       .unwrap()
       .then(
         ({
@@ -50,7 +51,7 @@ function UserEntry() {
 
           setIsUserAccessed(true);
           dispatch(setUser(user));
-          setTimeout(() => handleclose(), 10000);
+          //  setTimeout(() => handleclose(), 10000);
           return null;
         }
       )

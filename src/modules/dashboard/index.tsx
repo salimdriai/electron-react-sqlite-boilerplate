@@ -52,7 +52,7 @@ export default function Dashbaors() {
     },
   ]);
 
-  const { users, isLoading } = useAppSelector((state) => state.users);
+  const { users, isLoading, user } = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -66,23 +66,23 @@ export default function Dashbaors() {
       // const users = await window.electron.getAllUsers(permission);
       if (!Array.isArray(users)) return toast.error('somthing went wrong !');
 
-      users.forEach((user: User) => {
-        const registrationTime = new Date(user.registeredAt).getTime();
+      users.forEach((u: User) => {
+        const registrationTime = new Date(u.registeredAt).getTime();
         if (registrationTime === dayStart.getTime()) {
           newUsersCount += 1;
         }
 
         let isEnteredToday = false;
 
-        if (user.lastEntryTimestamp > dayStart.getTime()) {
+        if (u.lastEntryTimestamp > dayStart.getTime()) {
           isEnteredToday = true;
         }
 
         if (isEnteredToday) {
-          const isUserExist = latestEnteredUsers.find((u) => u.id === user.id);
+          const isUserExist = latestEnteredUsers.find(({ id }) => id === u.id);
 
           if (!isUserExist) {
-            setLatestEnteredUsers((prev) => [...prev, user]);
+            setLatestEnteredUsers((prev) => [...prev, u]);
           }
         }
       });
@@ -124,7 +124,7 @@ export default function Dashbaors() {
   useEffect(() => {
     dispatch(fetchUsers(permission));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   return (
     <Stack spacing={5}>
@@ -149,10 +149,14 @@ export default function Dashbaors() {
           <AccessTimeChart latestEnteredUsers={latestEnteredUsers} />
         </Box>
         <Box flex={2}>
-          <SessionsTable />
+          <UsersTable
+            latestEnteredUsers={latestEnteredUsers.sort(
+              (a, b) => b.lastEntryTimestamp - a.lastEntryTimestamp
+            )}
+          />
         </Box>
       </Stack>
-      <UsersTable latestEnteredUsers={latestEnteredUsers} />
+      <SessionsTable />
     </Stack>
   );
 }

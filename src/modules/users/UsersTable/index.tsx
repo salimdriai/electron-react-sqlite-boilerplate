@@ -81,7 +81,7 @@ export default function UsersTable() {
   const handleClearSearch = async () => {
     setSearchQuery('');
     const data = await window.electron.getAllUsers(permission);
-    setUsers(data);
+    dispatch(setUsers(data));
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, row: User) => {

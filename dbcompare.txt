@@ -1,8 +1,0 @@
-1- remove settings table
-2- add App table
-3- add Notifications table
-
-
-1- add lastNotified to Users table
-2- add phoneNumber to Accounts table
-3- add planName to Subscriptions table

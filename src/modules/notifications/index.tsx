@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -21,6 +22,7 @@ import {
   generateNotifications,
   getNotifications,
   toggleReadNotification,
+  updateAll,
 } from 'features/notifications/reducers';
 import UserDetails from 'modules/users/UserDetails';
 import { setUser } from 'features/users';
@@ -48,6 +50,15 @@ export default function Notifications() {
 
   const toggleRead = async (notification: Notification, read: boolean) => {
     await dispatch(toggleReadNotification({ notification, read }));
+    dispatch(getNotifications());
+  };
+
+  const markAllAsRead = async () => {
+    await dispatch(updateAll('read'));
+    dispatch(getNotifications());
+  };
+  const deleteAll = async () => {
+    await dispatch(updateAll('delete'));
     dispatch(getNotifications());
   };
 
@@ -126,9 +137,23 @@ export default function Notifications() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Box px={2} py={1}>
-          <Typography variant="body2">Notifications</Typography>
-        </Box>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          px={2}
+          py={1}
+        >
+          <Typography variant="body2" flex={1}>
+            Notifications
+          </Typography>
+          <Button size="small" onClick={markAllAsRead}>
+            {t('actions.markAllAsRead')}
+          </Button>
+          <Button color="error" size="small" onClick={deleteAll}>
+            {t('actions.deleteAll')}
+          </Button>
+        </Stack>
         <Divider />
         {notifications.length === 0 ? (
           <MenuItem
@@ -175,7 +200,10 @@ export default function Notifications() {
                     <b>{notif.username}</b> -{' '}
                     <span style={{ fontSize: 12 }}>{notif.createdAt}</span>
                   </Typography>
-                  <Typography variant="body2" sx={{ lineHeight: 1 }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ lineHeight: 1, maxWidth: 100 }}
+                  >
                     {t('subscriptions.subscription.expired')}{' '}
                     {`(${getPlan(notif.planId)?.name})`}
                   </Typography>

@@ -173,7 +173,12 @@ const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
               fullWidth
               {...field}
               onChange={(e) =>
-                field.onChange(e.target.value.trim().toLowerCase())
+                field.onChange(
+                  (Number(e.target.value) || e.target.value)
+                    .toString()
+                    .trim()
+                    .toLowerCase()
+                )
               }
               label="id"
               error={!!errors.id}

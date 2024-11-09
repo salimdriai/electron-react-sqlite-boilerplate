@@ -7,6 +7,7 @@ import {
   toggleReadNotification,
   deleteNotification,
   generateNotifications,
+  updateAll,
 } from './reducers';
 
 interface InitialState {
@@ -69,6 +70,16 @@ const paymentsSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(deleteNotification.rejected, (state) => {
+      state.isLoading = false;
+    });
+
+    builder.addCase(updateAll.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateAll.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(updateAll.rejected, (state) => {
       state.isLoading = false;
     });
   },
