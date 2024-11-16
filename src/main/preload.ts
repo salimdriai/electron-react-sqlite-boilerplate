@@ -2,8 +2,6 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-import { Account, FreeSession, Settings, User } from 'types';
-
 export type Channels = 'ipc-example';
 
 const electronHandler = {
@@ -25,48 +23,8 @@ const electronHandler = {
     },
   },
 
-  // settings -------------------
-  getSettings: () => ipcRenderer.invoke('settings:get'),
-  updateSettings: (settings: Settings) =>
-    ipcRenderer.invoke('settings:update', settings),
-
-  // users ----------------------
-  getAllUsers: (permission: string) =>
-    ipcRenderer.invoke('user:getAll', permission),
-  getOneUser: (id: string) => ipcRenderer.invoke('user:getOne', id),
-  searchUsers: (query: string) => ipcRenderer.invoke('user:search', query),
-  insertUser: (user: User) => ipcRenderer.invoke('user:insert', user),
-  updateUser: (user: User) => ipcRenderer.invoke('user:update', user),
-  removeUser: (id: string) => ipcRenderer.invoke('user:remove', id),
-  removeAllUsers: () => ipcRenderer.invoke('user:removeAll'),
-
-  // account ---------------------
-  getAllAccounts: () => ipcRenderer.invoke('account:getAll'),
-  logAccount: (username: string, password: string) =>
-    ipcRenderer.invoke('account:logAccount', username, password),
-  getOneAccount: (username: string) =>
-    ipcRenderer.invoke('account:getOne', username),
-  createAccount: (account: Account) =>
-    ipcRenderer.invoke('account:insert', account),
-  updateAccount: (account: Account) =>
-    ipcRenderer.invoke('account:update', account),
-  removeAccount: (username: string) =>
-    ipcRenderer.invoke('account:remove', username),
-  activateApp: (key: string) => ipcRenderer.invoke('app:activate', key),
-  isAppActivated: () => ipcRenderer.invoke('app:isActivated'),
-
-  // free session ----------------
-  getFreeSessions: () => ipcRenderer.invoke('freeSession:getAll'),
-
-  createFreeSessions: (session: FreeSession) =>
-    ipcRenderer.invoke('freeSession:create', session),
-  updateFreeSessions: (session: FreeSession) =>
-    ipcRenderer.invoke('freeSession:update', session),
-  removeFreeSessions: (id: string) =>
-    ipcRenderer.invoke('freeSession:delete', id),
-
-  // other -----------------------
-  decryptData: (data: string) => ipcRenderer.invoke('data:decrypt', data),
+  // invoke operations here
+  // e.g :  createUser: (user: User) => ipcRenderer.invoke('user:create', user),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

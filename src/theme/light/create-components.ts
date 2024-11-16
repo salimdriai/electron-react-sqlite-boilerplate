@@ -1,8 +1,6 @@
 import {
   createTheme,
   filledInputClasses,
-  /*   inputLabelClasses,
-  outlinedInputClasses, */
   paperClasses,
   tableCellClasses,
 } from '@mui/material';
@@ -26,7 +24,7 @@ export default function createComponents(config: any) {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '12px',
+          //  borderRadius: '8px',
           textTransform: 'none',
           minWidth: '100px',
         },
@@ -53,7 +51,7 @@ export default function createComponents(config: any) {
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          //  borderRadius: 8,
           [`&.${paperClasses.elevation1}`]: {
             boxShadow:
               '0px 5px 22px rgba(0, 0, 0, 0.04), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.03)',
@@ -270,7 +268,7 @@ export default function createComponents(config: any) {
           borderBottom: 'none',
           [`& .${tableCellClasses.root}`]: {
             borderBottom: 'none',
-            //  backgroundColor: palette.neutral[50],
+            backgroundColor: '#dddddd',
             //  color: palette.neutral[700],
             fontSize: 12,
             fontWeight: 600,

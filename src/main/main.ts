@@ -10,31 +10,9 @@
  */
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
-import {
-  User as UserType,
-  Account as AccountType,
-  Settings as SettingsType,
-  FreeSession as FreeSessionType,
-} from 'types';
+import DB from './db';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { decryptData } from './utils/Encription';
-
-import DB from './db';
-import UserModel from './models/User';
-import AccountModel from './models/Account';
-import SettingsModel from './models/Settings';
-import FreeSessionModel from './models/FreeSession';
-
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -86,8 +64,9 @@ const createWindow = async () => {
     show: false,
     width: 1024,
     height: 728,
-    icon: getAssetPath('icon.png'),
+    icon: getAssetPath('512x512.png'),
     webPreferences: {
+      webSecurity: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
@@ -100,11 +79,7 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
-      mainWindow.show();
-    }
+    mainWindow.show();
   });
 
   mainWindow.on('closed', () => {
@@ -122,7 +97,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 };
 
 /**
@@ -130,9 +105,10 @@ const createWindow = async () => {
  */
 
 app.on('before-quit', () => {
-  // Close the database connection
   const db = new DB();
   db.close();
+
+  window.localStorage.clear();
 });
 
 app.on('window-all-closed', () => {
@@ -142,125 +118,13 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
+app.commandLine.appendSwitch('high-dpi-support', '1');
+app.commandLine.appendSwitch('force-device-scale-factor', '1');
 app
   .whenReady()
-  .then(() => {
-    /* const db = new DB();
-    db.connect(); */
-
-    const User = new UserModel();
-    const Account = new AccountModel();
-    const Settings = new SettingsModel();
-    const FreeSession = new FreeSessionModel();
-
-    // settings
-    ipcMain.handle('settings:get', async () => {
-      const settings = await Settings.get();
-      return settings;
-    });
-    ipcMain.handle('settings:update', async (_, settings: SettingsType) => {
-      await Settings.update(settings);
-      return settings;
-    });
-
-    // users ----------------------
-    ipcMain.handle('user:getAll', async (_, permission: string) => {
-      const users = await User.getAll(permission);
-      return users;
-    });
-    ipcMain.handle('user:getOne', async (_, id: string) => {
-      const user = await User.getOne(id);
-      return user;
-    });
-    ipcMain.handle('user:search', async (_, query: string) => {
-      const users = await User.search(query);
-      return users;
-    });
-    ipcMain.handle('user:insert', async (_, user: UserType) => {
-      await User.create(user);
-      user.currentSubscriptions = JSON.parse(user.currentSubscriptions as any);
-      return user;
-    });
-    ipcMain.handle('user:update', async (_, user: UserType) => {
-      await User.update(user);
-      user.currentSubscriptions = JSON.parse(user.currentSubscriptions as any);
-      return user;
-    });
-    ipcMain.handle('user:remove', async (_, id: string) => {
-      await User.remove(id);
-    });
-    ipcMain.handle('user:removeAll', async () => {
-      await User.removeAll();
-    });
-
-    // account ---------------------
-    ipcMain.handle('account:getAll', async () => {
-      const users = await Account.getAll();
-      return users;
-    });
-    ipcMain.handle(
-      'account:logAccount',
-      async (_, username: string, password: string) => {
-        const account = await Account.logAccount(username, password);
-        return account;
-      }
-    );
-    ipcMain.handle('account:getOne', async (_, username: string) => {
-      const account = await Account.getOne(username);
-      return account;
-    });
-    ipcMain.handle('account:insert', async (_, account: AccountType) => {
-      await Account.create(account);
-      return account;
-    });
-    ipcMain.handle('account:update', async (_, account: AccountType) => {
-      await Account.update(account);
-      return account;
-    });
-    ipcMain.handle('account:remove', async (_, username: string) => {
-      await Account.remove(username);
-    });
-
-    ipcMain.handle('data:decrypt', async (_, data: string) => {
-      const decryptedData = decryptData(data);
-      return decryptedData;
-    });
-
-    ipcMain.handle('app:activate', async (_, key: string) => {
-      const res = await Account.activateApp(key);
-      return res;
-    });
-    ipcMain.handle('app:isActivated', async () => {
-      const res = await Account.isAppActivated();
-      return res;
-    });
-
-    // free session
-
-    ipcMain.handle('freeSession:getAll', async () => {
-      const freeSessions = await FreeSession.get();
-      return freeSessions;
-    });
-
-    ipcMain.handle(
-      'freeSession:create',
-      async (_, session: FreeSessionType) => {
-        await FreeSession.create(session);
-        return session;
-      }
-    );
-    ipcMain.handle(
-      'freeSession:update',
-      async (_, session: FreeSessionType) => {
-        await FreeSession.update(session);
-        return session;
-      }
-    );
-    ipcMain.handle('freeSession:delete', async (_, id: string) => {
-      await FreeSession.remove(id);
-    });
-
+  .then(async () => {
+    // Add your operations here
+    // e.g :  ipcMain.handle('user:create', UsersIPC.create);
     createWindow();
 
     app.on('activate', () => {
@@ -268,9 +132,5 @@ app
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
     });
-
-    /* nfc.on('error', (err) => {
-      console.log('an error occurred', err);
-    }); */
   })
   .catch(console.log);

@@ -3,12 +3,12 @@ const createTypography = () => {
     fontFamily:
       '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     body1: {
-      fontSize: '1rem',
+      fontSize: '1.2rem',
       fontWeight: 500,
       lineHeight: 1.5,
     },
     body2: {
-      fontSize: '0.9rem',
+      fontSize: '1rem',
       fontWeight: 400,
       lineHeight: 1.57,
     },

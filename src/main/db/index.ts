@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable class-methods-use-this */
 // @ts-nocheck
 
@@ -12,9 +13,9 @@ const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 export default class DB {
-  private prodDbPath = path.join(app.getPath('userData'), 'gymboss.db');
+  private prodDbPath = path.join(app.getPath('userData'), 'database.db');
 
-  private devDbPath = path.join(app.getAppPath(), 'gymboss.db');
+  private devDbPath = path.join(app.getAppPath(), 'database.db');
 
   connect() {
     const dbPath = isDevelopment ? this.devDbPath : this.prodDbPath;
@@ -30,5 +31,21 @@ export default class DB {
 
   clear() {
     Database.clear();
+  }
+
+  backup() {
+    const dbPath = !isDevelopment
+      ? path.join(app.getPath('userData'), `backup-${Date.now()}.db`)
+      : path.join(app.getAppPath(), `backup-${Date.now()}.db`);
+
+    const db = this.connect();
+
+    db.backup(dbPath)
+      .then(() => {
+        console.log('backup complete!');
+      })
+      .catch((err: any) => {
+        console.log('backup failed:', err);
+      });
   }
 }
