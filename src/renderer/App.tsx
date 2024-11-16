@@ -1,83 +1,79 @@
 /* eslint-disable promise/always-return */
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useAppDispatch, useAppSelector } from 'features/store';
+
 import {
-  switchTheme,
-  switchLanguage,
-  showAccessInput,
-  setAppId,
-} from 'features/settings';
-import { currentUser } from 'features/authentication';
-import { initActivationData } from 'features/settings/reducers';
-import { Themes } from 'types';
-import Loading from 'components/Loading';
-import Alert from 'components/Alert';
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  Button,
+  Box,
+} from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 
 import createDarkTheme from '../theme/dark';
-import createLightTheme from '../theme/light';
-import Pages from '../pages';
 import '../i18n';
 import './index.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const {
-    settings: { theme },
-    loading: settingsLoading,
-  } = useAppSelector((state) => state.settings);
-
-  const { loading: authLoading } = useAppSelector(
-    (state) => state.authentication
-  );
-
-  const { i18n } = useTranslation();
-
   const darkTheme = createDarkTheme();
-  const lightTheme = createLightTheme();
-  const dispatch = useAppDispatch();
 
-  const initSettings = async () => {
-    const settings = await window.electron.getStoreData('settings');
-    i18n.changeLanguage(settings.language || 'en');
-    dispatch(switchLanguage(settings.language || 'en'));
-    dispatch(switchTheme(settings.theme || Themes.Dark));
-    dispatch(showAccessInput(settings.accessInput || false));
-    dispatch(setAppId(settings.appId));
+  const handleAction = () => {
+    console.log('Action triggered!'); // Example action for navigation or database query
   };
-
-  const initAdminAcount = async () => {
-    const accounts = await window.electron.getAllAccounts();
-    if (!accounts.length) {
-      window.electron.initAdminAcount();
-    }
-  };
-
-  // const licensing = async () => {
-  //   setIsLoading(true);
-  //   await dispatch(initActivationData());
-  //   setIsLoading(false);
-  // };
-
-  useEffect(() => {
-    // licensing();
-    dispatch(currentUser());
-    initAdminAcount();
-    initSettings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Router>
       <CssBaseline />
-      <ThemeProvider theme={theme === Themes.Dark ? darkTheme : lightTheme}>
-        {settingsLoading || authLoading || isLoading ? <Loading /> : <Pages />}
-        <Alert />
+      <ThemeProvider theme={darkTheme}>
+        <>
+          {/* Navbar */}
+          <AppBar position="static">
+            <Toolbar>
+              <HomeIcon sx={{ mr: 2 }} />
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                Electron-React-SQLite App
+              </Typography>
+            </Toolbar>
+          </AppBar>
+
+          {/* Main Content */}
+          <Container sx={{ textAlign: 'center', mt: 6 }}>
+            <Typography variant="h3" gutterBottom>
+              Electron-React-SQLite
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+              This is a boilerplate for your Electron, SQLite, and React
+              application.
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleAction}
+            >
+              Get Started
+            </Button>
+          </Container>
+
+          {/* Footer */}
+          <Box
+            component="footer"
+            sx={{
+              mt: 6,
+              py: 2,
+              backgroundColor: '#f5f5f5',
+              textAlign: 'center',
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              © {new Date().getFullYear()} My App. All rights reserved.
+            </Typography>
+          </Box>
+        </>
       </ThemeProvider>
     </Router>
   );

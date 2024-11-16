@@ -25,6 +25,14 @@ export default class DB {
     });
   }
 
+  close() {
+    Database.close();
+  }
+
+  clear() {
+    Database.clear();
+  }
+
   backup() {
     const dbPath = !isDevelopment
       ? path.join(app.getPath('userData'), `backup-${Date.now()}.db`)
@@ -39,13 +47,5 @@ export default class DB {
       .catch((err: any) => {
         console.log('backup failed:', err);
       });
-  }
-
-  close() {
-    Database.close();
-  }
-
-  clear() {
-    Database.clear();
   }
 }

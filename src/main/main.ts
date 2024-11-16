@@ -9,34 +9,10 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { exec } from 'child_process';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
-// import { autoUpdater } from 'electron-updater';
-// import log from 'electron-log';
 import DB from './db';
 import MenuBuilder from './menu';
-import { resolveHtmlPath, initBaseApiUrl } from './util';
-import { decryptData } from './utils/Encription';
-import { SECRET_KEY, SECRET_IV } from './config/keys';
-import AppModel from './models/App';
-
-import * as UsersIPC from './ipc/usersIpc';
-import * as SubscriptionPlansIPC from './ipc/subscriptionPlansIpc';
-import * as SubscriptionsIPC from './ipc/subscriptionsIpc';
-import * as AccountsIPC from './ipc/accountsIpc';
-import * as PaymentsIPC from './ipc/paymentsIpc';
-import * as NotificationsIPC from './ipc/notificationsIpc';
-import * as FreeSessionsIPC from './ipc/freeSessionsIpc';
-import * as StoreIPC from './ipc/storeIpc';
-
-// class AppUpdater {
-//   constructor() {
-//     log.transports.file.level = 'info';
-//     autoUpdater.logger = log;
-//     // autoUpdater.checkForUpdatesAndNotify();
-//     autoUpdater.autoDownload = false;
-//   }
-// }
+import { resolveHtmlPath } from './util';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -88,7 +64,7 @@ const createWindow = async () => {
     show: false,
     width: 1024,
     height: 728,
-    icon: getAssetPath('icon.png'),
+    icon: getAssetPath('512x512.png'),
     webPreferences: {
       webSecurity: false,
       preload: app.isPackaged
@@ -147,134 +123,8 @@ app.commandLine.appendSwitch('force-device-scale-factor', '1');
 app
   .whenReady()
   .then(async () => {
-    initBaseApiUrl('https://flexfit-421917.oa.r.appspot.com/api/v1');
-
-    const App = new AppModel();
-
-    const getHddSerialNumber = () =>
-      new Promise((resolve, reject) => {
-        const isWindows = process.platform === 'win32';
-        const operation = isWindows
-          ? 'wmic diskdrive get serialnumber'
-          : 'smartctl -a /dev/sda | grep "Serial Number"';
-
-        exec(operation, (err, stdout) => {
-          if (err) {
-            console.error(`exec error: ${err}`);
-            reject(err);
-            return;
-          }
-          const serialNumber = stdout.split(isWindows ? '\n' : ':')[1].trim();
-          resolve(serialNumber);
-        });
-      });
-
-    const hddSerialNumber = await getHddSerialNumber();
-    // const licenseData = await App.initLicense();
-
-    // const savedHddSerialNumber = licenseData.hddsn;
-    // const isActivated = licenseData.isActive;
-
-    // if (
-    //   isActivated &&
-    //   savedHddSerialNumber !== '' &&
-    //   hddSerialNumber !== savedHddSerialNumber
-    // ) {
-    //   dialog.showMessageBoxSync({
-    //     type: 'error',
-    //     title: 'Cannot use the app on this PC!',
-    //     message: `The app can be used only on the pc where it is first activated.`,
-    //   });
-
-    //   app.quit();
-    //   return;
-    // }
-
-    // backup db
-
-    ipcMain.handle('backupDB', async () => {
-      const db = new DB();
-      db.backup();
-    });
-
-    // machine address
-    ipcMain.handle('getHddSerialNumber', async () => hddSerialNumber);
-
-    // app activation
-    ipcMain.handle('activate', async (_, data: any) => {
-      // const result = await Account.setLicenseData(data);
-      const result = await App.updateLicense(data);
-      return result;
-    });
-
-    ipcMain.handle('getLicenseData', async () => {
-      const result = await App.getLicense();
-      console.log('getLicense---------------', result);
-      return result;
-    });
-
-    // users ----------------------
-    ipcMain.handle('user:getAll', UsersIPC.getAll);
-    ipcMain.handle('user:getOne', UsersIPC.getOne);
-    ipcMain.handle('user:create', UsersIPC.create);
-    ipcMain.handle('user:search', UsersIPC.search);
-    ipcMain.handle('user:update', UsersIPC.update);
-    ipcMain.handle('user:remove', UsersIPC.remove);
-    ipcMain.handle('user:removeAll', UsersIPC.removeAll);
-
-    // subscription plans -------------
-    ipcMain.handle('subscriptionPlan:getAll', SubscriptionPlansIPC.getAll);
-    ipcMain.handle('subscriptionPlan:create', SubscriptionPlansIPC.create);
-    ipcMain.handle('subscriptionPlan:update', SubscriptionPlansIPC.update);
-
-    // subscriptions -------------------
-    ipcMain.handle('subscriptions:getAll', SubscriptionsIPC.getAll);
-    ipcMain.handle('subscriptions:create', SubscriptionsIPC.create);
-    ipcMain.handle('subscriptions:update', SubscriptionsIPC.update);
-    ipcMain.handle('subscriptions:delete', SubscriptionsIPC.remove);
-    ipcMain.handle(
-      'subscriptions:getUserSubscriptions',
-      SubscriptionsIPC.getUserSubscriptions
-    );
-
-    // account ---------------------
-    ipcMain.handle('account:getAll', AccountsIPC.getAll);
-    ipcMain.handle('account:logAccount', AccountsIPC.logAccount);
-    ipcMain.handle('account:getOne', AccountsIPC.getOne);
-    ipcMain.handle('account:insert', AccountsIPC.create);
-    ipcMain.handle('account:update', AccountsIPC.update);
-    ipcMain.handle('account:remove', AccountsIPC.remove);
-    ipcMain.handle('account:initAdmin', AccountsIPC.initAdmin);
-
-    // free session
-    ipcMain.handle('freeSession:getAll', FreeSessionsIPC.getAll);
-    ipcMain.handle('freeSession:create', FreeSessionsIPC.create);
-    ipcMain.handle('freeSession:update', FreeSessionsIPC.update);
-    ipcMain.handle('freeSession:delete', FreeSessionsIPC.remove);
-
-    // payments
-    ipcMain.handle('payments:getAll', PaymentsIPC.getAll);
-    ipcMain.handle('payments:getUserPayments', PaymentsIPC.getOne);
-    ipcMain.handle('payments:create', PaymentsIPC.create);
-    ipcMain.handle('payments:update', PaymentsIPC.update);
-
-    // notifications
-    ipcMain.handle('notifications:getAll', NotificationsIPC.getAll);
-    ipcMain.handle('notifications:create', NotificationsIPC.create);
-    ipcMain.handle('notifications:update', NotificationsIPC.update);
-    ipcMain.handle('notifications:delete', NotificationsIPC.remove);
-    ipcMain.handle('notifications:updateAll', NotificationsIPC.updateAll);
-
-    // store
-    ipcMain.handle('store:get', StoreIPC.getData);
-    ipcMain.handle('store:set', StoreIPC.setData);
-
-    // other
-    ipcMain.handle('data:decrypt', async (_, data: string) => {
-      const decryptedData = decryptData(data, SECRET_KEY, SECRET_IV);
-      return decryptedData;
-    });
-
+    // Add your operations here
+    // e.g :  ipcMain.handle('user:create', UsersIPC.create);
     createWindow();
 
     app.on('activate', () => {
