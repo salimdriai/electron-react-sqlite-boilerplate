@@ -50,15 +50,15 @@ export default function Report() {
     <Stack spacing={4}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
-          <Tab label={t('payments.payments')} {...a11yProps(0)} />
-          <Tab label={t('common.users')} {...a11yProps(1)} />
+          <Tab label={t('common.users')} {...a11yProps(0)} />
+          <Tab label={t('payments.payments')} {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <Payments />
+        <UsersAnalytics />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <UsersAnalytics />
+        <Payments />
       </CustomTabPanel>
     </Stack>
   );

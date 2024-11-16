@@ -17,6 +17,7 @@ const initialState: InitialState = {
     theme: Themes.Dark,
     gymName: 'SprintFit',
     accessInput: false,
+    removeZeros: false,
     appId: '',
   },
   activation: {
@@ -46,6 +47,10 @@ const settingsSlice = createSlice({
       window.electron.setStoreData('settings.accessInput', action.payload);
       state.settings.accessInput = action.payload;
     },
+    removeZerosFromId: (state, action) => {
+      window.electron.setStoreData('settings.removeZeros', action.payload);
+      state.settings.removeZeros = action.payload;
+    },
     setAppId: (state, action) => {
       window.electron.setStoreData('settings.appId', action.payload);
       state.settings.appId = action.payload;
@@ -74,6 +79,7 @@ export const {
   switchTheme,
   switchLanguage,
   showAccessInput,
+  removeZerosFromId,
   updateActivationData,
   setAppId,
 } = settingsSlice.actions;

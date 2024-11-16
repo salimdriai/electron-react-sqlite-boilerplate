@@ -21,7 +21,7 @@ import Typography from '@mui/material/Typography';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import DatePicker from 'react-datepicker';
 import { useAppSelector } from 'features/store';
-
+import { removeZerosFromId } from 'utils';
 import QrCode from 'components/Qrcode';
 import { Sex, BloodType, Subscription, User } from 'types';
 import { photoStyle, cameraModalStyle } from './helpers';
@@ -38,8 +38,8 @@ interface IInfo {
 }
 
 const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
-  const { state } = useLocation();
   const [isKeyLost, setIsKeyLost] = useState(false);
+  const { state } = useLocation();
 
   const [camera, setCamera] = useState<{
     open: boolean;
@@ -174,10 +174,9 @@ const Info = ({ formMethods, isEditMode, blurQrCode }: IInfo) => {
               {...field}
               onChange={(e) =>
                 field.onChange(
-                  (Number(e.target.value) || e.target.value)
-                    .toString()
-                    .trim()
-                    .toLowerCase()
+                  settings.removeZeros
+                    ? removeZerosFromId(e.target.value)
+                    : e.target.value
                 )
               }
               label="id"

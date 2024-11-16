@@ -14,6 +14,7 @@ export interface Settings {
   lang: Lang;
   gymName: string;
   accessInput: boolean;
+  removeZeros: boolean;
   appId: string;
 }
 

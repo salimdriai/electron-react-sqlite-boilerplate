@@ -10,16 +10,24 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { sessionsEntry } from 'features/users/reducers';
 import { useAppDispatch, useAppSelector } from 'features/store';
 import { setUser } from 'features/users';
+import { removeZerosFromId } from 'utils';
 import UserDetails from '../UserDetails';
 
 function UserEntry() {
   const [isUserAccessed, setIsUserAccessed] = useState(false);
-  const { t } = useTranslation();
+  const [userId, setUserId] = useState('');
+
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { user: accessedUser } = useAppSelector((state) => state.users);
   const {
-    settings: { accessInput },
+    settings: { accessInput, removeZeros },
   } = useAppSelector((state) => state.settings);
+
+  const handleChange = (e: any) => {
+    setUserId(e.target.value);
+  };
+
   const handleclose = () => {
     setIsUserAccessed(false);
     dispatch(setUser(null));
@@ -27,7 +35,7 @@ function UserEntry() {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleAccess = (id: any) => {
-    const idWithoutZeros = Number(id).toString().toLowerCase() || id;
+    const idWithoutZeros = removeZeros ? removeZerosFromId(id) : id;
     dispatch(sessionsEntry(idWithoutZeros))
       .unwrap()
       .then(
@@ -61,7 +69,6 @@ function UserEntry() {
   useEffect(() => {
     let scannedValue = '';
     let typingTimstamps: number[] = [];
-    // const refusedTypingSpeed = 25;
 
     const accessListener = (e: any) => {
       if (e.target.localName === 'input') return;
@@ -73,7 +80,6 @@ function UserEntry() {
         typingTimstamps.push(now);
         scannedValue += pressedKey;
       }
-      // const diffs = getTypingDiffs(typingTimstamps);
 
       if (pressedKey === 'Enter' && scannedValue.length > 3) {
         setTimeout(() => {
@@ -92,12 +98,6 @@ function UserEntry() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const [userId, setUserId] = useState('');
-
-  const handleChange = (e: any) => {
-    setUserId(e.target.value);
-  };
 
   return (
     <>

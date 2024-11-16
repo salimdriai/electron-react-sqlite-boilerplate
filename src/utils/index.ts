@@ -35,6 +35,10 @@ export const oneMonthFromDate = (date: Date | string) => {
   return new Date(start + oneMonthTimestamp).toDateString();
 };
 
+export const removeZerosFromId = (value: string | number) => {
+  return Number(value).toString().toLowerCase() || value;
+};
+
 export * from './importPlans';
 export * from './importSubscriptions';
 export * from './importUsers';

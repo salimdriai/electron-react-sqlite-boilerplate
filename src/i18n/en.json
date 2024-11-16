@@ -175,6 +175,7 @@
       "accessInput": {
         "show": "show access input"
       },
+      "RemoveZerosFromId": "Remove zeros from ID",
       "plans": {
         "plans": "Subscription plans",
         "add": "Add subscription plan",

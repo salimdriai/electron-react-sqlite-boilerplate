@@ -5,6 +5,7 @@ import Language from './Language';
 import Theme from './Theme';
 import Currency from './Currency';
 import AccessInput from './AccessInput';
+import RemoveZerosFromId from './RemoveZerosFromId';
 // import AccessType from './AccessType';
 
 const AppSettings = () => {
@@ -14,6 +15,7 @@ const AppSettings = () => {
       <Currency />
       <Theme />
       <AccessInput />
+      <RemoveZerosFromId />
       {/* <AccessType /> */}
     </Card>
   );
